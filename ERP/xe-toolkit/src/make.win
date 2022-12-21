@@ -1,0 +1,17 @@
+all:
+	@cmd /c "cd windows && nmake /nologo"
+	@cmd /c "cd jmdr/windows && nmake /nologo"
+	@cmd /c "cd plugins/CaptiveCollector/windows && nmake /nologo"
+	@cmd /c "cd CCdirect/windows && nmake /nologo"
+
+install:
+	@cmd /c "cd windows && nmake /nologo install"
+	@cmd /c "cd jmdr/windows && nmake /nologo install"
+	@cmd /c "cd plugins/CaptiveCollector/windows && nmake /nologo install"
+	@cmd /c "cd CCdirect/windows && nmake /nologo install"
+
+clean:
+	@cmd /c "cd windows && nmake /nologo clean"
+	@cmd /c "cd jmdr/windows && nmake /nologo clean"
+	@cmd /c "cd plugins/CaptiveCollector/windows && nmake /nologo clean"
+	@cmd /c "cd CCdirect/windows && nmake /nologo clean"

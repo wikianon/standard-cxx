@@ -1,0 +1,5 @@
+#!/bin/bash 
+
+. exec/system/shell/domain/user/move_primary
+
+exit 0

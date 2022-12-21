@@ -1,0 +1,4 @@
+/extern
+*.old
+*.save
+.DS_Store

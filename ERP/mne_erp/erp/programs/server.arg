@@ -1,0 +1,33 @@
+debug:   0
+project: erp
+
+DbHttpTimeout: 1200
+
+DbDatabase: erpdb
+DbDatabase@mars: erpdb@localhost
+
+#ImapScan: 1
+
+DbTrustCheckUserip: 10.0.0.0/8,192.168.0.0/16,127.0.0.1/32
+
+PhpPath: /usr/bin/php-cgi -d include_path=.:/home/manny/projects/web/allg/php:/usr/share/php:/usr/share/pear
+
+projectroot:          /home/manny/projects
+projectroot@IE10Win7: C:/Users/IEUser/Documents/projects
+projectroot@umbriel:  /home/manny/projects
+projectroot@uranus:  C:/Users/manny/projects
+projectroot@mars:     /Users/manny/projects
+
+EmbedwebHttpMaps:   allg!web/allg:extern!web/extern
+
+EmbedwebHttpSearchPathjs:     /allg/js:/extern/js
+EmbedwebHttpSearchPathstyles: /styles:/allg/styles
+EmbedwebHttpSearchPathimages: /images:/allg/images:/allg/images/mne_editor
+EmbedwebHttpSearchPathweblet: /weblet:/allg/weblet
+EmbedwebHttpSearchPathtempl:  /templ:/allg/templ
+
+EmbedwebHttpNocache: 1
+
+EmbedwebHttpServerpath: erp/web
+EmbedwebHttpDataroot:   data
+RepRoot:                tex/report

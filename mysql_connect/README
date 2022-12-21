@@ -1,0 +1,27 @@
+se foi incluido o #include <mysql/mysql.h>
+faça: 
+
+bash-4.4$ g++ -o connect example2.cxx -lmysqlclient
+
+else
+
+bash-4.4$ g++ -o connect example2.cxx -lmysqlclient -I/usr/include/mysql 
+ou
+bash-4.4$ g++ -o connect example2.cxx -L/usr/include/mysql -lmysqlclient -I/usr/include/mysql
+
+
+bash-4.4$ g++ -o connect example3.cxx -lmysqlcppconn -I/usr/include/cppconn
+ou
+bash-4.4$ g++ -o connect -I/usr/include -I/usr/include/cppconn -Wl,-Bdynamic example3.cxx -lmysqlcppconn
+
+
+bash-4.4$ g++ -o connect -I/usr/include/mysql -L/usr/include/mysql -I/usr/include/cppconn -L/usr/include/cppconn -lmysqlclient -lmysqlcppconn example4.cxx
+
+http://download.nust.na/pub6/mysql/tech-resources/articles/mysql-connector-cpp.html
+https://github.com/anhstudios/mysql-connector-cpp/blob/master/examples/README
+
+https://r3dux.org/2010/11/how-to-use-mysql-connectorc-to-connect-to-a-mysql-database-in-windows/
+
+https://stackoverflow.com/questions/19348319/mysql-cppconn-threads-segmentation-fault
+https://stackoverflow.com/questions/40041865/database-connection-error-in-mysql-through-mysql-cppconn
+https://stackoverflow.com/questions/16424828/how-to-connect-mysql-database-using-c

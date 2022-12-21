@@ -1,0 +1,27 @@
+We at Captive Metrics would like to acknowledge the following people and
+organizations for their contributions to our software. The whole is a sum
+of its parts and these parts made a real difference.
+
+*) Karsten Lentzsch, the JGoodies guy at http://www.jgoodies.com. Karsten,
+   thank you so much for your work. It makes Java look so much more
+   professional.
+
+*) Jason J. Simas, the author of the Chart2D library. His stuff can be found at
+   http://chart2d.sourceforge.net/. Jason, we hope you decide to do Chart3D.
+
+(We know that both Karsten and Jason would like a little remuneration for
+ their considerable work, so as soon as we have income coming in, we'll send
+ a little your way. You deserve it.)
+
+*) I don't see any damn manifolds. Just a tree.
+
+*) Jeff Skaletsky, the ubiquitous uber-guru of Unix system administration.
+   Jeff, again and again, thank you.
+
+*) The geniuses at Trolltech who were kind enough to let us use their licenses
+   for our own software since it was exactly what we wanted. Thank you so much,
+   especially, Cathrine Bore.
+
+*) Especially, the biggest thank you to Mrs. Richard Pettit who allowed her
+   husband to follow his dream and start Captive Metrics Software Corporation.
+   You, too, are a visionary.

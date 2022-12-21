@@ -1,0 +1,217 @@
+/****************************************************************************
+**
+** Copyright (c) 2006-2007 Captive Metrics Software Corporation.
+**                    All rights reserved.
+**
+** This file is part of the jmdr library of Captivity.
+**
+** This file may be used under the terms of the GNU General Public
+** License version 2.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE-GPL.txt contained within the
+** same package as this file. This software is subject to a
+** dual-licensing mechanism, the details of which are outlined in
+** file LICENSE-DUAL.txt, also contained within this package. Be sure
+** to use the correct license for your needs. To view the commercial
+** license, read LICENSE-COMMERCIAL.txt also contained within this
+** package.
+**
+** If you do not have access to these files or are unsure which license
+** is appropriate for your use, please contact the sales department at
+** sales@captivemetrics.com.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+****************************************************************************/
+
+
+              CXX = g++
+#ifdef LinuxArchitecture
+               LD = $(CXX)
+       OS_VERSION = `os_version`
+          INCLUDE = -I../../../../mdr -I/opt/java/include -I/opt/java/include/linux
+   CXXSTD_DEFINES =
+  STD_CPP_DEFINES = -D`uname -p`
+      STD_DEFINES = -D`uname -p`
+           CCLINK = $(CC)
+         LDPRELIB =
+        LDOPTIONS =
+     TOP_INCLUDES =
+    PROTO_DEFINES =
+             LIBS = -L$(LIBDIR) -lmdr
+               OS = linux
+           TARGET = libjmdr.so
+            OPTIM = -g
+# ifdef _BUILD32
+             MACH = x86
+       CXXOPTIONS = -D_LINUX -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_='(unsigned int)'
+    CXXDEBUGFLAGS = $(OPTIM) -mcpu=pentium4 -m32 -Wall -fPIC
+# else
+             MACH = x86_64
+       CXXOPTIONS = -D_LINUX -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_=''
+    CXXDEBUGFLAGS = $(OPTIM) -mcpu=athlon -m64 -Wall -fPIC
+# endif
+# ifdef i386Architecture
+             MACH = x86
+       CXXOPTIONS = -D_LINUX -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_='(unsigned int)'
+    CXXDEBUGFLAGS = $(OPTIM) -m32 -Wall -fPIC
+# endif
+     SHLIBLDFLAGS = $(CXXDEBUGFLAGS) -shared
+            SHELL = /bin/sh
+#endif
+
+#ifdef SunArchitecture
+              CXX = CC
+               LD = $(CXX)
+          INCLUDE = -I../../../../mdr -I/opt/java/include -I/opt/java/include/solaris
+       OS_VERSION = `os_version`
+            OPTIM = -g
+# if defined(i386Architecture)
+#  ifdef _BUILD32
+             MACH = x86
+       CXXOPTIONS = -D_SOLARIS -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_='(unsigned int)'
+    CXXDEBUGFLAGS = $(OPTIM) -KPIC -mt
+#  else
+             MACH = x86_64
+       CXXOPTIONS = -D_SOLARIS -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_=''
+    CXXDEBUGFLAGS = $(OPTIM) -xarch=amd64 -KPIC -mt
+#  endif
+# else
+#  ifdef _BUILD32
+             MACH = sparc
+       CXXOPTIONS = -D_SOLARIS -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_='(unsigned int)'
+    CXXDEBUGFLAGS = $(OPTIM) -xarch=v8 -xchip=ultra3 -KPIC -mt
+#  else
+             MACH = sparcv9
+       CXXOPTIONS = -D_SOLARIS -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_=''
+    CXXDEBUGFLAGS = $(OPTIM) -xarch=v9 -xchip=ultra3 -KPIC -mt
+#  endif
+# endif
+             LIBS = -L$(LIBDIR) -lmdr -lkstat -lkvm -lm -ldl -lelf -lCstd
+     SHLIBLDFLAGS = $(CXXDEBUGFLAGS) -G
+   CXXSTD_DEFINES =
+           CCLINK = $(CC)
+         LDPRELIB =
+  STD_CPP_DEFINES = -Dsun -D`uname -p`
+      STD_DEFINES = -Dsun -D`uname -p`
+           YFLAGS = -dv
+     TOP_INCLUDES =
+               OS = solaris
+           TARGET = libjmdr.so
+#endif
+
+#ifdef __DARWIN__
+       OS_VERSION = `os_version`
+          INCLUDE = -I../../../../mdr -I/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Headers
+       CXXOPTIONS = -D_DARWIN -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_='(unsigned int)'
+            OPTIM = -g
+    CXXDEBUGFLAGS = $(OPTIM) -Wall -fPIC
+   CXXSTD_DEFINES =
+#ifdef i386
+             MACH = x86
+#else
+             MACH = ppc
+#endif
+        CCOPTIONS = -D_DARWIN
+             LIBS = -L$(LIBDIR) -lmdr -framework CoreFoundation -framework IOKit
+               OS = darwin
+               LD = g++ $(OPTIM) -dynamiclib -flat_namespace \
+                    -undefined suppress -single_module
+           TARGET = libjmdr.jnilib
+#endif
+
+#ifdef FreeBSDArchitecture
+               LD = $(CXX)
+       OS_VERSION = `os_version`
+          INCLUDE = -I../../../../mdr -I/usr/local/include -I/opt/java/include -I/opt/java/include/freebsd
+       CXXOPTIONS = -D_FREEBSD -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_='(unsigned int)'
+            OPTIM = -g
+    CXXDEBUGFLAGS = $(OPTIM) -Wall -fPIC
+   CXXSTD_DEFINES =
+  STD_CPP_DEFINES = -D`uname -p`
+      STD_DEFINES = -D`uname -p`
+           CCLINK = $(CC)
+         LDPRELIB =
+        LDOPTIONS =
+     TOP_INCLUDES =
+    PROTO_DEFINES =
+             LIBS = -L$(LIBDIR) -lmdr -lkvm -ldevstat
+               OS = freebsd
+           TARGET = libjmdr.so
+             MACH = x86
+#endif
+#ifdef AIXArchitecture
+              CXX = xlC_r
+               LD = $(CXX)
+          INCLUDE = -I../../../../mdr -I../../../.. -I/usr/local/include -I/usr/java5/include
+       CXXOPTIONS = -D_AIX -DOS_VERSION=$(OS_VERSION) $(INCLUDE) \
+                    -D_POINTER_CAST_='(unsigned int)'
+       OS_VERSION = `os_version`
+             LIBS = -L$(LIBDIR) -lmdr -lperfstat -L/usr/local/lib -lnetsnmp -lpthread -lintl
+            OPTIM = -g
+    CXXDEBUGFLAGS = $(OPTIM) -qpic=large
+     SHLIBLDFLAGS = $(CXXDEBUGFLAGS) -G
+   CXXSTD_DEFINES =
+           CCLINK = $(CXX)
+         LDPRELIB =
+  STD_CPP_DEFINES = -Daix -D`uname -p`
+      STD_DEFINES = -Daix -D`uname -p`
+           YFLAGS = -dv
+     TOP_INCLUDES =
+               OS = aix
+           TARGET = libjmdr.so
+             MACH = ppc
+#endif
+
+           LIBDIR = ../../../../../lib/$(OS)/$(MACH)
+             OBJS = mdr_t.o \
+                    mdr_misc_t.o \
+                    mdr_cpu_t.o \
+                    mdr_cpuinfo_t.o \
+                    mdr_cache_t.o \
+                    mdr_disk_t.o \
+                    mdr_ctlr_t.o \
+                    mdr_ctlrstat_t.o \
+                    mdr_icmp_t.o \
+                    mdr_iostat_t.o \
+                    mdr_ip_t.o \
+                    mdr_memory_t.o \
+                    mdr_mnt_t.o \
+                    mdr_mp_t.o \
+                    mdr_mpstat_t.o \
+                    mdr_netif_t.o \
+                    mdr_cpustat_t.o \
+                    mdr_pf_t.o \
+                    mdr_ps_t.o \
+                    mdr_tcp_t.o \
+                    mdr_thread_t.o \
+                    mdr_udp_t.o \
+                    mdr_performance_host_t.o \
+                    mdr_performance_counter_t.o \
+                    mdr_systat_t.o \
+                    mdr_category_t.o \
+                    mdr_proc_states_t.o
+
+.SUFFIXES: .cpp
+
+.cpp.o:
+	$(CXX) -c $(CXXDEBUGFLAGS) $(CXXOPTIONS) $(STD_CPP_DEFINES) $*.cpp -o $*.o
+
+all::	$(TARGET)
+
+$(TARGET):	$(OBJS)
+	$(LD) -o $(TARGET) $(SHLIBLDFLAGS) $(OBJS) $(LIBS)
+	-mv $(LIBDIR)/$(TARGET) $(LIBDIR)/$(TARGET).old
+	cp $(TARGET) $(LIBDIR)
+
+clean::
+	/bin/rm -f $(OBJS) $(TARGET)

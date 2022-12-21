@@ -1,0 +1,5 @@
+DEP = ../xml/bexml ../fontes/befontes
+
+DEPS := $(DEPS) $(DEP)
+DEPS_I = $(foreach list,$(DEP),$(dir $(list))Makefile.dep)
+include $(DEPS_I)

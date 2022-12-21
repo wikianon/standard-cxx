@@ -1,0 +1,9 @@
+Este exemplo foi criado com a finalidade de aprender a se usar métodos get set e encapsulamento em C++.
+Para compilar o programa basta entrar na pasta srcmain/ dar permissão de execução  ao script install, 
+execute o mesmo para instalar os headers depois entre na pasta srcmain e faça make.
+
+bash-4.4$ cd srcmain/ 
+
+bash-4.4$ make install
+
+bash-4.4$ make

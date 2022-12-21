@@ -1,0 +1,44 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script apache2/site read.sh
+
+exit_status=0
+
+sites=`get_data "$getallsites" | \
+  while read line; 
+  do
+    get_sites "$line"
+    echo " $name"
+done`
+
+sites=( $sites )
+for site in `ls $apache2rootdir/sites-available`
+do
+    count=0
+    name=${site%.*}
+    while [ ! "${sites[count]}" = "" ]
+    do
+        if [ "${sites[count]}.conf" = "$site" ]; then
+            break;
+        fi
+        count=$(( $count + 1 ))
+    done
+    
+    if [ "${sites[count]}" = "" ]; then
+        mne_error_ignore=1
+        if [ -f "$apache2rootdir/sites-enabled/$site" ]; then 
+            rm "$apache2rootdir/sites-enabled/$site"
+        fi
+        rm "$apache2rootdir/sites-available/$site"
+        rm "$certcertdir/$name.crt"
+        rm "$certcsrdir/$name.csr"
+        rm "$certkeydir/$name.key"
+        mne_error_ignore=
+    fi
+done
+
+$apache2restart  2>&1 > /dev/null
+

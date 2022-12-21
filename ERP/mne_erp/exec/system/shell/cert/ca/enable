@@ -1,0 +1,51 @@
+#!/bin/bash
+
+exit_status=0
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script cert/ca read.sh
+
+mkdir -p $certcadir   2>&1 >/dev/null
+mkdir -p $certkeydir  2>&1 >/dev/null
+mkdir -p $certcertdir 2>&1 >/dev/null
+mkdir -p $certcsrdir  2>&1 >/dev/null
+
+chown -R root:$daemonuser $certcadir
+chown -R root:$daemonuser $certkeydir
+chown -R root:$daemonuser $certcertdir
+chown -R root:$daemonuser $certcsrdir
+
+chmod 770 $certcadir
+chmod 770 $certkeydir
+chmod 770 $certcertdir
+chmod 770 $certcsrdir
+
+conf=`get_data "$getcertconf"`
+get_certconf "$conf"
+
+if [ -f $certcadir/ca.crt ]; then
+    chmod 600 $certcadir/ca.key
+    chmod 644 $certcadir/ca.crt
+    if [ "$vaoverwriteInput" != "1" ]; then
+        echo "Key allready exists";
+    else
+        echo $vapasswdInput | openssl genrsa -des3 -passout stdin -out $certcadir/ca.key 4096 >&$logfile 2>&1
+        echo $vapasswdInput | openssl req -new -sha256 -x509 -days 3650 -passin stdin -key $certcadir/ca.key -out $certcadir/ca.crt -config $scriptdir/../openssl.conf -extensions v3_ca -subj "/CN=$org CA/C=$country/ST=$state/L=$city/O=$org/OU=$orgunit"
+    fi
+else
+    echo $vapasswdInput | openssl genrsa -des3 -passout stdin -out $certcadir/ca.key 4096 >&$logfile 2>&1
+    echo $vapasswdInput | openssl req -new -sha256 -x509 -days 3650 -passin stdin -key $certcadir/ca.key -out $certcadir/ca.crt -config $scriptdir/../openssl.conf -extensions v3_ca -subj "/CN=$org CA/C=$country/ST=$state/L=$city/O=$org/OU=$orgunit"
+fi
+
+domain=`hostname`
+aliases=$(hostname --all-fqdns | sed -e 's/ *$//' -e "s/ /,/g")
+. exec/system/shell/cert/http/mkcert
+
+mne_error_ignore=1
+rm /usr/local/share/ca-certificates/mne_erpca.crt >&$logfile 2>&1
+mne_error_ignore=
+ln -s $certcadir/ca.crt /usr/local/share/ca-certificates/mne_erpca.crt
+update-ca-certificates >&$logfile 2>&1
+

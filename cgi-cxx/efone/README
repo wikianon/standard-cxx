@@ -1,0 +1,55 @@
+Efone - Distributed internet telephony system.
+
+(c) 1999,2000 Krzysztof Dabrowski
+(c) 1999,2000 ElysiuM deeZine
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version
+2 of the License, or (at your option) any later version.
+
+1. What is this?
+
+This is a distributed telephony system for Linux. The goal is to have a
+distributed system similar to ICQ where clients connect to each other using
+the location information provided by central server(s).
+
+2. What is the current state of the project?
+
+The basic client/server that can connect another one of it's kind over the
+net and send & receive voice in full duplex mode without compression is
+ready althouth it does contain a lot of bugs probably. It's usable only on
+LANs or on high bandwith WANs at the moment because of the lack of
+compression.
+
+3. What is the roadmap?
+
+- clean up and debug client
+- add compression algorightms (gsm and others)
+- create central server that keeps user's data with a web based interface
+- add gtk or qt interface
+- debug, debug, debug
+
+4. How can i help?
+
+You can join the development by sending patches to the author (me). Any help
+would be apreciated.
+
+5. Contact info:
+
+The project's home page is: http://www.elysium.pl/members/brush/efone/  .
+You can also reach my via e-mail at: brush@elysium.pl
+
+6. Hardware requirements.
+
+You will need a full duplex sound card with oss compatible sound driver to
+use this application. I use Soundblaster AWE 32 for my development.
+
+7. How to build/use it?
+
+Unpack the distribution. Change to the resulting directory. Type 'make'.
+After a short while everything should finish and you have the resulting
+'efone' binary. Run it on 2 machines and issue a "connect <destination ip>"
+command. It should connect and you can speak.
+Use the 'help' command to learn more.
+https://www.scriptbrasil.com.br/script/c/efone-20000423.tar.gz

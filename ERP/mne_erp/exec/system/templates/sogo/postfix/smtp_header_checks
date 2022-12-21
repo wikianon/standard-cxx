@@ -1,0 +1,2 @@
+/^From:.*root@####DOMAIN####.*/ REPLACE From: "Root ####HOST####" <root@####DOMAIN####>
+/^Received.*from userid 0.*/    REPLACE From: "Root ####HOST####" <root@####DOMAIN####>

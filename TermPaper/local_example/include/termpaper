@@ -1,0 +1,11 @@
+/*! 
+ * TermPaper Header Include Global
+ *  
+ * Retirado de: http://www.cplusplus.com/forum/beginner/107842/
+ */
+#ifndef _TERMPAPER_INC
+#define _TERMPAPER_INC
+
+#include "TermPaper/include/termpaper.hxx"
+
+#endif

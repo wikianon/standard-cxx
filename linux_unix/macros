@@ -1,0 +1,19 @@
+/**/
+#ifndef _MACROS_INC
+#define _MACROS_INC 1
+
+#pragma GCC system_header
+
+#if __cplusplus < 201103L
+# include <bits/c++0x_warning.h>
+#endif
+
+#if __cplusplus <= 201103L
+# include <bits/c++14_warning.h>
+#endif
+
+#if __cplusplus <= 201402L
+# include <bits/c++17_warning.h>
+#endif
+
+#endif

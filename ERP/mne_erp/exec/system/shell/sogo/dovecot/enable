@@ -1,0 +1,29 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+mkdir -p        /var/dovecot >&$logfile 2>&1
+chown root:mail /var/dovecot >&$logfile 2>&1
+chmod 770       /var/dovecot >&$logfile 2>&1
+chmod g+s       /var/dovecot >&$logfile 2>&1
+
+user=$(hostname)"_sogo"
+prog='/####BINDPASSWORD####/ { gsub(/####BINDPASSWORD####/, "'$bindpassword'");  }
+      /####BINDUSER####/     { gsub(/####BINDUSER####/,"'$sogouser'");  }      
+      /####CERTCERTDIR####/  { gsub(/####CERTCERTDIR####/,"'$certcertdir'"); }
+      /####CERTKEYDIR####/   { gsub(/####CERTKEYDIR####/,"'$certkeydir'"); }
+      /####HOST####/         { gsub(/####HOST####/,"'$(hostname)'"); }
+      /####DOMAIN####/       { gsub(/####DOMAIN####/,"'$domain'"); }
+      /####DOMAINDN####/     { gsub(/####DOMAINDN####/,"'$domaindn'"); }
+      /####USER####/         { gsub(/####USER####/,"'$user'"); }
+                             { print $0 }'
+
+for file in dovecot-ldap.conf.ext conf.d/10-ssl.conf conf.d/10-auth.conf conf.d/15-mailboxes.conf conf.d/10-master.conf
+do
+  find_template conffile sogo/dovecot $file
+  save_file $dovecotconf/$file
+  awk "$prog" < $conffile > $dovecotconf/$file
+done
+
+systemctl restart dovecot.service

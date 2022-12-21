@@ -1,0 +1,38 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script domain/share read.sh
+find_script domain/detail read.sh
+
+find_template conffile domain/share shares_standalone.conf
+
+conf=
+dirs=
+
+prog='/####RELEASENAME####/ { gsub(/####RELEASENAME####/,releasename); }
+      /####FOLDERNAME####/  { gsub(/####FOLDERNAME####/,foldername);   }
+      /####DESCRIPTION####/ { gsub(/####DESCRIPTION####/,description); }
+      /####VALIDUSER####/   { gsub(/####VALIDUSER####/,validuser);     }
+      /####RDUSER####/      { gsub(/####RDUSER####/,rduser);     }
+                            { print $0 }'
+
+validuser=
+oldname=
+dirs=`( get_data "$getreleases" | \
+  while read line; 
+  do
+     get_releases "$line"
+     echo $line 1>&$logfile
+     validuser=$(get_data "$getvalidusers" "$name" | while read lline; do get_validusers "$lline"; echo -n " $user,"; done; )
+     rduser=$(get_data "$getvalidusers" "$name" | while read lline; do get_validusers "$lline"; if [ "$readwrite" = "r" ]; then echo -n " $user,"; fi; done; )
+     awk "$prog" "releasename=$name" "foldername=$DATAROOT$location" "description=$description" "validuser=$validuser" "rduser=$rduser" $conffile
+     
+  done )`
+  
+echo "$dirs" > $sambaconf/shares.conf
+
+. ./exec/system/shell/domain/restart/$typ
+
+exit $exit_status

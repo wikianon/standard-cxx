@@ -1,0 +1,61 @@
+#!/usr/bin/wish -f
+
+set cgipath "/home/httpd/cgi-bin/"
+set htmlpath "/home/httpd/html/"
+set binpath "/bin/"
+
+font create largefont -size 15
+label .title -text "Web E-mail Install" -font largefont
+
+label .cgi_label -text "Cgi-bin path:"
+entry .cgi_path -textvariable cgipath
+
+label .html_label -text "Html root path:"
+entry .html_path -textvariable htmlpath
+label .bin_label -text "Bin path:"
+entry .bin_path -textvariable binpath
+
+button .install -text "install" -command press_install
+button .quit -text "Quit" -command press_quit
+
+
+grid .title -row 0 -column 0 -columnspan 4 -sticky "we"
+
+grid .cgi_label -row 1 -column 0 -columnspan 2 -sticky "w"
+grid .cgi_path -row 2 -column 0 -columnspan 2 -sticky "e"
+
+grid .html_label -row 3 -column 0 -columnspan 2 -sticky "w"
+grid .html_path -row 4 -column 0 -columnspan 2 -sticky "e"
+
+grid .bin_label -row 5 -column 0 -columnspan 2 -sticky "w"
+grid .bin_path -row 6 -column 0 -columnspan 2 -sticky "e"
+
+grid .install -row 8 -column 0 -sticky "we"
+grid .quit -row 8 -column 1 -sticky "we"
+
+
+
+
+proc press_quit args {
+	exit
+}
+proc press_install args {
+	.install config -state disabled
+	.quit config -state disabled
+	exec "./install"
+	tk_messageBox -default ok -icon info -message "Web E-Mail is now installed." \
+	-title Done
+	exit
+}
+
+
+## init ####################
+
+tk_messageBox -default ok -icon info -message "This install is still in the making, it does not work!!!!" \
+-title "Don't use"
+
+wm title . "Web email tk install"
+
+update idletasks
+
+

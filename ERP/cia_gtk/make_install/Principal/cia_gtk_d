@@ -1,0 +1,7 @@
+#!/bin/sh
+cd /etc/cia_gtk
+gdb --x=gdbcmd -batch cia_gtk | tee ~/.cia/.saida
+cp ~/.cia/.saida ~/.cia/saida
+cp ~/.cia/.saida ~/.cia/erros
+
+exit 0

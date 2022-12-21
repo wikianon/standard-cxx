@@ -1,0 +1,141 @@
+#!/bin/bash
+
+i=`dpkg --get-selections mnesamba 2>/dev/null | expand | fgrep ' install' | wc -l`
+if [ ! "$i" = "1" ]; then
+    apt-get update >&$logfile 2>&1
+    apt-get -y install mnesamba >&$logfile 2>&1
+fi
+
+find_script domain/user read.sh
+find_template globalextra  domain/enable globalextra_primary.conf
+
+# -------------------------------------------
+# permission certifikat files
+# -------------------------------------------
+if [ ! -f  $certcadir/ca.crt ] || [ ! -f $certcertdir/$(hostname).crt ]; then
+    echo 'need certificates for provisoring domain';
+    exit 1
+fi
+chown root:root $certkeydir/$(hostname).key
+
+chmod 600 $certkeydir/$(hostname).key
+chmod 644 $certcertdir/$(hostname).crt
+chmod 600 $certcadir/ca.key
+chmod 644 $certcadir/ca.crt
+
+mne_error_ignore=1
+rm /usr/local/share/ca-certificates/mne_erpca.crt >&$logfile 2>&1
+mne_error_ignore=
+ln -s $certcadir/ca.crt /usr/local/share/ca-certificates/mne_erpca.crt
+update-ca-certificates >&$logfile 2>&1
+
+# -------------------------------------------
+# bereinigen
+# -------------------------------------------
+systemctl daemon-reload
+systemctl stop smb.service
+systemctl stop nmb.service
+
+systemctl disable smb.service
+systemctl disable nmb.service
+
+systemctl enable samba.service >&$logfile 2>&1
+systemctl daemon-reload
+
+systemctl stop samba.service
+
+save_file $sambaconf/smb.conf
+save_file $dhcpconfig
+save_file /etc/hosts
+save_file $kerberosconfig
+
+rm_config
+
+# -------------------------------------------
+# check address is in /etc/hosts
+# -------------------------------------------
+addr=$(ip addr show $netdevice | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+add_host $addr $(hostname) $domain
+
+# -------------------------------------------
+# domain provision
+# -------------------------------------------
+samba-tool domain provision \
+    --option="interfaces=lo,$netdevice" \
+     --option="bind interfaces only=yes" \
+     --use-rfc2307 \
+     --use-xattrs=yes \
+     --realm="$domain" \
+     --domain="$workgroup" \
+     --server-role=dc \
+     --dns-backend=BIND9_DLZ \
+     --adminpass="123()$vaadminpasswordInput" >&$logfile 2>&1
+
+mod_smbconf
+mod_bind
+mod_netpar
+mod_appamor_bind
+
+prog='/####CERTCERTDIR####/     { gsub(/####CERTCERTDIR####/,certcertdir); }
+      /####CERTKEYDIR####/      { gsub(/####CERTKEYDIR####/,certkeydir); }
+      /####CERTCADIR####/       { gsub(/####CERTCADIR####/,certcadir); }
+      /####HOST####/            { gsub(/####HOST####/,host); }
+                             { print $0 }'
+
+awk "$prog" "host=$(hostname)" "certcertdir=$certcertdir" "certkeydir=$certkeydir" "certcadir=$certcadir" < $globalextra > $sambaconf/globalextra.conf
+
+samba-tool user setexpiry --noexpiry administrator >&$logfile 2>&1
+samba-tool domain passwordsettings set --complexity=off >&$logfile 2>&1
+samba-tool domain passwordsettings set --min-pwd-length=1 >&$logfile 2>&1
+$sambabin/samba-tool user setpassword "administrator" --newpassword="$vaadminpasswordInput" >&$logfile 2>&1
+
+samba-tool user create www-data --rfc2307-from-nss --random-password --description="Unprivileged user for Webservices" >&$logfile 2>&1
+samba-tool user setexpiry --noexpiry www-data >&$logfile 2>&1
+
+mkdir -p /etc/mne/dns >&$logfile 2>&1
+chmod 755 /etc/mne/dns
+samba-tool user create dnsadmin                    --random-password --description="Unprivileged user for DNS Admin" >&$logfile 2>&1
+samba-tool user setexpiry --noexpiry  dnsadmin >&$logfile 2>&1
+samba-tool group addmembers DnsAdmins dnsadmin >&$logfile 2>&1
+
+samba-tool domain exportkeytab --principal=dnsadmin@$udomain /etc/mne/dns/dns.keytab >&$logfile 2>&1
+chown root:dhcpd /etc/mne/dns/dns.keytab
+chmod 440 /etc/mne/dns/dns.keytab
+
+# -------------------------------------------
+# bekannte Benutzer hinzufügen
+# -------------------------------------------
+add_users >&$logfile 2>&1
+systemctl restart samba.service
+systemctl restart bind9.service
+
+# -------------------------------------------
+# check name-server in dhclient.conf
+# -------------------------------------------
+mod_dhclient $addr $domain
+
+# -------------------------------------------
+# resolv.conf konfigurieren
+# -------------------------------------------
+echo "nameserver $addr" > /etc/resolv.conf
+echo "domain $domain" >> /etc/resolv.conf
+echo "search $domain" >> /etc/resolv.conf
+
+# -------------------------------------------
+# check kerberos
+# -------------------------------------------
+cp $sambavar/private/krb5.conf $kerberosconfig
+
+sleep 2
+systemctl status samba.service >&$logfile 2>&1
+
+echo "$vaadminpasswordInput" | kinit  administrator@$udomain >&$logfile 2>&1
+klist >&$logfile 2>&1
+
+# -------------------------------------------
+# Grant share Rights to Domainadmins
+# -------------------------------------------
+#$sambabin/net rpc rights grant "$(toupper $workgroup)\Domain Admins" SeDiskOperatorPrivilege -k
+
+echo 'please reboot before continue'
+

@@ -1,0 +1,36 @@
+/*
++------------------------------------------------------------------------------+
+| Luciano Trindade Pereira 2006                                                |
+| Bibliotecas Estendidas em C                                                  |
++------------------------------------------------------------------------------+
+| BECalendario                                                                 |
++------------------------------------------------------------------------------+
+| BECalendario é uma interface livre, você pode redistribuí-la e/ou            |
+| modificá-la dentro dos termos da Licença Pública Geral GNU como              |
+| publicada pela Fundação do Software Livre (FSF); na versão 2 da              |
+| Licença, ou (na sua opnião) qualquer versão.                                 |
+| Este programa é distribuido na esperança que possa ser útil,                 |
+| mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÃO a qualquer |
+| MERCADO ou APLICAÇÃO EM PARTICULAR.                                          |
+| Veja a Licença Pública Geral GNU para maiores detalhes.                      |
+| Você deve ter recebido uma cópia da Licença Pública Geral GNU                |
+| junto com este programa, se não, escreva para a Fundação do Software         |
+| Livre(FSF) Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA     |
++------------------------------------------------------------------------------+
+*/
+#ifndef _BECALENDARIO_H
+	#define _BECALENDARIO_H
+	#include "../global/beglobal.h"
+
+	//janela
+	typedef struct
+	{
+		GtkWidget *window;
+		GtkWidget *calendar;
+		GDate *Data;
+	} _BECalendario_Janela;
+	//Protótipos
+	GDate *be_Calendario (GtkWindow *winPai, const GDate *Data);
+	//Protótipos reservados
+	void _be_Interface_sinal_windowCalendario_on_buttonOK_clicked (GtkWidget *widget, gpointer user_data);
+#endif

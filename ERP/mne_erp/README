@@ -1,0 +1,46 @@
+
+ERP de código aberto
+ERP modular, baseado na web para Linux, Mac OS X e Windows
+Trazido a você por: nelsonit  
+
+O ERP de código aberto é um ERP baseado na Web.
+
+O software contém uma interface web para administração do
+sistema e um Active Directory com base em Samba resp.
+um groupware baseado em Sogo. Ele pode ser usado como SBS para
+compartilhar dados via Webdav e SMB e administrar o site com base no Apache.
+
+O software do servidor ERP é executado em Linux, MAC OS X e Windows.
+O ERP não precisa de plugins no navegador no computador cliente.
+O ERP pode ser acessado a partir de qualquer local sem esforço.
+Seja em casa com seu computador doméstico (Windows, Linux, MAC OS X)
+ou viajando com seu telefone inteligente (iPhone, iPad, Android)
+ou no escritório, os dados estão sempre à mão.
+
+Interface Webdav para sincronizar contatos e calendário.
+
+Além do cliente, pedido, gerenciamento de faturamento, etc ... 
+o ERP possui uma gestão completa de armazéns, 
+incluindo um gerenciamento de pedidos de material no armazém.
+
+
+Extensões ou modificações podem ser facilmente programadas.
+Características
+
+    Diretório Active
+    Groupware Sogo
+    Administração do Sistema
+    gerenciamento de clientes (crm)
+    gerenciamento de pedidos
+    gerenciamento de entrega
+    gerenciamento de armazenagem
+    gestão de inventário
+    gestão pessoal
+    gravação do tempo de trabalho
+    planejamento do tempo de trabalho
+    repositório de documentos com controle de versão
+    webdav, webcal, webcard
+    arquivamento de correio
+    Customizável
+    
+Fonte: https://sourceforge.net/projects/opensourceerp/files/    

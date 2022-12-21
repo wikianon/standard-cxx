@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -f check.db  2> /dev/null
+rm -f orig.db   2> /dev/null

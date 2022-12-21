@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment=
+Comment[en_US]=
+Encoding=UTF-8
+Exec=/opt/CMxe/init.d/CaptiveControl
+GenericName=
+GenericName[en_US]=
+Icon=/opt/CMxe/images/Control.png
+MimeType=
+Name=Control
+Name[en_US]=Control
+Path=
+StartupNotify=false
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DCOP-ServiceType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

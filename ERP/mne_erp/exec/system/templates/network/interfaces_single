@@ -1,0 +1,11 @@
+
+# The ####DEVICE#### network interface
+auto ####DEVICE####
+iface ####DEVICE#### inet ####TYP####
+        address ####ADDR####
+        netmask ####MASK####
+        broadcast ####BCAST####
+        gateway ####GW####
+        dns-nameservers ####NAMESERVER####
+        dns-search ####SEARCH####
+        dns-domain ####DOMAIN####

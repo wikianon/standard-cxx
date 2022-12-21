@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/ezinstaller">
+        <file>images/installer.png</file>
+    </qresource>
+</RCC>

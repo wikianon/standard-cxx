@@ -1,0 +1,6 @@
+#!/bin/sh
+# Por Luciano T. Pereira
+chown -R mysql:mysql *
+chmod -R 664 *
+chmod -R 774
+exit 0 

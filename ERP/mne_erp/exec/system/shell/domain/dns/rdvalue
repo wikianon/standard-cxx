@@ -1,0 +1,34 @@
+#!/bin/bash
+
+exit_status=0
+
+vaadminpasswordInputignore=1
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+. $scriptdir/functions
+
+find_script domain/dns read.sh
+read_domain
+
+if [ "$typ" = "primary" ] || [ "$typ" = "second" ]; then
+
+  acttime=$(date +%s)
+  check_passwd
+
+  prog='/^  Name=/     { name=""; split($1,n,"="); sub(/,/,"",n[2]); name=n[2]; next}
+        /^    A:/      { if ( name != "" ) printf("SELECT mne_system.dnsaddress_ok ( '\''%s'\'',  '\''%s'\'', '\''A'\'' );\n", name,  $2) }
+        /^    AAAA:/   { if ( name != "" ) printf("SELECT mne_system.dnsaddress_ok ( '\''%s'\'',  '\''%s'\'', '\''AAAA'\'' );\n", name,  $2) }
+        /^    CNAME:/  { if ( name != "" ) printf("SELECT mne_system.dnsaddress_ok ( '\''%s'\'',  '\''%s'\'', '\''CNAME'\'' );\n", name,  substr($2,1,length($2)-1)) }
+        /^    MX:/     { printf("SELECT mne_system.dnsaddress_ok ( '\'$domain\'',  '\''%s %s'\'', '\''MX'\'' );\n", substr($2,1,length($2) - 1),  num=substr($3,2,length($3) - 2)) }'
+
+
+  insert=$(samba-tool dns query $(hostname) $domain '@' ALL -k yes | awk "$prog")
+
+  prog='{ if ( substr($4,1,1) != "<" ) printf("SELECT mne_system.macaddress_ok('\''%s'\'', '\''%s'\'')\n;",  substr($2,2,length($2) - 2 ), $4 ) } '
+  insert="$insert"$(arp -an $name 2> /dev/null  | awk "$prog")
+
+  result=$(get_data "$insert");
+  result=$(get_data "$cleardnsaddress" $acttime)
+
+fi

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+exit_status=0
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+user=$valoginnameInput
+if [ ! "$user" = "" ]; then
+    . exec/system/shell/domain/user/update
+fi

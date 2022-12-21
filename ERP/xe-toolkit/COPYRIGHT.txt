@@ -1,0 +1,10 @@
+
+        Copyright (c) 2006-2007 Captive Metrics Software Corporation.
+
+                             All rights reserved.
+
+
+     Read the license files included with this package. Acceptance of the
+         license terms is a precondition of the use of this software.
+
+

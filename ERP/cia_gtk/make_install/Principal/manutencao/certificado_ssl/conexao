@@ -1,0 +1,1 @@
+mysql -u suportetecnico --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem

@@ -1,0 +1,19 @@
+#!/bin/bash 
+
+mne_error_ignore=1
+id $user 1>&$logfile 2>&1
+result=$?
+mne_error_ignore=
+
+option=
+if [ ! "$uid" = "" ]; then
+    option="--uid-number=$uid"
+else
+    option="--firstuid 10000 --ingroup nogroup"
+fi
+
+if [ ! "$result" = "0" ];then
+  /usr/sbin/adduser --shell /bin/false --no-create-home --disabled-password $option --gecos ",,,," $user 1>&$logfile 2>&1
+fi
+
+echo -ne "$password\n$password\n" | $sambabin/smbpasswd -a -s $user 1>&$logfile 2>&1

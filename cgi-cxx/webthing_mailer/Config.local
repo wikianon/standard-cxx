@@ -1,0 +1,47 @@
+/*
+WebThing Source code: copyright WebThing Ltd, 1997.
+
+All distribution, modification and use of this software is subject
+to the terms and conditions described in the accompanying LICENSE file,
+which also tells you how to obtain SUPPORT and WARRANTY.
+
+The software as distributed carries NO WARRANTY.  Please see file
+COPYING for details.
+
+Further information and updates are available from
+<URL:http://www.webthing.com/software/>
+*/
+/*	The basepath and _path variables set by the constructor
+	determine the base of the directory structure where
+	WebThing will store data (except DBM data).
+*/
+
+  Config() : basepath("/home/webthing/data/")
+/*
+	The default configuration puts all user directories in a flat
+	structure, which will slow significantly with more than a few
+	hundred users.  Define LARGE_SITE to get the /u/s/username
+	structure for thousands or tens of thousands of users.
+
+	Note that if you define LARGE_SITE you'll have to change the
+	adduser script too.
+*/
+	{
+#ifdef LARGE_SITE
+	char* uname = getenv("REMOTE_USER") ;
+	_path = basepath + uname[0] + '/' + uname[1] + '/' + uname ;
+#else
+	_path = basepath + getenv("REMOTE_USER") ;
+#endif
+	}
+
+/* mail domain (this is important) */
+  const char* domain() const { return "webthing.com" ; }
+
+/* base URL */
+  const char* base() const
+	{ return "<base href=\"http://localhost/vdesk/mailonly/\">" ; }
+
+/* log of outgoing messages */
+  char* sendlog() const
+	{ return "/var/log/webthing-sendlog" ; }

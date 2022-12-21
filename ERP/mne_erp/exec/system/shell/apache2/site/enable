@@ -1,0 +1,74 @@
+#!/bin/bash 
+
+vapasswordInputignore=1
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script apache2/site read.sh
+find_script cert/ca read.sh
+
+find_template portfile   apache2/site  site.conf
+find_template sportfile  apache2/site https.conf
+
+exit_status=0
+
+prog='/####HTTPPORT####/      { gsub(/####HTTPPORT####/, httpport);  }
+      /####HTTPSPORT####/     { gsub(/####HTTPSPORT####/,httpsport); }
+      /####DOMAIN####/        { gsub(/####DOMAIN####/,domain); }
+      /####ALIAS####/         { if ( aliases != "" ) gsub(/####ALIAS####/,aliases); else next; fi }
+      /####EMAIL####/         { if ( email != "" ) gsub(/####EMAIL####/,email); else next; fi   }
+      /####DOCUMENTROOT####/  { gsub(/####DOCUMENTROOT####/,documentroot); }
+      /####NAME####/          { gsub(/####NAME####/,name); }
+      /####APACHEROOTDIR####/ { gsub(/####APACHEROOTDIR####/,apacherootdir); }
+      /####DATAROOT####/      { gsub(/####DATAROOT####/,dataroot); }
+                              { print $0 }'
+
+conf=`get_data "$getcertconf"`
+get_certconf "$conf"
+
+mkdir -p $apache2rootdir/ssl 2>&1 >/dev/null
+
+get_data "$getsites" | \
+  while read line; 
+  do
+    get_sites "$line"
+    site=$name.conf
+    defaulttempl=`echo $conftext | awk '/mne_default_template/ { print "1"; exit }'`
+    if [ "$conftext" = "" ] || [ "$defaulttempl" = "1" ]; then
+      if [ "$httpsonly" = "f" ]; then
+        conftext=`cat $sportfile $portfile | sed -e '/mne_default_template_http /d'`
+      else
+        conftext=`cat $sportfile`
+      fi
+    fi
+     
+    echo "$conftext"  | sed -e 's/\\n/\n/g' | awk "$prog" "dataroot=$DATAROOT" "apacherootdir=$apache2rootdir" "httpport=$port" "httpsport=$sport" "domain=$domain" "aliases=$aliases" "email=$email" "documentroot=$documentroot" "name=$name" > $apache2rootdir/sites-available/$site
+     
+    if [ "$enabled" = "t" ]; then
+        if [ ! -f "$apache2rootdir/sites-enabled/$site" ]; then 
+            a2ensite $site 2>&1 > /dev/null
+            if [ $? != 0 ]; then
+                echo "error in enable $name" 1>&2;
+                exit_status=1 
+            fi
+        fi
+    else
+        if [ -f "$apache2rootdir/sites-enabled/$site" ]; then 
+            a2dissite $name 2>&1 > /dev/null
+            if [ $? != 0 ]; then
+                echo "error in disable $name" 1>&2;
+                exit_status=1 
+            fi
+        fi
+    fi
+     
+    if [ "$varenewcertInput" != "" ] ||  [ ! -e $certkeydir/$domain.key ] ||  [ ! -e $certcertdir/$domain.crt ]; then
+        . exec/system/shell/cert/http/mkcert
+    fi
+done
+
+$apache2reload  2>&1 > /dev/null
+
+exit $exit_status
+

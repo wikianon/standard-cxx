@@ -1,0 +1,126 @@
+#!/bin/bash
+
+i=`dpkg --get-selections mnesamba 2>&$logfile | expand | fgrep ' install' | wc -l`
+if [ ! "$i" = "1" ]; then
+    apt-get update >&$logfile 2>&1
+    apt-get -y install mnesamba >&$logfile 2>&1
+fi
+
+find_template globalextra  domain/enable globalextra_primary.conf
+
+systemctl daemon-reload >&$logfile 2>&1
+systemctl stop smb.service >&$logfile 2>&1
+systemctl stop nmb.service >&$logfile 2>&1
+
+systemctl disable smb.service >&$logfile 2>&1
+systemctl disable nmb.service >&$logfile 2>&1
+
+systemctl enable samba.service >&$logfile 2>&1
+systemctl daemon-reload >&$logfile 2>&1
+
+save_file $sambaconf/smb.conf
+save_file $dhcpconfig
+save_file /etc/hosts
+save_file $kerberosconfig
+
+# -------------------------------------------
+# permission certifikat files
+# -------------------------------------------
+if [ -f $certkeydir/$(hostname).key ]; then
+    chown root:root $certkeydir/$(hostname).key
+    chmod 600 $certkeydir/$(hostname).key
+fi
+
+if [ -f $certkeydir/$(hostname).crt ]; then
+    chmod 644 $certcertdir/$(hostname).crt
+fi
+
+if [ -f $certcadir/ca.crt ]; then
+  chmod 644 $certcadir/ca.crt
+fi
+
+# -------------------------------------------
+# check PDC address is in /etc/hosts
+# -------------------------------------------
+add_host $primaryaddr $primaryname $domain
+addr="$(ip addr show $netdevice | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)"
+add_host $addr $(hostname) $domain
+
+# -------------------------------------------
+# modify resolv.conf
+# -------------------------------------------
+echo "nameserver $primaryaddr" > /etc/resolv.conf
+echo "domain $domain" >> /etc/resolv.conf
+echo "search $domain" >> /etc/resolv.conf
+
+# -------------------------------------------
+# check kerberos
+# -------------------------------------------
+udomain=$(echo "$domain"| awk '{print toupper($0)}')
+mod_kerberos $udomain
+
+admin=$vaadminInput
+if [ "$admin" = "" ];then
+  admin=administrator
+fi
+echo "$vaadminpasswordInput" | kinit  $admin@$udomain 1>&$logfile 2>&1
+klist 1>&$logfile 2>&1
+
+# -------------------------------------------
+# domain provision
+# -------------------------------------------
+rm_config
+samba-tool domain join $domain DC \
+    --option="interfaces=lo,$netdevice" \
+    --option="bind interfaces only=yes" \
+    --realm="$domain" -U"$admin" \
+    --dns-backend=BIND9_DLZ \
+    --password="$vaadminpasswordInput" >&$logfile 2>&1
+
+mod_smbconf
+mod_netpar
+mod_bind
+mod_appamor_bind
+
+prog='/####CERTCERTDIR####/     { gsub(/####CERTCERTDIR####/,certcertdir); }
+      /####CERTKEYDIR####/      { gsub(/####CERTKEYDIR####/,certkeydir); }
+      /####CERTCADIR####/       { gsub(/####CERTCADIR####/,certcadir); }
+      /####HOST####/            { gsub(/####HOST####/,host); }
+                             { print $0 }'
+
+awk "$prog" "host=$(hostname)" "certcertdir=$certcertdir" "certkeydir=$certkeydir" "certcadir=$certcadir" < $globalextra > $sambaconf/globalextra.conf
+
+mkdir -p /etc/mne/dns >&$logfile 2>&1
+chmod 755 /etc/mne/dns
+
+mne_error_ignore=1
+samba-tool user create www-data --rfc2307-from-nss --random-password --description="Unprivileged user for Webservices"
+samba-tool user setexpiry --noexpiry www-data
+
+samba-tool user create dnsadmin --random-password --description="Unprivileged user for DNS Admin" 1>&$logfile 2>&1
+mne_error_ignore=0
+
+samba-tool user setexpiry --noexpiry  dnsadmin 1>&$logfile 2>&1
+samba-tool group addmembers DnsAdmins dnsadmin 1>&$logfile 2>&1
+
+samba-tool domain exportkeytab --principal=dnsadmin@$udomain /etc/mne/dns/dns.keytab >&$logfile 2>&1
+chown root:dhcpd /etc/mne/dns/dns.keytab
+chmod 440 /etc/mne/dns/dns.keytab
+
+systemctl restart samba.service
+systemctl restart bind9.service
+
+# -------------------------------------------
+# check name-server in dhclient.conf
+# -------------------------------------------
+mod_dhclient $addr $domain
+
+# -------------------------------------------
+# modifiziere resolv.conf
+# -------------------------------------------
+echo "nameserver $addr" > /etc/resolv.conf
+echo "domain $domain" >> /etc/resolv.conf
+echo "search $domain" >> /etc/resolv.conf
+
+echo 'please reboot before continue'
+

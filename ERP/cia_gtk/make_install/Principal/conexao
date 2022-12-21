@@ -1,0 +1,16 @@
+[servidor]
+ip=
+porta=
+usuario=
+senha=
+
+[seguranca]
+chaveprivada=client-key.pem
+certificado=client-cert.pem
+autoridade=ca-cert.pem
+caminhoautoridade=
+cifras=
+
+[local]
+#-1=ilimitado; -2=todos; 0=nenhum; 100 a 200=Bom
+sqlcachemax=-2

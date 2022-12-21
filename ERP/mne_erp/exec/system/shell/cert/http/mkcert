@@ -1,0 +1,36 @@
+#!/bin/bash
+
+export RANDFILE=/root/.rnd
+
+if [ ! -e $certkeydir/$domain.key ]; then
+    openssl genrsa -out $certkeydir/$domain.key 4096 >&$logfile 2>&1
+fi
+
+chmod 600 $certkeydir/$domain.key
+
+if [ "$aliases" != "" ]; then
+    echo "subjectAltName=DNS:$domain $aliases" | sed -e "s/[ 	][ 	]*/,/g" -e "s/,/,DNS:/g" > $scriptdir/multi.cnf
+else
+   echo "subjectAltName=DNS:$domain" > $scriptdir/multi.cnf
+fi
+
+rm -f $certcsrdir/$domain.csr  2>&1 >/dev/null
+rm -f $certcertdir/$domain.crt 2>&1 >/dev/null
+
+cat $certscriptdir/openssl.conf $scriptdir/multi.cnf > $scriptdir/sslconf.cnf
+
+openssl req -new -sha256 -key $certkeydir/$domain.key -out $certcsrdir/$domain.csr -config $scriptdir/sslconf.cnf -subj "/C=$country/ST=$state/L=$city/O=$org/OU=$orgunit"  >&$logfile 2>&1
+
+echo $vapasswdInput | openssl x509 -req -days 365 -extfile $scriptdir/multi.cnf \
+		     -in $certcsrdir/$domain.csr -CA $certcadir/ca.crt -CAkey $certcadir/ca.key -CAcreateserial -CAserial $certcadir/serial.seq -out $certcertdir/$domain.crt -passin stdin  >&$logfile 2>&1
+
+if [ "$?" != "0" ]; then
+    rm -f $certcsrdir/$domain.csr  2>&$logfile >/dev/null
+    rm -f $certcertdir/$domain.crt 2>&$logfile >/dev/null
+else
+    chmod 644 $certcsrdir/$domain.csr 
+    chmod 644 $certcertdir/$domain.crt
+fi   
+
+rm -f $scriptdir/multi.cnf
+rm -f $scriptdir/sslconf.cnf

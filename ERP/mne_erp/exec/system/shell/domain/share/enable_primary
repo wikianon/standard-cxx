@@ -1,0 +1,66 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script domain/share read.sh
+find_script domain/detail read.sh
+
+find_template conffile domain/share shares_primary.conf
+
+prog='/####RELEASENAME####/ { gsub(/####RELEASENAME####/,releasename); }
+      /####FOLDERNAME####/  { gsub(/####FOLDERNAME####/,foldername);   }
+      /####DESCRIPTION####/ { gsub(/####DESCRIPTION####/,description); }
+      /####WORKGROUP####/   { gsub(/####WORKGROUP####/,workgroup);     }
+                            { print $0 }'
+
+workgroup=$($sambabin/samba-tool domain info 127.0.0.1 | fgrep 'Netbios domain' | sed -e 's/  *//g' | cut -f2 -d:)
+dirs=`( get_data "$getreleases" | \
+  while read line; 
+  do
+     get_releases "$line"
+     awk "$prog" "releasename=$(tolower "$name")" "foldername=$DATAROOT$location" "description=$description" "workgroup=$workgroup" $conffile
+  done )`
+  
+echo "$dirs" > $sambaconf/shares.conf
+. ./exec/system/shell/domain/restart/$typ
+
+get_data "$getreleases" | \
+  while read line; 
+  do
+    get_releases "$line"
+     
+    groupname="Mneshare $(Tolower $name)"
+    groupnameread="$groupname Read"
+    $sambabin/samba-tool group list | egrep "^$groupname\$" >&$logfile 2>&1
+    if [ ! "$?" = "0" ]; then
+      $sambabin/samba-tool group add "$groupname" >&$logfile 2>&1
+      $sambabin/samba-tool group add "$groupnameread" >&$logfile 2>&1
+
+      wwwid=$($sambabin/wbinfo --name-to-sid="www-data" | cut -f1 "-d ")
+      wrsid=$($sambabin/wbinfo --name-to-sid="$groupname" | cut -f1 "-d ")
+      rdsid=$($sambabin/wbinfo --name-to-sid="$groupnameread" | cut -f1 "-d ")
+
+      ww="(A;OICI;0x001f01ff;;;$wwwid)"
+      wr="(A;OICI;0x001f01ff;;;$wrsid)"
+      rd="(A;OICI;0x001200a9;;;$rdsid)"
+
+      sddl=$($sambabin/samba-tool ntacl get --as-sddl "$DATAROOT/$location" | sed -e "s/(A.*$//" )
+      $sambabin/samba-tool ntacl set "$sddl$wr$rd$ww" "$DATAROOT/$location"
+    fi
+    chmod g+s "$DATAROOT/$location"
+     
+    $sambabin/samba-tool group removemembers "$groupname"     $(user=$($sambabin/samba-tool group listmembers "$groupname");     echo $user | sed -e "s/ /,/g") >&$logfile 2>&1
+    $sambabin/samba-tool group removemembers "$groupnameread" $(user=$($sambabin/samba-tool group listmembers "$groupnameread"); echo $user | sed -e "s/ /,/g") >&$logfile 2>&1
+
+    get_data "$getvalidusers" "$name" | \
+      while read lline;
+      do
+        get_validusers "$lline";
+        if [ "$readwrite" = "r" ]; then
+          $sambabin/samba-tool group addmembers "$groupnameread" "$user" >&$logfile 2>&1;
+        else
+          $sambabin/samba-tool group addmembers "$groupname" "$user" >&$logfile 2>&1;
+        fi
+    done;
+  done

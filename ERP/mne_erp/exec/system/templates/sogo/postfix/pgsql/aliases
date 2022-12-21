@@ -1,0 +1,4 @@
+user            = ####BINDUSER####
+dbname          = erpdb
+hosts           = 127.0.0.1
+query           = SELECT loginname FROM mne_system.mailaliaspublic WHERE lower(alias) = lower('%s');

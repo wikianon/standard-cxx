@@ -1,0 +1,5 @@
+
+
+bash-4.4$ gcc -o hello hello.c `pkg-config --cflags gtk+-3.0 --libs gtk+-3.0`
+
+

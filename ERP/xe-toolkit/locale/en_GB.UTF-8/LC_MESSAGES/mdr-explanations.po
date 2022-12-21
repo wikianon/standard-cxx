@@ -1,0 +1,918 @@
+#############################################################################
+##
+## Copyright (c) 2006-2007 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file is part of the localization catalogs of Captivity.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+#
+# Message catalog for the mdr library containing the explanations of all
+# the counters within all the fields.
+#
+
+#,fuzzy
+
+msgid ""
+msgstr ""
+
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: support@captivemetrics.com\n"
+"POT-Creation-Date: 2006-02-01 20:05-0500\n"
+"PO-Revision-Date: 2006-02-01 20:05-0500\n"
+"Last-Translator: Richard Pettit <richp@captivemetrics.com>\n"
+"Language-Team: English <support@captivemetrics.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#
+# Category explanations first.
+#
+msgid "Cache_Category"
+msgstr "Information about system caches within the host operating system."
+
+msgid "Cpu_Category"
+msgstr "Raw, per-CPU utilisation data."
+
+msgid "CpuInfo_Category"
+msgstr "CPU specifications for each CPU."
+
+msgid "CpuStat_Category"
+msgstr "CPU utilisation information over an interval for all CPUs in the "
+"system, presented as an aggregate."
+
+msgid "Ctlr_Category"
+msgstr "Raw, per-controller utilisation data."
+
+msgid "CtlrStat_Category"
+msgstr "Controller utilisation information over an interval for each controller."
+
+msgid "Disk_Category"
+msgstr "Raw, per-disk utilisation data."
+
+msgid "ICMP_Category"
+msgstr "Management information for the ICMP group as defined by RFC 1213. "
+"Note that this may not be a complete set of metrics as defined by the RFC."
+
+msgid "IoStat_Category"
+msgstr "Disk utilisation information over an interval for each disk."
+
+msgid "IP_Category"
+msgstr "Management information for the IP group as defined by RFC 1213. "
+"Note that this may not be a complete set of metrics as defined by the RFC."
+
+msgid "Memory_Category"
+msgstr "Data regarding the utilisation and operation of the virtual memory subsystem."
+
+msgid "Misc_Category"
+msgstr "Miscellaneous system information including both constant values "
+"and raw hardware counters."
+
+msgid "Mounts_Category"
+msgstr "Capacity information regarding mounted disk resources."
+
+msgid "MP_Category"
+msgstr "Raw, per-CPU utilisation data."
+
+msgid "MPStat_Category"
+msgstr "CPU utilisation information over an interval for each CPU."
+
+msgid "Netif_Category"
+msgstr "Raw, per-network-interface utilisation data."
+
+msgid "NetStat_Category"
+msgstr "Network interface utilisation information over an interval for each network interface."
+
+msgid "PF_Category"
+msgstr "Capacity information regarding system paging files."
+
+msgid "ProcStates_Category"
+msgstr "Counts of processes in the various run states."
+
+msgid "PS_Category"
+msgstr "Per-process utilisation and capacity information."
+
+msgid "SunCPU_Category"
+msgstr "Raw, SunOS specific, per-CPU utilisation data."
+
+msgid "SysStat_Category"
+msgstr "Aggregate presentation of various system metrics for memory, CPU, "
+"disk, paging files and hardware utilisation."
+
+msgid "TCP_Category"
+msgstr "Management information for the TCP group as defined by RFC 1213. "
+"Note that this may not be a complete set of metrics as defined by the RFC."
+
+msgid "Thread_Category"
+msgstr "Per-system-thread utilisation and capacity information."
+
+msgid "UDP_Category"
+msgstr "Management information for the UDP group as defined by RFC 1213. "
+"Note that this may not be a complete set of metrics as defined by the RFC."
+
+#: mdr_cache.cpp
+msgid "Cache Hits"
+msgstr "Of the number of attempts to locate an item in a cache, this value is the number "
+"of attempts that found that item within the cache."
+
+msgid "Cache Misses"
+msgstr "Of the number of attempts to locate an item in a cache, this value is the number "
+"of attempts that did not find that item within the cache."
+
+msgid "Hit Percentage"
+msgstr "The number of Cache Hits as a percentage of total attempts to locate an item in "
+"the cache. It is Cache Hits multiplied times 100 and divided by the number of attempts."
+
+#: mdr_cpu.cpp
+msgid "User CPU Ticks"
+msgstr "The number of clock ticks that were accumulated while the CPU was executing code "
+"in user space. User space code is the code within an application that is not executing "
+"a system call. System calls represent the operating system kernel executing priviledged "
+"code on behalf of an application."
+
+msgid "Kernel CPU Ticks"
+msgstr "The number of clock ticks that were accumulated while the CPU was executing "
+"priviledged code within the operating system kernel. This may be on behalf of an application "
+"that made a system call or as the normal ongoing function of the operating system."
+
+msgid "Wait CPU Ticks"
+msgstr "The number of clock ticks that were accumulated while there was at least one "
+"pending I/O request. Wait CPU Ticks are accounted for on many operating systems as idle "
+"time since the CPU is not actively waiting for the completion of an I/O. It is simply "
+"a hint about the I/O activity over a period."
+
+msgid "Nice CPU Ticks"
+msgstr "The number of clock ticks that were accumulated while the CPU was executing code "
+"in the user space of a program that had its nice value modified to a lower priority. User "
+"space code is the code within an application that is not executing a system call. System "
+"calls represent the operating system kernel executing priviledged code on behalf of an "
+"application."
+
+msgid "Idle CPU Ticks"
+msgstr "The number of clock ticks that were accumulated while the operating system kernel "
+"was executing the idle thread. The idle thread is executed when there are no processes "
+"on the system that are competing for execution cycles by the CPU."
+
+msgid "Hardware Interrupt Ticks"
+msgstr "The number of clock ticks that were accumulated while the operating system kernel "
+"was executing code to handle a hardware interrupt generated by one of the devices attached "
+"to the computer."
+
+msgid "Software Interrupt Ticks"
+msgstr "The number of clock ticks that were accumulated while the operating system kernel "
+"was executing code to handle a manufactured interrupt created by the kernel or one of the "
+"device drivers."
+
+#: mdr_cpuinfo.cpp
+msgid "CPU Instance Number"
+msgstr "A cardinal value that enumerates the CPU instance within the kernel. It may be a "
+"value assigned by the kernel or it may simply be the next number in the sequence of CPU "
+"instance numbers."
+
+msgid "CPU Architecture"
+msgstr "The name which identifes the CPU type by vendor."
+
+msgid "CPU Model Name"
+msgstr "The specific model of CPU as a sub-designation of the CPU Architecture."
+
+msgid "CPU Speed in Megahertz"
+msgstr "The clock speed of the CPU in magahertz as reported by the CPU."
+
+#: mdr_ctlr.cpp
+msgid "Read Operations"
+msgstr "The number of read operations performed on the device over the interval."
+
+msgid "KBytes Read"
+msgstr "The kilobytes of data read from the device over the interval."
+
+msgid "Read Time"
+msgstr "The number of milliseconds spent reading from the device over the interval."
+
+msgid "Write Operations"
+msgstr "The number of write operations performed on the device over the interval."
+
+msgid "KBytes Written"
+msgstr "The kilobytes of data written to the device over the interval."
+
+msgid "Write Time"
+msgstr "The number of milliseconds spent writing to the device over the interval."
+
+msgid "Run Time"
+msgstr "The total number of millseconds that the device was busy over the interval."
+
+msgid "Wait Time"
+msgstr "The total number of milliseconds spent waiting for the pending "
+"operations on the device to be accepted by the device for processing."
+
+msgid "Q-Length*Run-Time"
+msgstr "The Run Time multiplied times the number of operations "
+"currently running but not complete."
+
+msgid "Q-Length*Wait-Time"
+msgstr "The Wait Time multiplied times the number of operations "
+"current waiting to be started."
+
+msgid "Average Request Queue Length"
+msgstr "The average length of the pending request queue."
+
+msgid "Percent Time Busy"
+msgstr "The percentage of the interval represented by Run Time."
+
+msgid "Average Access Time"
+msgstr "The average amount of elapsed time in milliseconds between "
+"the time that an operation is accepted by the device and when the "
+"reply from the device for that operation is returned."
+
+msgid "Disks on Controller"
+msgstr "The number of disks connected to the controller."
+
+#: mdr_disk.cpp
+msgid "Disk Type"
+msgstr "A string representation of the type of disk. Possible values "
+"are \"physical\", \"logical\", \"network\", \"ram\", \"loop\" and \"meta\"."
+
+msgid "Megabytes of Capacity"
+msgstr "The total size of the device represented in megabytes."
+
+#: mdr_icmp.cpp
+msgid "Messages Received"
+msgstr "Total number of received ICMP messages."
+
+msgid "Messages Received mith Error"
+msgstr "Number of received ICMP messages with errors."
+
+msgid "Dest. Unreach. Msgs. Received"
+msgstr "Number of received \"Destination unreachable\" messages."
+
+msgid "Time Exceeded Msgs. Received"
+msgstr "Number of received \"Time exceeded\" messages."
+
+msgid "Param. Prob. Msgs. Received"
+msgstr "Number of received \"Parameter problem\" messages."
+
+msgid "Source Quench Msgs. Received"
+msgstr "Number of received \"Source quench\" messages."
+
+msgid "ICMP Redirect Msgs. Received"
+msgstr "Number of received \"ICMP redirect\" messages."
+
+msgid "Echo Request Msgs. Received"
+msgstr "Number of received \"Echo request\" messages."
+
+msgid "Echo Reply Msgs. Received"
+msgstr "Number of received \"Echo reply\" messages."
+
+msgid "Timestamp Msgs. Received"
+msgstr "Number of received \"Timestamp\" messages."
+
+msgid "Timestamp Reply Msgs. Received"
+msgstr "Number of received \"Timestamp reply\" messages."
+
+msgid "Addr. Mask Req. Msgs. Received"
+msgstr "Number of received \"Address mask request\" messages."
+
+msgid "Addr. Mask Reply Msgs. Received"
+msgstr "Number of received \"Address mask reply\" messages."
+
+msgid "Messages Transmitted"
+msgstr "Total number of sent ICMP messages."
+
+msgid "Messages Transmitted for Errors"
+msgstr "Number of messages not sent due to internal ICMP errors."
+
+msgid "Dest. Unreach. Msgs. Transmitted"
+msgstr "Number of \"Destination unreachable\" messages sent."
+
+msgid "Time Exceeded Msgs. Transmitted"
+msgstr "Number of \"Time exceeded\" messages sent."
+
+msgid "Param. Prob. Msgs. Transmitted"
+msgstr "Number of \"Parameter problem\" messages sent."
+
+msgid "Source Quench Msgs. Transmitted"
+msgstr "Number of \"Source quench\" messages sent."
+
+msgid "ICMP Redirect Msgs. Transmitted"
+msgstr "Number of \"ICMP redirrect\" messages sent."
+
+msgid "Echo Request Msgs. Transmitted"
+msgstr "Number of \"Echo request\" messages sent."
+
+msgid "Echo Reply Msgs. Transmitted"
+msgstr "Number of \"Echo reply\" messages sent."
+
+msgid "Timestamp Msgs. Transmitted"
+msgstr "Number of \"Timestamp request\" messages sent."
+
+msgid "Timestamp Reply Msgs. Transmitted"
+msgstr "Number of \"Timestamp reply\" messages sent."
+
+msgid "Addr. Mask Req. Msgs. Transmitted"
+msgstr "Number of \"Address mask request\" messages sent."
+
+msgid "Addr. Mask Reply Msgs. Transmitted"
+msgstr "Number of \"Address mask reply\" messages sent."
+
+#: mdr_ip.cpp
+msgid "Forwarder"
+msgstr "Indication of whether this entity is a gateway. "
+"Values are 1 for gateway and 2 for not a gateway."
+
+msgid "Time-to-Live"
+msgstr "Default time-to-live value for IP headers."
+
+msgid "Datagrams Received"
+msgstr "Number of input datagrams received from all interfaces "
+"including those received in error."
+
+msgid "In Discards from Header Errors"
+msgstr "Number of IP datagrams discarded due to errors in the IP header."
+
+msgid "In Discards from Address Errors"
+msgstr "Number of input datagrams discarded because the IP address "
+"in the destination field was not valid for this entity."
+
+msgid "Datagrams Forwarded"
+msgstr "Number of input datagrams forwarded because the IP address "
+"in the destination field was not valid for this entity."
+
+msgid "In Discards from Unknown Protocol"
+msgstr "Number of input datagrams discarded because the specified "
+"protocol in the IP header was invalid."
+
+msgid "In Discards of Good Datagrams"
+msgstr "Number of input datagrams discarded due to factors not "
+"related to the quality of the datagrams, but to a failure of the "
+"protocol stack, such as a resource shortage."
+
+msgid "Datagrams Sent Upstream"
+msgstr "Number of datagrams passed on to a higher layer "
+"module in the protocol stack."
+
+msgid "Upstream Output Requests"
+msgstr "Total number of datagrams requested to be delivered by "
+"IP on behalf of a higher layer module in the protocol stack."
+
+msgid "Out Discards of Good Datagrams"
+msgstr "Number of output datagrams discarded due to factors not "
+"related to the quality of the datagrams, but to a failure of the "
+"protocol stack, such as a resource shortage."
+
+msgid "Out Discards from No Route"
+msgstr "Number of output datagrams discarded because no route "
+"to the destination address could be found."
+
+msgid "Fragment Reassemble Timeout"
+msgstr "Maximum number of seconds that received fragments are "
+"held awaiting reassembly at this entity."
+
+msgid "Fragment Reassemblies Required"
+msgstr "Number of IP fragments received that needed to be "
+"reassembled at this entity."
+
+msgid "Fragments Reassembled"
+msgstr "Number of fragmented IP datagrams successfully reassembled."
+
+msgid "Fragment Reassembly Failures"
+msgstr "Number of failures at attempts to reassemble fragmented "
+"IP datagrams."
+
+msgid "Datagrams Fragmented"
+msgstr "Number of IP datagrams split into fragments by this entity."
+
+msgid "Fragment Discards from No-Fragment Flag"
+msgstr "Number of IP datagrams discarded because they needed to be "
+"fragmented but could not be because the \"No-Fragment\" "
+"flag was set."
+
+msgid "Fragments Created"
+msgstr "Number of IP datagram fragments created by this entity."
+
+msgid "Routing Entries Discarded"
+msgstr "Number of routing entries discarded even though they were valid."
+
+#: mdr_memory.cpp
+msgid "KBytes Free Memory"
+msgstr "Number of kilobytes of physical memory on the free list."
+
+msgid "KBytes Memory Paged In"
+msgstr "Number of kilobytes of memory paged in. A page-in operation "
+"is initiated when a page fault occurs during the execution of a program. "
+"This can be caused when a page that has been written to the paging file "
+"is needed in memory. It can also be caused when an executable is run for "
+"the first time and its pages are read in from the file system."
+
+msgid "KBytes Memory Paged Out"
+msgstr "Number of kilobytes of memory paged out. A page-out operation "
+"is initiated when a low memory condition occurs in the system and "
+"the pager process scans memory for pages that are least recently "
+"used. The contents of those pages are written out to the paging file "
+"and the page of physical memory is placed on the free list."
+
+msgid "Pages Scanned"
+msgstr "Number of pages of physical memory scanned by the pager process "
+"in the event of a low memory condition. Pages that are least recently "
+"used have their contents written to the paging file and the page of "
+"physical memory is placed on the free list."
+
+msgid "KBytes Memory Freed"
+msgstr "Number of kilobytes of memory placed on the free list, either as "
+"a result of the pager process running or due to the termination of a process."
+
+msgid "Total Page Faults"
+msgstr "The sum of minor and major page faults. Minor page faults do not "
+"require disk access as the faulted page is still in memory. Major faults "
+"require disk access since the page has been written to secondary storage."
+
+#: mdr_misc.cpp
+msgid "Host Name"
+msgstr "The name of the computer host on which the collector is running."
+
+msgid "OS Name"
+msgstr "The name of the operating system as given by the vendor."
+
+msgid "OS Version"
+msgstr "The version string of the currently running operating system."
+
+msgid "Physical Pages"
+msgstr "The amount of physical memory installed in the computer "
+"represented as the number of Page Size pages."
+
+msgid "Page Size"
+msgstr "The native size of a page of physical memory."
+
+msgid "CPUs Configured"
+msgstr "The number of CPUs physically present in the computer."
+
+msgid "CPUs On-line"
+msgstr "The number of configured CPUs that are on-line for the purpose of "
+"running the current operating system."
+
+msgid "Clock Ticks/sec"
+msgstr "The number of interrupts delivered to the CPU from the "
+"clock generator every second."
+
+msgid "Boot Time"
+msgstr "The time of system boot-up represented in Unix-style time, i.e., "
+"the number of seconds since 00:00:00 January 1, 1970."
+
+msgid "Total Interrupts"
+msgstr "The total number of hardware interrupts from all devices "
+"including the clock since system boot-up."
+
+msgid "Clock Interrupts"
+msgstr "The number of interrupts delivered to the CPU from the "
+"clock generator since system boot-up."
+
+msgid "System Calls"
+msgstr "The total number of system calls made by all programs "
+"since system boot-up."
+
+msgid "Context Switches"
+msgstr "The total number of context switches made by all programs "
+"since system boot-up."
+
+msgid "Process Count"
+msgstr "The number of processes on the system, in any state, "
+"at the current time."
+
+msgid  "1 Minute Run Queue Length"
+msgstr  "The average length of the process run queue over the past 1 minute."
+
+msgid  "5 Minute Run Queue Length"
+msgstr  "The average length of the process run queue over the past 5 minutes."
+
+msgid "15 Minute Run Queue Length"
+msgstr  "The average length of the process run queue over the past 15 minutes."
+
+msgid "Current Time"
+msgstr "The current time expressed in Unix-style time, i.e., "
+"the number of seconds since 00:00:00 January 1, 1970."
+
+#: mdr_mnt.cpp
+msgid "Special File"
+msgstr "For local mounts, this is the name of a block special device node, such as /dev/cdrom. "
+"For remote mounts, it will be the name of the remote resource. For NFS, it is in the form "
+"of <host>:<directory>, e.g. oak:/cabinet. For special file system types, such as procfs or "
+"tmpfs, it is simply the file system type name."
+
+msgid "Mount Point"
+msgstr "The full path of the directory on which the resource specified "
+"by Special File is mounted."
+
+msgid "File System Type"
+msgstr "The format of the mounted file system represented by a text name."
+
+msgid "Mount Options"
+msgstr "The options passed to \"mount\" at the time the file system was mounted."
+
+msgid "Mount Time"
+msgstr "The time the file system was mounted represented in Unix-style time, i.e., "
+"the number of seconds since 00:00:00 January 1, 1970."
+
+msgid "KBytes Space Total"
+msgstr "The total number of kilobytes of storage on the file system."
+
+msgid "KBytes Space Used"
+msgstr "The number of kilobytes of storage no longer available for use "
+"on the file system."
+
+msgid "KBytes Space Free"
+msgstr "The number of kilobytes of storage available for use "
+"on the file system."
+
+msgid "Percent Used"
+msgstr "The percentage of the total size that is used."
+
+msgid "Inode Count"
+msgstr "The number of inodes allocated to the file system."
+
+msgid "Free Inode Count"
+msgstr "The number of inodes that are available for use on the file system."
+
+msgid "Major Number"
+msgstr "The device major number of the local resource."
+
+msgid "Minor Number"
+msgstr "The device minor number of the local resource."
+
+msgid "File System ID"
+msgstr "A unique identifier for the file system."
+
+#: mdr_mpstat.cpp
+msgid "Percent User Time"
+msgstr "The percentage of the elapsed time spent executing code "
+"in user space. User space code is the code within an application that is not executing "
+"a system call. System calls represent the operating system kernel executing priviledged "
+"code on behalf of an application."
+
+msgid "Percent Kernel Time"
+msgstr "The percentage of the elapsed time spent executing "
+"priviledged code within the operating system kernel. This may be on behalf of an application "
+"that made a system call or as the normal ongoing function of the operating system."
+
+msgid "Percent Wait Time"
+msgstr "The percentage of the elapsed time while there was at least one "
+"pending I/O request charged to this CPU. Wait Time is accounted "
+"for on many operating systems as idle time since the CPU is not actively "
+"waiting for the completion of an I/O. It is simply a hint about the I/O "
+"activity over a period."
+
+msgid "Percent Idle Time"
+msgstr "The percentage of elapsed time that the operating system kernel "
+"was executing the idle thread. The idle thread is executed when there are no processes "
+"on the system that are competing for execution cycles by the CPU."
+
+#: mdr_netif.cpp
+msgid "IP Address"
+msgstr "The Internet Protocol address assigned to this interface."
+
+msgid "Network Mask"
+msgstr "The subnet mask assigned to this interface."
+
+msgid "Broadcast Address"
+msgstr "The broadcast address assigned to this interface."
+
+msgid "Maximum Transfer Unit"
+msgstr "The maximum packet size that can be sent or received "
+"on this interface."
+
+msgid "Bytes Received"
+msgstr "The number of bytes received by this interface."
+
+msgid "Bytes Transmitted"
+msgstr "The number of bytes transmitted by this interface."
+
+msgid "Packets Received"
+msgstr "The number of packets received by this interface."
+
+msgid "Packets Transmitted"
+msgstr "The number of packets transmitted by this interface."
+
+msgid "Errors on Receipt"
+msgstr "The number of packets received by this interface that "
+"contained errors that prevented further dissemination."
+
+msgid "Errors on Transmission"
+msgstr "The number of outbound packets that could not be sent "
+"because of errors."
+
+msgid "Failures on Receipt"
+msgstr "The number of valid packets received by this interface that "
+"could not be disseminated further due to a failure of the protocol "
+"stack, the operating system or the hardware."
+
+msgid "Failures on Transmission"
+msgstr "The number of valid outbound packets that could not be sent "
+"due to a failure of the protocol stack, the operating system, or "
+"the hardware."
+
+msgid "Collisions on Transmission"
+msgstr "The number of attempted packet transmitions on a CSMA/CD device that "
+"caused a collision on the shared media."
+
+msgid "Interface Speed (b/s)"
+msgstr "The speed of the interface in bits per second."
+
+msgid "Collision Percent"
+msgstr "The percentage of transmitted packets that met with a collision "
+"on a CSMA/CD device."
+
+msgid "Interface is Full Duplex"
+msgstr "Indication of whether the interface is full duplex or half duplex."
+
+#: mdr_ps.cpp
+msgid "Start Time"
+msgstr "The time, represented in Unix-style time, i.e., the number of seconds "
+"since 00:00:00 January 1, 1970, that the process was started."
+
+msgid "User ID"
+msgstr "The user identifier of the process."
+
+msgid "Effective User ID"
+msgstr "The effective user identifier of the process."
+
+msgid "Process ID"
+msgstr "The unique numeric identifier of the process."
+
+msgid "Parent Process ID"
+msgstr "The process identifier of the process that spawned this process."
+
+msgid "Terminal Device ID"
+msgstr "A numeric identifier used to determine what user input device (if any) "
+"was used to start the process."
+
+msgid "File Name"
+msgstr "The name of the process file without path-name delimiters."
+
+msgid "Full Command"
+msgstr "The full name of the command with its full path-name and command arguments."
+
+msgid "First Argument"
+msgstr "The name of the process file with path-name delimiters."
+
+msgid "Total CPU Seconds"
+msgstr "The sum of user and kernel CPU time accumulated by this process/thread since it started."
+
+msgid "User CPU Seconds"
+msgstr "The user CPU time accumulated by this process/thread since it started."
+
+msgid "Kernel CPU Seconds"
+msgstr "The kernel CPU time accumulated by this process/thread since it started."
+
+msgid "Total Size"
+msgstr "The size of this process/thread including all shared regions and pages not "
+"in memory."
+
+msgid "Resident Size"
+msgstr "The size of the portion of this process/thread that is contained in physical memory."
+
+msgid "Total I/O"
+msgstr "The amount of input/output in kilobytes performed by this process/thread."
+
+msgid "Percent CPU Use"
+msgstr "The percentage of elapsed time represented by the total CPU time."
+
+msgid "Percent Physmem Use"
+msgstr "The percentage of total physical memory represented by the resident "
+"portion of this process/thread."
+
+msgid "Voluntary Context Switches"
+msgstr "The number of context switches initiated by this process as a result "
+"of voluntarily giving up the CPU to wait for an event to occur."
+
+msgid "Involuntary Context Switches"
+msgstr "The number of context switches charged to this process/thread as a result "
+"of the process/thread expending its time quantum and being switched out in favour of "
+"another process/thread waiting to run."
+
+msgid "Major Page Faults"
+msgstr "The number of page faults requiring the reloading of the page from "
+"secondary storage."
+
+msgid "Minor Page Faults"
+msgstr "The number of page faults where the faulting page was found on the "
+"in-memory free list and did not require accessing secondary storage."
+
+msgid "Process State"
+msgstr "The state of the process represented as a number: 0 for \"runnable\", "
+"1 for \"sleeping\", 2 for \"stopped\", 3 for \"blocked\", 4 for \"unreapable\" "
+"or 5 for \"specific\"."
+
+msgid "Global Priority"
+msgstr "The priority of the process/thread represented in terms of the global "
+"priority of all classes of processes in the system."
+
+msgid "Unix Nice Value"
+msgstr "The scheduler priority adjustment value for Unix systems."
+
+msgid "Number of Threads"
+msgstr "The number of threads in the system context associated with this process."
+
+msgid "Total Size Delta"
+msgstr "The change in the total size from the previous to the current interval."
+
+msgid "Resident Size Delta"
+msgstr "The change in the resident size from the previous to the current interval."
+
+msgid "User Name"
+msgstr "The text name associated with the user identifier of the process."
+
+msgid "Effective User Name"
+msgstr "The text name associated with the effective user identifier of the process."
+
+#: mdr_systat.cpp
+msgid "KBytes Paged in/sec"
+msgstr "The kilobytes of pages paged in from secondary storage per second."
+
+msgid "KBytes Paged out/sec"
+msgstr "The kilobytes of pages paged out to secondary storage per second."
+
+msgid "Interrupts/sec"
+msgstr "The total number of hardware interrupts received per second."
+
+msgid "Context Switches/sec"
+msgstr "The total number of context switches per second."
+
+msgid "System Calls/sec"
+msgstr "The total number of system calls per second."
+
+msgid "Runnable Processes"
+msgstr "The number of processes in the system marked in the \"runnable\" state."
+
+msgid "Blocked Processes"
+msgstr "The number of processes in the system marked in the \"blocked\" state."
+
+msgid "Zombie Processes"
+msgstr "The number of processes in the system marked in the \"unreaped\" state."
+
+msgid "Percent Memory Free"
+msgstr "The percentage of total physical memory residing on the free list."
+
+msgid "Percent Paging File Free"
+msgstr "The percentage of total page file space that is unused."
+
+msgid "KBytes Read/sec"
+msgstr "The kilobytes of input from secondary storage per second."
+
+msgid "KBytes Written/sec"
+msgstr "The kilobytes of output to secondary storage per second."
+
+#: mdr_tcp.cpp
+msgid "Retransmit Timeout Algorithm"
+msgstr "Which algorithm is used to determine the amount of time "
+"to wait before retransmission. Values can be 1 for \"other\", "
+"2 for \"constant\", 3 for \"MIL-STD-1778\" and 4 for "
+"\"Jacobson's algorithm\"."
+
+msgid "Minimum Retransmission Timeout"
+msgstr "Minimum value for the retransmission timer."
+
+msgid "Maximum Retransmission Timeout"
+msgstr "Maximum value for the retransmission timer."
+
+msgid "Maximum Connection Count"
+msgstr "The maximum number of connections supported."
+
+msgid "Active Opens"
+msgstr "The total number of active (initiator) opens performed."
+
+msgid "Passive Opens"
+msgstr "The total number of passive (responder) opens recieved."
+
+msgid "Open Failures"
+msgstr "The number of failed connection attempts."
+
+msgid "Connection Resets"
+msgstr "The number of connections that have been reset."
+
+msgid "Established Connections"
+msgstr "The number of connections in the \"ESTABLISHED\" or "
+"\"CLOSE-WAIT\" state."
+
+msgid "Segments Received"
+msgstr "The number of segments received including those in error."
+
+msgid "Segments Transmitted"
+msgstr "The number of segments transmitted excluding retransmissions."
+
+msgid "Segments Retransmitted"
+msgstr "The number of segments that were retransmitted."
+
+msgid "Segments Received mith Error"
+msgstr "The number of segments received in error."
+
+msgid "RST Segments Transmitted"
+msgstr "The number of segments transmitted that contained the \"RST\" flag."
+
+#: mdr_thread.cpp
+msgid "Thread ID"
+msgstr "The thread identifier which may be unique to to all processes, "
+"but is required to be unique to the process to which it belongs."
+
+msgid "Thread State"
+msgstr "The state of the thread represented as a number: 0 for \"runnable\", "
+"1 for \"sleeping\", 2 for \"stopped\", 3 for \"blocked\", 4 for \"unreapable\" "
+"or 5 for \"specific\"."
+
+msgid "Id of Encapsulating Process"
+msgstr "The process identifier of the process to which this thread belongs."
+
+#: mdr_udp.cpp
+msgid "Undeliverable Datagrams Received"
+msgstr "The number of datagrams received for which there was no process "
+"listening on the destination port."
+
+msgid "Datagrams Received mith Error"
+msgstr "The number of datagrams received that could not be delivered for "
+"a reason other than there was no process listening on the destination port."
+
+msgid "Datagrams Transmitted"
+msgstr "The number of datagrams transmitted."
+
+#: mdr_proc_states.cpp
+msgid "Runnable"
+msgstr "The process is either running or runnable and waiting to run."
+
+msgid "Sleeping"
+msgstr "The process is not running or runnable and is waiting for an event "
+"to occur to place it back into the runnable state."
+
+msgid "Stopped"
+msgstr "The process has been stopped by user intervention."
+
+msgid "Blocked"
+msgstr "The process is blocked from running while waiting for the satisfaction "
+"of a request for a physical resource."
+
+msgid "Unreaped"
+msgstr "The process has exited but has not been recognised as such by the "
+"process that created it and is awaiting that action."
+
+msgid "Specific"
+msgstr "An operating system specific state not described by any of the other states."
+
+#: mdr_pf.cpp
+msgid "KBytes Total"
+msgstr "The total number of kilobytes of storage in the page file."
+
+msgid "KBytes Free"
+msgstr "The number of kilobytes of storage available for use "
+"in the page file."
+
+msgid "KBytes Used"
+msgstr "The number of kilobytes of storage no longer available for use "
+"in the page file."
+
+msgid "Bytes Received/sec"
+msgstr "The number of bytes received by this interface per second."
+
+msgid "Bytes Transmitted/sec"
+msgstr "The number of bytes transmitted by this interface per second."
+
+msgid "Packets Received/sec"
+msgstr "The number of packets received by this interface per second."
+
+msgid "Packets Transmitted/sec"
+msgstr "The number of packets transmitted by this interface per second."
+
+msgid "Errors on Receipt/sec"
+msgstr "The number of packets received by this interface per second that "
+"contained errors that prevented further dissemination."
+
+msgid "Errors on Transmission/sec"
+msgstr "The number of outbound packets per second that could not be sent "
+"because of errors."
+
+msgid "Failures on Receipt/sec"
+msgstr "The number of valid packets received by this interface per second that "
+"could not be disseminated further due to a failure of the protocol "
+"stack, the operating system or the hardware."
+
+msgid "Failures on Transmission/sec"
+msgstr "The number of valid outbound packets per second that could not be sent "
+"due to a failure of the protocol stack, the operating system, or "
+"the hardware."
+
+msgid "Collisions on Transmission/sec"
+msgstr "The number of attempted packet transmitions per second on a CSMA/CD device that "
+"caused a collision on the shared media."

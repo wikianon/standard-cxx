@@ -1,0 +1,39 @@
+<html><head>
+<title>Web E-Mail</title>
+<META HTTP-EQUIV="expires" content="0">
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#0000EF" alink="#FF0000" 
+background=/email/nlblue/bg1.gif>
+
+
+<table CELLSPACING=0 CELLPADDING=0 COLS=2 WIDTH="100%" NOSAVE>
+<tr NOSAVE><td NOSAVE>
+<b><font size="+4">Read</font></b>
+<font size=-1>&nbsp;&nbsp;&nbsp;(<!-#replace user_name>)</font>
+</td><td NOSAVE>
+<div align=right>
+&lt;&nbsp;<a href="<!-#replace url>" TARGET=_top>Main</a>&nbsp;-&nbsp;
+
+<a href="<!-#replace url>?write" TARGET=_top>Compose</a>&nbsp;-&nbsp;
+<a href="<!-#replace url>?book" TARGET=_top>Address Book</a>&nbsp;-&nbsp;
+<a href="<!-#replace url>?about" TARGET=_top>About</a>&nbsp;-&nbsp;
+<a href="<!-#replace url>?reset" TARGET=_top>Logout</a>&nbsp;>
+</div>
+</td></tr></table><hr WIDTH="100%">
+
+<table CELLSPACING=0 CELLPADDING=0 NOSAVE >
+<tr NOSAVE><td NOSAVE>
+<table CELLSPACING=0 CELLPADDING=0 WIDTH="100%" NOSAVE >
+<tr NOSAVE><td ALIGN=LEFT VALIGN=BOTTOM NOSAVE>
+<a href="<!-#replace url>?add_name_inbox=<!-#replace message_number>">Add address</a>&nbsp;&nbsp;
+<a href="<!-#replace url>?reply_inbox=<!-#replace message_number>">Reply</a>&nbsp;&nbsp;
+<a href="<!-#replace url>?forward_inbox=<!-#replace message_number>">Forward</a><br>
+<a href="<!-#replace url>?viewhtml_inbox=<!-#replace message_number>">HTML View</a>&nbsp;&nbsp;
+<a href="<!-#replace url>?viewprint_inbox=<!-#replace message_number>">Printable view</a>&nbsp;&nbsp;
+</td>
+<td ALIGN=RIGHT VALIGN=BOTTOM NOSAVE>
+<a href="<!-#replace url>?save_inbox=<!-#replace message_number>">Save</a>&nbsp;&nbsp;
+<a href="<!-#replace url>?delete_inbox=<!-#replace message_number>">Delete</a>
+</td></tr></table></td></tr>
+<tr NOSAVE><td NOSAVE>
+<form><textarea wrap=virtual cols=80 rows=20>

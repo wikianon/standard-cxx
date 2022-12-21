@@ -1,0 +1,35 @@
+#!/bin/bash -x
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+$sambabin/samba-tool user list | egrep "^$user\$" >/dev/null
+if [ ! "$?" = "0" ]; then
+
+  option=
+  if [ ! "$uid" = "" ]; then
+    option="--uid-number=$uid"
+  fi
+
+  mne_error_ignore=1
+  uid=$(id -u $user 2>&$logfile)
+  result=$?
+  mne_error_ignore=
+
+  if [ "$result" = "0" ]; then
+    $sambabin/samba-tool user create "$user" --random-password --rfc2307-from-nss $option
+  else
+     if [ "$option" = "" ]; then
+       lastuid=$(getent passwd | fgrep "$workgroup" | cut -f3 -d: | sort -n | tail -1)
+       if [ "$lastuid" != "" ]; then
+         let lastuid=lastuid+1
+         option="--uid-number=$lastuid"
+       else
+         option="--uid-number=30000"
+       fi
+     fi
+     
+    $sambabin/samba-tool user create "$user" --random-password $option
+  fi
+  $sambabin/samba-tool user setexpiry --noexpiry "$user"
+fi

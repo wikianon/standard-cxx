@@ -1,0 +1,83 @@
+#############################################################################
+##
+## Copyright (c) 2008 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+type=shared_obj
+language=c++
+target=libCCsolplugin.so
+optimize=-g
+
+if [ -z "$java_top" ]; then
+  java_top=/opt/java
+fi
+
+#
+# pre_snap: Makefile does not yet exist
+#
+pre_snap() {
+  case $os in
+  solaris) ;;
+  *) $ECHO This plugin is for Solaris only.
+     exit 1
+     ;;
+  esac
+
+  case $mach in
+  x86)
+    xflg=''
+    pcflg="'(unsigned int)'"
+    ;;
+  x86_64)
+    xflg=-xarch=generic64
+    pcflg="''"
+    ;;
+  sparc)
+    xflg=''
+    pcflg="'(unsigned int)'"
+    ;;
+  sparcv9)
+    xflg=-xarch=v9
+    pcflg="''"
+    ;;
+  esac
+
+  top="../../../../../.."
+  defines="-D_SOLARIS -D_POINTER_CAST_=$pcflg"
+  includes="-I. -I$top/src/mdr -I$java_top/include -I$java_top/include/solaris"
+  ccflags="$xflg -mt $defines $includes"
+  ldflags="-L$top/lib/$os/$mach -lmdr -lkstat -ljmdr -lnsl -lsocket -lCstd -lpthread"
+}
+
+#
+# post_snap: Makefile exists; doctor it or append it
+#
+post_snap() {
+  makefile=$1
+
+  (
+    top="../../../../../.."
+    $ECHO \\ninstall:\\t$target
+    $ECHO \\t-mv $top/lib/$os/$mach/$target $top/lib/$os/$mach/$target.old
+    $ECHO \\tcp $target $top/lib/$os/$mach/$target
+  ) >> $makefile
+}

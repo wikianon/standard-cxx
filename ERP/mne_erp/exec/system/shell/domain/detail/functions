@@ -1,0 +1,217 @@
+#!/bin/bash
+
+function add_host()
+{
+    local addr=$1
+    local hostname=$2
+    local domain=$3
+    local prog='BEGIN         { printf("'$addr' '$hostname' '$hostname'.'$domain'\n"); }
+                /'$hostname'/ { for( i=2; i<=NF; i++ )
+                                {
+                                  names = ""
+                                  if ( index($i, "'$hostname'") != 1 && index($i, "'$hostname'.") !=1 )
+                                    names = names + " " + $i; 
+                                };
+                                if ( names != "" )
+                                printf("%s %s\n", $1, names); next;
+                              }
+                              { print $0 }'
+
+    awk "$prog" < /etc/hosts > /tmp/hosts$$
+    mv /tmp/hosts$$ /etc/hosts
+}
+
+function add_users()
+{
+  get_data "$getuser" | \
+  while read line; 
+  do
+    get_user "$line"
+     
+    option=
+    if [ ! "$uid" = "" ]; then
+      option="--uid-number=$uid"
+    fi
+     
+    mne_error_ignore=1
+    id $user 1>&$logfile 2>&1
+    result=$?
+    mne_error_ignore=
+     
+    if [ "$result" = "0" ]; then
+      $sambabin/samba-tool user create "$user" --random-password --rfc2307-from-nss  $option
+    else
+     if [ "$option" = "" ]; then
+       lastuid=$(getent passwd | fgrep "$workgroup" | cut -f3 -d: | sort -n | tail -1)
+       if [ "$lastuid" != "" ]; then
+         let lastuid=lastuid+1
+         option="--uid-number=$lastuid"
+       else
+         option="--uid-number=30000"
+       fi
+     fi
+       $sambabin/samba-tool user create "$user" --random-password  $option
+    fi
+    samba-tool user setexpiry --noexpiry "$user"
+    
+  done
+}
+
+function mod_bind()
+{
+  fgrep "/var/lib/mne/samba/private/named.conf" $bindconf/named.conf 1>&$logfile 2>&1
+  if [ "$?" != "0" ];then
+    save_file $bindconf/named.conf
+    echo "include \"/var/lib/mne/samba/private/named.conf\";" >> $bindconf/named.conf
+  fi
+  
+  fgrep "dns.keytab" $bindconf/named.conf.options 1>&$logfile 2>&1
+  if [ "$?" != "0" ];then
+    save_file $bindconf/named.conf.options
+    sed -e  '/options  *{/a\ \ \ \ \ \ \ \ tkey-gssapi-keytab "/var/lib/mne/samba/private/dns.keytab";' $bindconf/named.conf.options > /tmp/bindoption.$$
+    mv /tmp/bindoption.$$ $bindconf/named.conf.options
+  fi
+  
+  chmod 640 /var/lib/mne/samba/private/dns.keytab
+  chown root:bind /var/lib/mne/samba/private/dns.keytab
+  chown root:bind /var/lib/mne/samba/private/named.conf
+  
+  
+}
+
+function mod_dhclient()
+{
+  if [ -f $dhcpconfig ]; then
+    find_template dhcpconfadd domain/enable dhcpconf_add.conf
+    prog=' /####DOMAIN####/     { gsub(/####DOMAIN####/,domain); }
+           /####NAMESERVER####/ { gsub(/####NAMESERVER####/,nameserver); }
+                                { print $0 }'
+    
+	sed -e "/mnesamba_conf start/,/mnesamba_conf end/d" < $dhcpconfig > /tmp/dhclient.$$
+    mv /tmp/dhclient.$$ $dhcpconfig
+    awk "$prog" "domain=$2" "nameserver=$1" $dhcpconfadd >> $dhcpconfig
+  fi
+}
+
+function mod_appamor_dhcp()
+{
+    sed -e "s/^.*include <dhcpd.d>/  include <dhcpd.d>/" < $apparmorconf/usr.sbin.dhcpd > /tmp/dhcpd.$$
+    mv /tmp/dhcpd.$$ /etc/apparmor.d/usr.sbin.dhcpd
+}
+
+function mod_appamor_bind()
+{
+    fgrep "usr.sbin.named.mnesamba" $apparmorconf/usr.sbin.named 1>&$logfile 2>&1
+    if [ "$?" != "0" ];then
+        sed -e '/^.*include <local\/usr.sbin.named>/a\ \ include <local/usr.sbin.named.mnesamba>' <  $apparmorconf/usr.sbin.named > /tmp/named.$$
+        mv /tmp/named.$$  $apparmorconf/usr.sbin.named
+    fi
+
+    echo "/opt/mne/samba/lib/** rm,"                >  $apparmorconf/local/usr.sbin.named.mnesamba
+    echo "/etc/mne/samba/** r,"                     >> $apparmorconf/local/usr.sbin.named.mnesamba
+    echo "/var/lib/mne/samba/private/dns.keytab r," >> $apparmorconf/local/usr.sbin.named.mnesamba
+    echo "/var/lib/mne/samba/private/named.conf r," >> $apparmorconf/local/usr.sbin.named.mnesamba
+    echo "/var/lib/mne/samba/private/dns/** rwk,"   >> $apparmorconf/local/usr.sbin.named.mnesamba
+    
+    systemctl restart apparmor
+}
+
+
+function mod_smbconf()
+{
+    local prog="/\[global\]/ { start=1; print \$0; next;}
+   /^[    ]*$|^\[/  { if ( start == 1 )
+                    {
+                      print \"        include = $sambaconf/globalextra.conf\";
+                      print \"        include = $sambaconf/dnsforward.conf\";
+                      print \"        include = $sambaconf/dhcp.conf\";
+                      start = 2;
+                     }
+                   }
+                   { print \$0; }
+               END { print \"include = $sambaconf/shares.conf\"; } "
+    
+    awk "$prog" < $sambaconf/smb.conf  > /tmp/smb.$$
+    mv /tmp/smb.$$ $sambaconf/smb.conf;
+    
+    touch $sambaconf/globalextra.conf;
+    touch $sambaconf/dhcp.conf;
+    touch $sambaconf/dnsforward.conf;
+    touch $sambaconf/shares.conf;
+}
+
+function mod_netpar()
+{
+    sed -e '/^passwd:/s@ *winbind@@' -e '/^passwd:/s@$@ winbind@' -e '/^group:/s@ *winbind@@' -e '/^group:/s@$@ winbind@' < /etc/nsswitch.conf  > /tmp/nsswitch.$$
+    mv /tmp/nsswitch.$$ /etc/nsswitch.conf
+    
+    sed -e "/interfaces =/s@interfaces.*\$@interfaces = lo $netdevice@" < $sambaconf/smb.conf  > /tmp/smb.$$; 
+    mv /tmp/smb.$$ $sambaconf/smb.conf;
+    
+    sed -e "/TLS_REQCERT/d" < $ldapconf/ldap.conf  > /tmp/ldap.$$; 
+    mv /tmp/ldap.$$ $ldapconf/ldap.conf;
+    echo "" >> $ldapconf/ldap.conf
+    echo "TLS_REQCERT allow" >> $ldapconf/ldap.conf
+    
+    if [ "$dnsforwarder" != "" ]; then
+        echo "         dns forwarder = $dnsforwarder" > $sambaconf/dnsforward.conf;
+    else
+        echo "" > $sambaconf/dnsforward.conf;
+    fi
+    
+   . exec/system/shell/network/wrconfig
+    
+    
+}
+
+function mod_kerberos()
+{
+    if [ -f $kerberosconfig ]; then
+        echo "[libdefaults]
+    dns_lookup_realm = false
+    dns_lookup_kdc = true
+    default_realm = $1
+        " "$(sed -e '/^\[libdefaults\]/,/^[   ]*$/d' < $kerberosconfig )" > /tmp/$$
+        mv /tmp/$$ $kerberosconfig
+    else
+        echo "[libdefaults]
+    dns_lookup_realm = false
+    dns_lookup_kdc = true
+    default_realm = $1
+        " > $kerberosconfig
+    fi
+}
+
+function rm_config()
+{
+    rm -rf /var/run/samba/* >&$logfile 2>&1
+    rm -rf /var/lib/mne/samba   >&$logfile 2>&1
+
+    for dir in cache lib lock locks private run
+    do
+        mkdir -p /var/lib/mne/samba/$dir 2>&1
+    done
+
+    # -------------------------------------------
+    # check name-server in dhclient.conf
+    # -------------------------------------------
+
+    if [ -f $dhcpconfig ]; then
+        sed -e "/mnesamba_conf start/,/mnesamba_conf end/d" < $dhcpconfig > /tmp/dhclient.$$
+        mv /tmp/dhclient.$$ $dhcpconfig
+    fi
+
+    if [ -f $bindconf/named.conf ]; then
+        sed -e "/\/var\/lib\/mne\/samba/d" < $bindconf/named.conf > /tmp/named.$$
+        mv /tmp/named.$$ $bindconf/named.conf
+    fi
+
+    mne_ignore_error=1
+    if [ -f $sambaconf/smb.conf ];then
+        rm $sambaconf/smb.conf >&$logfile 2>&1
+        rm $sambaconf/validuser.conf >&$logfile 2>&1
+        rm $sambaconf/shares.conf >&$logfile 2>&1
+        rm $sambaconf/globalextra.conf >&$logfile 2>&1
+    fi
+    mne_ignore_error=
+}

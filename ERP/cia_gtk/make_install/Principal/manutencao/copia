@@ -1,0 +1,9 @@
+#!/bin/sh
+# Por Luciano Trindade Pereira
+tar -cvvzPf `date +copia_incremental_%d-%m-%Y_%H-%M-%S.tar.gz` /var/log/mysql/
+mysqlcheck -u root -p --extended --auto-repair --repair --analyze --optimize --force --all-databases
+mysqldump -u root -p --flush-logs --delete-master-logs --all-databases > dados_completos.sql
+tar -cvvzPf `date +copia_sql_%d-%m-%Y_%H-%M-%S.tar.gz` *.sql
+rm -f *.sql
+
+exit 0 

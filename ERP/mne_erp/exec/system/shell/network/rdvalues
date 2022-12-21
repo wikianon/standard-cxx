@@ -1,0 +1,34 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+. exec/system/shell/allg/db.sh
+
+acttime=`date +%s`
+DELETE="SELECT mne_system.netdevice_del()"
+result=`get_data "$DELETE"`
+
+for device in `ls /sys/class/net`
+do
+  if [ "$device" != "lo" ]; then
+          addr=`ifconfig $device     | awk '/inet[^6]/ {gsub("^.*:", "", $2); print $2}'`
+         bcast=`ifconfig $device     | awk '/inet[^6]/ {gsub("^.*:", "", $3); print $3}'`
+          mask=`ifconfig $device     | awk '/inet[^6]/ {gsub("^.*:", "", $4); print $4}'`
+          
+
+    INSERT="INSERT INTO mne_system.netdevice (netdeviceid, addr, mask, broadcast, createuser, createdate, modifyuser, modifydate ) VALUES ('$device', '$addr', '$mask', '$bcast', session_user, $acttime, session_user, $acttime )";
+    get_data "$INSERT" >&$logfile 2>&1
+  
+  fi
+done
+
+        gw=`route -n             | awk '/^0\.0\.0\.0/ { print $2 }'`
+    search=`cat /etc/resolv.conf | awk '/^search[ \t]/ { print $2 }'`
+nameserver=`cat /etc/resolv.conf | awk 'BEGIN { found=0; } /^nameserver[ \t]/ { if ( found ) print ", "; print $2; found = 1 }'`
+   domain=`hostname --domain`
+  
+INSERT="INSERT INTO mne_system.netparam (netparamid, domain, nameserver, search, gw, createuser, createdate, modifyuser, modifydate ) VALUES ('0', '$domain', '$nameserver', '$search', '$gw', session_user, $acttime, session_user, $acttime )";
+get_data "$INSERT" >&$logfile 2>&1;
+  
+exit 0

@@ -1,0 +1,53 @@
+<!-- Name and Email address -->
+<table CELLSPACING=0 CELLPADDING=0 WIDTH="100%" BGCOLOR="#ababab" NOSAVE >
+ <tr NOSAVE>
+  <td WIDTH="50%" NOSAVE><!-#replace address_name>&nbsp;</td>
+  <td>
+   <a href="<!-#replace url>?s_sendto_addr=<!-#replace address_number>">
+    <img src="/email/nlblue/email.gif" border="0">
+   <!-#replace address_email></a>&nbsp;
+  </td>
+ </tr>
+</table>
+
+<!-- phone, address, fax -->
+<table CELLSPACING=0 CELLPADDING=0 WIDTH="100%" BGCOLOR="#CCCCCC" NOSAVE >
+ <tr NOSAVE>
+  <td WIDTH="10%" BGCOLOR="#999999" NOSAVE>
+   <div align=right><img src="/email/nlblue/phone.gif" border="0">Phone:</div>
+  </td>
+  <td WIDTH="40%" BGCOLOR="#CCCCCC" NOSAVE><!-#replace address_phone>&nbsp;</td>
+  <td WIDTH="10%" BGCOLOR="#999999" NOSAVE>
+   <div align=right><img src="/email/nlblue/address.gif" Border="0">Address:</div>
+  </td>
+  <td WIDTH="40%" BGCOLOR="#CCCCCC" NOSAVE><!-#replace address_line_1>&nbsp;</td>
+ </tr>
+ <tr NOSAVE>
+  <td WIDTH="10%" BGCOLOR="#999999" NOSAVE>
+   <div align=right><img src="/email/nlblue/fax.gif" border="0">Fax:</div>
+  </td>
+  <td WIDTH="40%" BGCOLOR="#CCCCCC" NOSAVE><!-#replace address_fax>&nbsp;</td>
+  <td WIDTH="10%" BGCOLOR="#999999" NOSAVE>&nbsp;</td>
+  <td WIDTH="40%" BGCOLOR="#CCCCCC" NOSAVE><!-#replace address_line_2>&nbsp;</td>
+ </tr>
+</table>
+
+<!-- Notes, delete and edit -->
+<table CELLSPACING=0 CELLPADDING=0 WIDTH="100%" NOSAVE >
+ <tr NOSAVE>
+  <td WIDTH="10%" BGCOLOR="#999999" NOSAVE>
+   <div align=right><img src="/email/nlblue/notes.gif" border="0">Notes:</div>
+  </td>
+  <td BGCOLOR="#CCCCCC" NOSAVE><!-#replace address_notes>&nbsp;</td>
+  <td WIDTH="10%" BGCOLOR="#999999" NOSAVE>
+   <center><a href="<!-#replace url>?edit_single_addr=<!-#replace address_number>">
+   <img src="/email/nlblue/edit.gif" border="0">Edit</a></center>
+  </td>
+  <td WIDTH="10%" BGCOLOR="#999999" NOSAVE>
+   <center><a href="<!-#replace url>?delete_addr=<!-#replace address_number>">
+   <img src="/email/nlblue/delete.gif" border="0">Delete</a></center>
+  </td>
+ </tr>
+</table>
+<br>
+

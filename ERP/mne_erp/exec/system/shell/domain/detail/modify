@@ -1,0 +1,15 @@
+#!/bin/bash
+
+exit_status=0
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script domain/detail read.sh
+domainconf=`get_data "$getdomain"`
+get_domain "$domainconf"
+
+export PATH=$sambabin:$sambasbin:$PATH
+
+. $scriptdir/functions
+. $scriptdir/modify_$typ

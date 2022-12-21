@@ -1,0 +1,75 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+. exec/system/shell/allg/db.sh
+
+find_script apache2/site read.sh
+
+get_ports `get_data "$getports"`
+get_rootfolder `get_data "$getrootfolder"`
+
+if [ "$location" = "" ]; then
+  location='keine location'
+fi
+
+dataroot=`echo "$DATAROOT" | sed -e "s@/@$bs/@g"`
+datalocation=`echo "$DATAROOT$location" | sed -e "s@/@$bs/@g"`
+
+INSERT=
+for site in `ls -1 $apache2rootdir/sites-available`
+do
+    name=`echo $site | sed -e 's/\.[^.]*$//g' | sort -u`
+    enabled=false
+    if [ -f $apache2rootdir/sites-enabled/$site ]; then
+        enabled=true
+    fi
+
+          domain=`awk '/^[ \t]*# / { next } tolower($1) ~ /servername/ { print $2; exit; }' $apache2rootdir/sites-available/$site`
+         aliases=`awk '/^[ \t]*# / { next } tolower($1) ~ /serveralias/ { gsub($1,""); sub(/^ */,""); print $0; exit; }' $apache2rootdir/sites-available/$site`
+           email=`awk '/^[ \t]*# / { next } tolower($1) ~ /serveradmin/ { print $2; exit; }' $apache2rootdir/sites-available/$site`
+    documentroot=`awk '/^[ \t]*# / { next } tolower($1) ~ /documentroot/ { print $2; exit; }' $apache2rootdir/sites-available/$site`
+    
+    if [ "$domain" = "" ]; then
+        domain=`hostname`
+    fi
+    
+    mne_error_ignore=1
+    httpsonly=true
+    egrep -q 'mne_default_template_http$' $apache2rootdir/sites-available/$site
+    if [ "$?" = "0" ]; then
+        httpsonly=false
+    fi
+    
+    if [ "$documentroot" = "" ]; then
+        dr='leer';
+    else
+       dr=`echo $documentroot | sed -e "s@/@$bs/@g"`
+    fi
+    
+    conf=`cat $apache2rootdir/sites-available/$site | sed -e "s/$bs/$bs$bs/g"\
+                                                          -e "s/'/$bs'/g" -e "s/\n/$bs""n/g" \
+                                                          -e "s/\(^[^#]*[Ss]erver[Aa]dmin\).*/\1 ####EMAIL####/" \
+                                                          -e "s/\(^.*[Ss]erver[Aa]lias\).*/\1 ####ALIAS####/" \
+                                                          -e "s/\(^[^#]*[Ss]erver[Nn]ame\).*/\1 ####DOMAIN####/" \
+                                                          -e "s/\(^[^#]*[Ee]rror[Ll]og.*\)$name\.log/\1####NAME####.log/" \
+                                                          -e "s/\(^[^#]*[Cu]stom[Ll]og.*\)$name\.log/\1####NAME####.log/" \
+                                                          -e "s/\(^[^#]*Directory\).*$datalocation.*/\1 ####DATAROOT########DOCUMENTROOT####>/" \
+                                                          -e "s/\(^[^#]*Directory\).*$dr.*/\1 ####DOCUMENTROOT####>/" \
+                                                          -e "s/\(^[^#]*[Dd]ocument[Rr]oot\).*$datalocation.*/\1 ####DATAROOT########DOCUMENTROOT####/" \
+                                                          -e "s/\(^[^#]*[Dd]ocument[Rr]oot\).*$dr.*/\1 ####DOCUMENTROOT####/" \
+                                                          -e "s/\(^[^#]*SSLCertificatefile\).*$dataroot\(.*\)/\1  ####DATAROOT####\2/" \
+                                                          -e "s/\(^[^#]*SSLCertificateKeyfile\).*$dataroot\(.*\)/\1  ####DATAROOT####\2/" \
+                                                          -e "s/\(^[^#]*SSLCertificateFile\).*$dataroot.*/\1  ####DATAROOT####\/cert\/cert\/####DOMAIN####.crt/" \
+                                                          -e "s/\(^[^#]*SSLCertificateKeyFile\).*$dataroot.*/\1  ####DATAROOT####\/cert\/key\/####DOMAIN####.key/" \
+                                                          -e "s/\(.*VirtualHost.*\*:\)$port.*>/\1####HTTPPORT####>/" \
+                                                          -e "s/\(.*VirtualHost.*\*:\)$sport.*>/\1####HTTPSPORT####>/"`
+    
+    documentroot=`echo $documentroot | sed -e "s@$datalocation/@@"`
+    allsite="$allsite $name"
+    INSERT="$INSERT""SELECT mne_system.apachesite_mod('$name', $enabled, '$domain', '$aliases', '$email', '$documentroot', E'$conf', $httpsonly);";
+done
+
+result=`get_data "$INSERT"`;
+result=`get_data "SELECT mne_system.apachesite_del('$allsite')"`;

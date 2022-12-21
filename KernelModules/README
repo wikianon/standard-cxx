@@ -1,0 +1,36 @@
+See following url for building instructions
+https://github.com/Barbalho12/linux-device-drivers-tutorial
+https://blog.felipetonello.com/2015/12/07/introducao-a-modulos-no-linux-kernel/
+http://www2.comp.ufscar.br/mediawiki/index.php/Criando_um_M%C3%B3dulo_do_kernel
+http://www.cyberciti.biz/tips/build-linux-kernel-module-against-installed-kernel-source-tree.html
+
+Save and close the file. Type the following command to build the hello.ko module:
+bash-4.3$ make
+
+#Run ls command to see newly build kernel module:
+bash-4.3$ ls
+
+hello.c  hello.ko  hello.mod.c	hello.mod.o  hello.o  Makefile	Module.markers	modules.order  Module.symvers
+
+To load Linux kernel module type the command:
+bash-4.3# modprobe hello
+
+
+Sample output:
+
+#hello.ko is kernel module file. To see information about module, enter:
+
+bash-4.3# modinfo hello.ko 
+
+#To load kernel module, enter:
+bash-4.3# insmod hello.ko
+
+#To list installed Linux kernel module, enter:
+bash-4.3# lsmod | grep hello
+
+#Consulte o syslog e verifique a mensagem do helloworld.ko
+bash-4.3# tail -f /var/log/syslog
+
+
+#To remove hello Linux kernel module, enter:
+bash-4.3# rmmod hello

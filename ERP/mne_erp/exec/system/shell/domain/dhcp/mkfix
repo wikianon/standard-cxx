@@ -1,0 +1,31 @@
+#!/bin/bash
+
+exit_status=0
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script domain/dns read.sh
+
+echo > /tmp/dhcpfix.$$
+get_data "$getfixaddress" | \
+  while read line; 
+  do
+    get_dnsaddress "$line"
+    if [ "$macaddr" != "" ]; then
+      cat >> /tmp/dhcpfix.$$ << EOF
+    host $name {
+                hardware ethernet $macaddr;
+                fixed-address $address;
+    } 
+EOF
+    fi
+  done
+  
+mv /tmp/dhcpfix.$$ /etc/dhcp/fix.conf
+
+systemctl restart isc-dhcp-server
+    
+  
+
+

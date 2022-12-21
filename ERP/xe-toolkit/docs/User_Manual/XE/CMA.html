@@ -1,0 +1,2399 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:st1="urn:schemas-microsoft-com:office:smarttags"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=FrontPage.Editor.Document>
+<meta name=Generator content="Microsoft FrontPage 6.0">
+<meta name=Originator content="Microsoft Word 11">
+<title>The Captive Metrics Software Architecture</title>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="date"/>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Richard Pettit</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>Richard Pettit</o:LastAuthor>
+  <o:Revision>6</o:Revision>
+  <o:TotalTime>1159</o:TotalTime>
+  <o:Created>2006-07-20T20:27:00Z</o:Created>
+  <o:LastSaved>2007-03-09T01:33:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>4159</o:Words>
+  <o:Characters>23708</o:Characters>
+  <o:Company>MDR</o:Company>
+  <o:Lines>197</o:Lines>
+  <o:Paragraphs>55</o:Paragraphs>
+  <o:CharactersWithSpaces>27812</o:CharactersWithSpaces>
+  <o:Version>11.6568</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:Zoom>0</w:Zoom>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Courier;
+	panose-1:2 7 4 9 2 2 5 2 4 4;
+	mso-font-alt:"Courier New";
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-style:italic;}
+h3
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:13.0pt;
+	font-family:Arial;}
+h5
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:5;
+	font-size:13.0pt;
+	font-family:"Times New Roman";
+	font-style:italic;}
+h6
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:6;
+	font-size:11.0pt;
+	font-family:"Times New Roman";}
+p.MsoList2, li.MsoList2, div.MsoList2
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.5in;
+	text-indent:-.25in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{mso-style-link:"Body Text Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+p.MsoSubtitle, li.MsoSubtitle, div.MsoSubtitle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	mso-outline-level:2;
+	font-size:12.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";}
+p.MsoBlockText, li.MsoBlockText, div.MsoBlockText
+	{margin-top:0in;
+	margin-right:1.0in;
+	margin-bottom:6.0pt;
+	margin-left:1.0in;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+span.BodyTextChar
+	{mso-style-name:"Body Text Char";
+	mso-style-locked:yes;
+	mso-style-link:"Body Text";
+	mso-ansi-font-size:12.0pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:Arial;
+	mso-ascii-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	mso-bidi-language:AR-SA;}
+p.Code, li.Code, div.Code
+	{mso-style-name:Code;
+	mso-style-parent:"Block Text";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	font-size:10.0pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+p.CodeLastLine, li.CodeLastLine, div.CodeLastLine
+	{mso-style-name:"Code Last Line";
+	mso-style-parent:Code;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+p.StyleHeading1Left05Right049, li.StyleHeading1Left05Right049, div.StyleHeading1Left05Right049
+	{mso-style-name:"Style Heading 1 + Left\: 0\.5\0022 Right\: 0\.49\0022";
+	mso-style-parent:"Heading 1";
+	margin-top:12.0pt;
+	margin-right:35.25pt;
+	margin-bottom:12.0pt;
+	margin-left:.5in;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:14.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:16.0pt;
+	font-weight:bold;}
+p.StyleSubtitleLeft05Right049, li.StyleSubtitleLeft05Right049, div.StyleSubtitleLeft05Right049
+	{mso-style-name:"Style Subtitle + Left\: 0\.5\0022 Right\: 0\.49\0022";
+	mso-style-parent:Subtitle;
+	margin-top:0in;
+	margin-right:35.25pt;
+	margin-bottom:3.0pt;
+	margin-left:.5in;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	mso-outline-level:2;
+	font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+p.StyleHeading2Left05Right049, li.StyleHeading2Left05Right049, div.StyleHeading2Left05Right049
+	{mso-style-name:"Style Heading 2 + Left\: 0\.5\0022 Right\: 0\.49\0022";
+	mso-style-parent:"Heading 2";
+	margin-top:12.0pt;
+	margin-right:35.25pt;
+	margin-bottom:3.0pt;
+	margin-left:.5in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:12.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	font-weight:bold;
+	font-style:italic;}
+p.StyleBodyTextLeft05Right049, li.StyleBodyTextLeft05Right049, div.StyleBodyTextLeft05Right049
+	{mso-style-name:"Style Body Text + Left\: 0\.5\0022 Right\: 0\.49\0022";
+	mso-style-parent:"Body Text";
+	margin-top:0in;
+	margin-right:35.25pt;
+	margin-bottom:6.0pt;
+	margin-left:.5in;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+p.StyleHeading5Left05Right049, li.StyleHeading5Left05Right049, div.StyleHeading5Left05Right049
+	{mso-style-name:"Style Heading 5 + Left\: 0\.5\0022 Right\: 0\.49\0022";
+	mso-style-parent:"Heading 5";
+	margin-top:12.0pt;
+	margin-right:35.25pt;
+	margin-bottom:3.0pt;
+	margin-left:.5in;
+	mso-pagination:widow-orphan;
+	mso-outline-level:5;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	font-weight:bold;
+	font-style:italic;}
+p.StyleCodeLeft05Right049, li.StyleCodeLeft05Right049, div.StyleCodeLeft05Right049
+	{mso-style-name:"Style Code + Left\: 0\.5\0022 Right\: 0\.49\0022";
+	mso-style-parent:Code;
+	margin-top:0in;
+	margin-right:35.25pt;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	font-size:8.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+p.StyleHeading3Left05Right049, li.StyleHeading3Left05Right049, div.StyleHeading3Left05Right049
+	{mso-style-name:"Style Heading 3 + Left\: 0\.5\0022 Right\: 0\.49\0022";
+	mso-style-parent:"Heading 3";
+	margin-top:12.0pt;
+	margin-right:35.25pt;
+	margin-bottom:3.0pt;
+	margin-left:.5in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:12.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	font-weight:bold;}
+p.StyleBodyTextRight049, li.StyleBodyTextRight049, div.StyleBodyTextRight049
+	{mso-style-name:"Style Body Text + Right\: 0\.49\0022";
+	mso-style-parent:"Body Text";
+	margin-top:0in;
+	margin-right:35.25pt;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+p.StyleBodyTextRight0491, li.StyleBodyTextRight0491, div.StyleBodyTextRight0491
+	{mso-style-name:"Style Body Text + Right\: 0\.49\00221";
+	mso-style-parent:"Body Text";
+	margin-top:0in;
+	margin-right:35.25pt;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+p.StyleBodyTextBoldRight049, li.StyleBodyTextBoldRight049, div.StyleBodyTextBoldRight049
+	{mso-style-name:"Style Body Text + Bold Right\: 0\.49\0022";
+	mso-style-parent:"Body Text";
+	margin-top:0in;
+	margin-right:35.25pt;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	text-align:justify;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	font-weight:bold;}
+p.StyleCodeLastLine8ptLeft05Right276, li.StyleCodeLastLine8ptLeft05Right276, div.StyleCodeLastLine8ptLeft05Right276
+	{mso-style-name:"Style Code Last Line + 8 pt Left\: 0\.5\0022 Right\: 2\.76\0022";
+	mso-style-parent:"Code Last Line";
+	margin-top:0in;
+	margin-right:207.75pt;
+	margin-bottom:12.0pt;
+	margin-left:.5in;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+p.StyleCodeLastLineLeft05Right276, li.StyleCodeLastLineLeft05Right276, div.StyleCodeLastLineLeft05Right276
+	{mso-style-name:"Style Code Last Line + Left\: 0\.5\0022 Right\: 2\.76\0022";
+	mso-style-parent:"Code Last Line";
+	margin-top:0in;
+	margin-right:207.75pt;
+	margin-bottom:12.0pt;
+	margin-left:.5in;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:272633699;
+	mso-list-template-ids:251267702;}
+@list l1
+	{mso-list-id:1688865924;
+	mso-list-template-ids:-1180792926;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l2
+	{mso-list-id:1715496984;
+	mso-list-template-ids:906505422;}
+@list l2:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<p class=StyleHeading1Left05Right049>
+<font size="4">The Captive Metrics Software
+Architecture</font></p>
+
+<p class=StyleSubtitleLeft05Right049 >
+<font size="2">As it stands
+on March 8, 2007</font></p>
+
+<p class=StyleSubtitleLeft05Right049 >
+<font size="2">By Richard
+Pettit</font></p>
+
+<p class=StyleSubtitleLeft05Right049 >
+<font size="2">Founder,
+Captive Metrics Software Corporation</font></p>
+
+<p class=StyleHeading2Left05Right049 >
+<font size="3">Introduction</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Will I be
+able to get away with writing all this code and writing no documentation? I
+think not. At the very least, it provides me with a trail of bread crumbs to follow
+should I ever forget what it was that I did. What needs to be described here is
+what is taking place and how it happens. The problem that needed solving was a
+way to extract performance metrics from an operating system and transport them
+to an application. By the time the metrics get to their destination, they
+should be sufficiently generic that the application will be completely platform
+neutral. Well, almost completely. A good place to start is to look at a picture
+of the overall architecture. It’s a big picture, so instead of shrinking it or
+trying to place it inline, I’ll provide <a href="../../images/CMA.png">a link to
+it</a>.</font></p>
+
+<p class=StyleHeading2Left05Right049 >
+<font size="3">MDR</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">At the
+bottom of the heap of all this code is the MDR library.<span
+style='mso-spacerun:yes'>  </span>For the uninitiated, it stands for
+“monitoring done right”. Mdr is a C++ class library and it's the low level
+stuff that interfaces to the OS. Actually, only the very bottom of MDR
+interfaces to the OS and maybe just a little bit above it. In the MDR source
+directory, there is another directory called <i style='mso-bidi-font-style:
+normal'>platform</i>. It contains the platform specific code. To understand the
+code in this file, a little overview of MDR patterns is needed.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">MDR Patterns</font></p>
+
+<p class=StyleBodyTextLeft05Right049 style="margin-bottom: 0pt"><i
+style='mso-bidi-font-style:normal'><span style='font-family:
+Arial'><font size="2">Synopsis:</font></span></i></p>
+<span
+style='mso-bidi-font-style:normal'>
+<p class=StyleBodyTextLeft05Right049><span style='font-family:
+Courier'><font size="1">&nbsp;&nbsp;&nbsp; mdr_&lt;category&gt;_t variable;</font></span></span><span style='font-family:Arial'><o:p></o:p></span></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Get on your
+Windows box and start <i style='mso-bidi-font-style:normal'>perfmon</i>. Click
+the <b style='mso-bidi-font-weight:normal'>+</b> button to add fields. The <b
+style='mso-bidi-font-weight:normal'>Add Counters</b> dialog comes up. The
+performance counters in the Windows registry are put together in collections
+called performance objects. I call them categories. It's fairly
+straight-forward. There's a <i style='mso-bidi-font-style:normal'>PhysicalDisk</i>
+category, a <i style='mso-bidi-font-style:normal'>Processor</i> category, etc.;
+groupings of either physical things or logical things. Not all things number
+quantity one though, for instance, the <i style='mso-bidi-font-style:normal'>Memory</i>
+category. There are not lots of memories in the machine, just one global
+memory. Therefore the <i style='mso-bidi-font-style:normal'>Memory</i> category
+is a singleton. The <i style='mso-bidi-font-style:normal'>PhysicalDisk</i>
+category, on the other hand, numbers more than one. At the very least, Windows
+will show you disk <i style='mso-bidi-font-style:normal'>0</i> and disk <i
+style='mso-bidi-font-style:normal'>_Total</i>. Obviously, <i style='mso-bidi-font-style:
+normal'>_Total</i> is a pseudo-disk that the OS contrived. These disks are
+called instances. And any category that numbers more than one of what it
+describes has instances of whatever it's describing. <i style='mso-bidi-font-style:
+normal'>Network Interface,</i> for example, also has more than one instance.
+These two categories are called (by me) singletons and tuples (short for
+n-tuples). The MDR library uses this pattern of performance categories of
+singletons and tuples, both of which contain performance counters (fields in
+MDR terms). Windows has its performance registry and the MDR library provides
+similar structured data for the UNIX variants. This allows any upper level design
+to look down on the performance data and see the same data organization
+regardless of the operating system. This is a key design element as you will
+see.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Since all
+these singletons and tuples are just categories, there is a base class that
+defines this. This is the <b style='mso-bidi-font-weight:normal'>mdr_t</b>
+class. All of the classes that represent a category in the MDR library inherit
+this class. This provides a consistent interface to performance categories
+regardless of whether they are a singleton or a tuple.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The primary
+purpose of <b style='mso-bidi-font-weight:normal'>mdr_t</b> is to provide
+access to the fields within each category. Each field is defined by a field
+name, a field number and is also accessible as a public member for direct
+application access. In addition, each field has associated with it a Boolean
+value that indicates whether it is supported on the platform from which the
+metrics are being derived. A text explanation for each field is also available
+via an <b style='mso-bidi-font-weight:normal'>mdr_t</b> public method. These
+explanations are kept in a message catalog file.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The public
+symbols provided by <b style='mso-bidi-font-weight:normal'>mdr_t</b> are as
+follows.</font></p>
+
+<p class=StyleHeading5Left05Right049 ><span
+style='font-family:Arial'><font size="3">Types</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">// enumerate the possible field
+types</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">enum</font><font size="1"> mdr_value_type_t {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">MVT_I32,<span style='mso-spacerun:yes'>  </span>MVT_UI32,<span
+style='mso-spacerun:yes'>  </span>MVT_I64,<span style='mso-spacerun:yes'>   
+</span>MVT_UI64,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">MVT_LONG, MVT_ULONG, MVT_DOUBLE, MVT_STRING,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">MVT_BOOL</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">};</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">struct</font><font size="1"> mdr_value_t {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">mdr_value_type_t mv_type;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">// a union of the possible types for a value</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">union {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">int<span style='mso-spacerun:yes'>          </span>i32;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">uint32_t<span style='mso-spacerun:yes'>     </span>ui32;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">int64_t<span style='mso-spacerun:yes'>      </span>i64;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">uint64_t<span style='mso-spacerun:yes'>     </span>ui64;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">long<span style='mso-spacerun:yes'>         </span>l;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">ulong_t<span style='mso-spacerun:yes'>      </span>ul;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">double<span style='mso-spacerun:yes'>       </span>d;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">std::string *s;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">bool<span style='mso-spacerun:yes'>         </span>b;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">} mv_un;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">};</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">class os_version_t {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">public:</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">int os_version;<span style='mso-tab-count:2'>       </span>//
+(major_version * 100) + (minor_version * 10)</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">int major_version;<span style='mso-tab-count:1'>    </span>// the 5 part
+of 5.8</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">int minor_version;<span style='mso-tab-count:1'>    </span>// the 8 part
+of 5.8</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">// only unix variants need addressing</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">bool is_linux;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">bool is_solaris;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">bool is_darwin;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">bool is_freebsd;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">bool is_aix;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">bool is_hpux;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">os_version_t();</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">};</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">typedef</font><font size="1"> std::vector&lt;std::string&gt; mdr_keyset_t;</font></span></p>
+
+<p class=StyleHeading5Left05Right049 ><span
+style='font-family:Arial'><font size="3">Members</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">static os_version_t mdr_os_version;
+// per above</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">std::string</font><font size="1"> mdr_category_name;<span
+style='mso-spacerun:yes'>      </span>// Name of this category.</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">bool</font><font size="1"><span
+style='mso-spacerun:yes'>        </span>mdr_category_supported; // Category
+supported?</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">bool</font><font size="1"><span
+style='mso-spacerun:yes'>        </span>mdr_is_singleton;<span
+style='mso-spacerun:yes'>       </span>// Is this single or a tuple?</font></span></p>
+
+<p class=StyleCodeLastLine8ptLeft05Right276><span style='font-family:Courier'>
+<font size="1">int</font><font size="1"><span style='mso-spacerun:yes'>        
+</span>mdr_field_count;<span style='mso-spacerun:yes'>        </span>// # of
+fields in this category.</font></span></p>
+
+<p class=StyleHeading5Left05Right049 ><span
+style='font-family:Arial'><font size="3">Methods</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">bool</font><font size="1"><span
+style='mso-spacerun:yes'>           </span>mdr_is_supported(int field_number);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">std::string</font><font size="1"><span
+style='mso-spacerun:yes'>   </span>&amp;mdr_field_name(int field_number);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">std::string</font><font size="1"><span
+style='mso-spacerun:yes'>   </span>&amp;mdr_field_explanation(int
+field_number);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">std::string</font><font size="1"><span
+style='mso-spacerun:yes'>   </span>&amp;mdr_field_explanation(const char
+*field_name);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">virtual const mdr_value_t
+&amp;mdr_field_value(int field_number);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">virtual const mdr_value_t
+&amp;mdr_field_value(const std::string &amp;key,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">                                           
+</font> </span><font size="1">int
+field_number)</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">virtual const mdr_keyset_t
+&amp;mdr_keyset(void);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">int</font><font size="1"> mdr_field_name_to_number(const
+char *name);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">int</font><font size="1">
+mdr_field_name_to_number(std::string &amp;name)</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">mdr_keyset_t</font><font size="1">
+&amp;mdr_all_field_names(void);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">mdr_keyset_t</font><font size="1">
+&amp;mdr_supported_field_names(void);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">// updating</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">virtual void mdr_refresh(void) = 0;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">virtual void mdr_rates(void) = 0;</font></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">void mdr_refresh_rates(void);</font></span></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The <span
+style='font-family:Courier'>mdr_field_value</span> methods are declared virtual
+since only one will apply to a category. If it is a singleton, then there is no
+instance name. The default action for these methods is to simply throw an
+exception. Those categories that are tuples will redefine the method with the
+instance name parameter and the singletons will redefine the method without the
+instance name parameter. The same is the case for the <font face="Courier">mdr_keyset</font> method. This
+method returns a vector of strings representing all of the instance names in
+the tuple. If called in a singleton class, an exception will be thrown.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">There are
+also the utility methods <span style='font-family:Courier'>mdr_field_name_to_number</span>,
+<span style='font-family:Courier'>mdr_all_field_names</span> and <span
+style='font-family:Courier'>mdr_supported_field_names</span>. Their purposes
+are to translate a field name to its field number, return a string vector of
+all the field names and return a string vector of field names of only those
+fields that are supported on the platform from which the metrics are being
+derived, respectively. The purpose of identifying fields by numbers is so a
+loop can be written that starts at zero and iterates until <span
+style='font-family:Courier'>mdr_field_count</span> in order to access all of
+the fields of a category.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">For each
+tuple class, the pattern is to inherit <b style='mso-bidi-font-weight:normal'>mdr_t</b>
+and also inherit a <b style='mso-bidi-font-weight:normal'>std::map</b> which
+maps the instance name to a container class. The container class is unique for
+each tuple. The container is called a <i style='mso-bidi-font-style:normal'>can</i>
+and the <b style='mso-bidi-font-weight:normal'>std::map</b> of the cans is
+called a <i style='mso-bidi-font-style:normal'>box</i>.<span
+style='mso-spacerun:yes'>  </span>For instance, the declaration of the disk
+tuple starts out as shown here.</font></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">class md_can_t {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">public:</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span style='mso-tab-count:1; font-family:Courier'><font size="1">       </font> </span>
+<span
+style='font-family:Courier'><font size="1">std::string</font><font size="1"> md_type;<span
+style='mso-tab-count:2'>            </span>// Disk Type</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">…</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">};</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">typedef</font><font size="1"> std::map&lt;std::string,
+md_can_t&gt; md_box_t;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">typedef</font><font size="1"> md_box_t::iterator
+md_node_t;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">class mdr_disk_t : public mdr_t,
+public md_box_t {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">…</font></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">};</font></span></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">This pattern
+repeats throughout all of the tuple classes. To iterate through the disks, a
+loop would be used to access the <b style='mso-bidi-font-weight:normal'>md_box_t,</b>
+as such.</font></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">mdr_disk_t</font><font size="1"> disk;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">md_node_t</font><font size="1"> n;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">for(n</font><font size="1">=disk.begin(); n !=
+disk.end(); n++) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-tab-count:1'><font size="1">        
+</font> </span><font size="1">std::string
+&amp;instance_name = n-&gt;first;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-tab-count:1'><font size="1">        
+</font> </span><font size="1">md_can_t
+&amp;disk_data = n-&gt;second;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-tab-count:1'><font size="1">        
+</font> </span><font size="1">…</font></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">}</font></span></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The method
+for retrieving new data is <span style='font-family:Courier'>mdr_refresh</span>.
+This method is the platform specific component of the class. As such, it is
+contained within the aforementioned file found in the platform directory.
+Therefore, looking at the code within the platform directory, you would see
+definitions of <span style='font-family:Courier'>mdr_cache_t::mdr_refresh,
+mdr_memory_t::mdr_refresh, mdr_disk_t::mdr_refresh</span>, and so on.<span
+style='mso-spacerun:yes'>  </span>The <span style='font-family:Courier'>mdr_rates</span>
+method subtracts the values from the previous refresh from the current values
+and places the difference in the members in place of the newest value. This is,
+of course, only the case for the rate members. It would not be logical to
+compute the difference of the clock speed of the processor. It is an absolute
+value. It was considered to include a value for each field of each category to
+define whether it was a rate, absolute value, or some other value type, but I
+didn’t think it was necessary. For convenience, there is also a <span
+style='font-family:Courier'>mdr_refresh_rates</span> which simply calls <span
+style='font-family:Courier'>mdr_refresh</span> and then <span style='font-family:
+Courier'>mdr_rates</span>.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">Example</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">To
+summarize, the following example displays all of the field names within the <b
+style='mso-bidi-font-weight:normal'>mdr_disk_t</b> category and whether the
+field is supported. When run, the output is similar to the text shown after the
+program source.</font></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">#include &quot;mdr_disk.h&quot;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">int</font><font size="1"> main()</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">{</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">try {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">mdr::mdr_disk_t disk;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">for(int i=0; i&lt;disk.mdr_field_count; i++) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">std::cout.width(50);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">std::cout.setf(std::ios_base::left,
+std::ios_base::adjustfield);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">std::cout &lt;&lt; disk.mdr_field_name(i);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">std::cout.width(4);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">std::cout &lt;&lt;
+(disk.mdr_is_supported(i) ? &quot;yes&quot; : &quot;no&quot;) &lt;&lt;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">                </font> </span>
+<font size="1">&lt;&lt; std::endl;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">} catch(std::exception &amp;e) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">std::cerr &lt;&lt; e.what() &lt;&lt; std::endl;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 ><o:p>
+<font size="1">&nbsp;</font></o:p></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">return 0;</font></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Disk Type<span
+style='mso-spacerun:yes'>                                         </span>yes 
+</font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Read Operations<span
+style='mso-spacerun:yes'>                                   </span>yes </font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">KBytes</font><font size="1"> Read<span
+style='mso-spacerun:yes'>                                       </span>yes 
+</font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Read Time<span
+style='mso-spacerun:yes'>                                         </span>yes 
+</font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Write Operations<span
+style='mso-spacerun:yes'>                                  </span>yes </font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">KBytes</font><font size="1"> Written<span
+style='mso-spacerun:yes'>                                    </span>yes </font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Write Time<span
+style='mso-spacerun:yes'>                                        </span>yes 
+</font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Run Time<span
+style='mso-spacerun:yes'>                                          </span>yes 
+</font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Wait Time<span
+style='mso-spacerun:yes'>                                         </span>yes 
+</font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Q-Length*Run-Time<span
+style='mso-spacerun:yes'>                                 </span>yes </font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Q-Length*Wait-Time<span
+style='mso-spacerun:yes'>                                </span>yes </font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Average Request Queue Length<span
+style='mso-spacerun:yes'>                      </span>yes </font> </span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">Percent Time Busy<span
+style='mso-spacerun:yes'>                                 </span>yes </font> </span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">Average Access Time<span
+style='mso-spacerun:yes'>                               </span>yes</font></span></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">Beyond the
+Categories</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Now that the
+categories are all defined and the data organization of the UNIX metrics looks
+like the Windows metrics, it’s now time to move up one level logically to view
+this data in a more abstract way.</font></p>
+
+<h6 style='margin-top:12.0pt;margin-right:207.75pt;margin-bottom:3.0pt;
+margin-left:.5in'><span style='font-family:Arial'><font size="2">Performance
+Host</font></span></h6>
+
+<p class=StyleBodyTextLeft05Right049 style="margin-bottom: 0pt"><i
+style='mso-bidi-font-style:normal'><span style='font-family:
+Arial'><font size="2">Synopsis:</font></span></i></p>
+<p class=StyleBodyTextLeft05Right049><span
+style='mso-bidi-font-style:normal'><span style='font-family:
+Courier'><font size="1">&nbsp;&nbsp;&nbsp; mdr_performance_host_t host(“host-name”);</font></span><o:p></o:p></span></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The entire
+collection of categories exists on a host. For the purposes of the MDR library,
+it is called an <b style='mso-bidi-font-weight:normal'>mdr_performance_host_t</b>.<span
+style='mso-spacerun:yes'>  </span>Programmatically, what <b style='mso-bidi-font-weight:
+normal'>mdr_performance_host_t</b> should provide to the user are the
+following:</font></p>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-left:1.0in;text-indent:-.25in;
+mso-list:l0 level1 lfo1;tab-stops:list .5in'><![if !supportLists]>
+<span
+style='mso-list:Ignore; mso-fareast-font-family:Arial; mso-bidi-font-family:Arial'>
+<font size="2">1.</font><span style='font-style:normal; font-variant:normal; font-weight:normal; font-family:Times New Roman'><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font>
+</span></span><![endif]><font size="2">The “flavor” of the OS, </font> </p>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-left:1.0in;text-indent:-.25in;
+mso-list:l0 level1 lfo1;tab-stops:list .5in'><![if !supportLists]>
+<span
+style='mso-list:Ignore; mso-fareast-font-family:Arial; mso-bidi-font-family:Arial'>
+<font size="2">2.</font><span style='font-style:normal; font-variant:normal; font-weight:normal; font-family:Times New Roman'><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font>
+</span></span><![endif]><font size="2">A string vector of category names, </font> </p>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-left:1.0in;text-indent:-.25in;
+mso-list:l0 level1 lfo1;tab-stops:list .5in'><![if !supportLists]>
+<span
+style='mso-list:Ignore; mso-fareast-font-family:Arial; mso-bidi-font-family:Arial'>
+<font size="2">3.</font><span style='font-style:normal; font-variant:normal; font-weight:normal; font-family:Times New Roman'><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font>
+</span></span><![endif]><font size="2">A utility method for allocating a category class
+of the specified name.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The public symbols provided by <b style='mso-bidi-font-weight:normal'>mdr_performance_host_t</b>
+are as follows.</font></p>
+
+<p class=StyleHeading5Left05Right049 ><span
+style='font-family:Arial'><font size="3">Types</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">enum</font><font size="1"> mdr_os_flavor_t {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">MOS_LINUX<span style='mso-spacerun:yes'>     </span>= 1,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">MOS_SOLARIS<span style='mso-spacerun:yes'>   </span>= 2,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">MOS_AIX<span style='mso-spacerun:yes'>       </span>= 4,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">MOS_HPUX<span style='mso-spacerun:yes'>      </span>= 8,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">MOS_MACOS<span style='mso-spacerun:yes'>     </span>= 16,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">MOS_BSD<span style='mso-spacerun:yes'>       </span>= 32</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">};</font></span></p>
+
+<p class=StyleHeading5Left05Right049 ><span
+style='font-family:Arial'><font size="3">Members</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">mdr_os_flavor_t</font><font size="1"> mdr_os_flavor;</font></span></p>
+
+<p class=StyleHeading5Left05Right049 ><span
+style='font-family:Arial'><font size="3">Methods</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const mdr_keyset_t
+&amp;mdr_get_category_names();</font></span></p>
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">mdr_t</font><font size="1"> *mdr_get_category_by_name(const
+char *category);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">mdr_t</font><font size="1">
+*mdr_get_category_by_name(const std::string &amp;category);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">void mdr_release_host(void);</font></span></p>
+<p class=StyleCodeLastLineLeft05Right276><font face="Courier" size="1">
+std::string &amp;mdr_localized_name(std::string &amp;en_us_name, std::string &amp;localized_name);<br>
+std::string &amp;mdr_en_us_name(std::string &amp;localized_name, std::string &amp;en_us_name);</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The <b
+style='mso-bidi-font-weight:normal'>mdr_keyset_t</b> type is reused for the <span
+style='font-family:Courier'>mdr_get_category_names</span> method. The <span
+style='font-family:Courier'>mdr_get_category_by_name</span> method will
+allocate a category class defined by the category parameter. Since the host will 
+be localized with the regional language, the methods <font face="Courier">
+mdr_localized_name</font> and <font face="Courier">mdr_en_us_name</font> are 
+provided to translate from U.S. English to the local language and back again, 
+respectively. Each of the
+category classes defines its name through a call to the <b style='mso-bidi-font-weight:
+normal'>mdr_t</b> constructor when the constructor for the category class is
+called. There are <span style='font-family:"Courier New"'>const</span> values
+in the mdr.h include file that define all of the category names. They are as
+follows.</font></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_CACHE_NAME<span style='mso-spacerun:yes'>   &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Caches&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_CPU_NAME<span
+style='mso-spacerun:yes'>     &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;CPU Utilization Data&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_CPUINFO_NAME<span style='mso-spacerun:yes'> &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;CPU
+Information&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_CPUSTAT_NAME<span style='mso-spacerun:yes'> &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Global CPU
+Metrics&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_CTLR_NAME<span style='mso-spacerun:yes'>    &nbsp;&nbsp;&nbsp;&nbsp; </span>=
+&quot;Controllers&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_CTLRSTAT_NAME&nbsp;&nbsp;&nbsp;&nbsp;
+= &quot;Controller Metrics&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_DISK_NAME<span style='mso-spacerun:yes'>    &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Disks&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_ICMP_NAME<span style='mso-spacerun:yes'>    &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;ICMP
+Protocol&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_IOSTAT_NAME<span style='mso-spacerun:yes'>  &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Disk
+Metrics&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_IP_NAME<span
+style='mso-spacerun:yes'>      &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;IP Protocol&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_MEMORY_NAME<span style='mso-spacerun:yes'>  &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Memory
+Data&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_MISC_NAME<span style='mso-spacerun:yes'>    &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Miscellaneous
+Data&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_MNT_NAME<span
+style='mso-spacerun:yes'>     &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Mount Points&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_MP_NAME<span
+style='mso-spacerun:yes'>      &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Per-CPU Data&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_MPSTAT_NAME<span style='mso-spacerun:yes'>  &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Per-CPU
+Metrics&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_NETIF_NAME<span style='mso-spacerun:yes'>   &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Network
+Interfaces&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_PF_NAME<span
+style='mso-spacerun:yes'>      &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Paging Files&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_PS_NAME<span
+style='mso-spacerun:yes'>      &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Processes&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_SYSTAT_NAME<span style='mso-spacerun:yes'>  &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;System
+Metrics&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_TCP_NAME<span
+style='mso-spacerun:yes'>     &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;TCP Protocol&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">const char *MDR_THREAD_NAME<span
+style='mso-spacerun:yes'>  &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;Threads&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049><span style='font-family:Courier'>
+<font size="1">const char *MDR_UDP_NAME<span
+style='mso-spacerun:yes'>     &nbsp;&nbsp;&nbsp;&nbsp; </span>= &quot;UDP Protocol&quot;;</font></span></p>
+<p class=StyleCodeLeft05Right049><font face="Courier" size="1">const char *MDR_PROC_STATES_NAME&nbsp; 
+= &quot;Process States&quot;;</font></p>
+<p class=StyleCodeLastLineLeft05Right276><font face="Courier" size="1">const 
+char *MDR_NETSTAT_NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;Interface Metrics&quot;;</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Note that
+the <span style='font-family:Courier'>mdr_get_category_by_name</span> method
+returns an <b style='mso-bidi-font-weight:normal'>mdr_t</b> pointer, the
+superclass of all the categories. It is important to note how this class works
+in respect to this method. If called more than once with the same category
+name, it will return the same pointer every time. <b style='mso-bidi-font-weight:
+normal'>mdr_performance_host_t</b> maintains a mapping of category names to <b
+style='mso-bidi-font-weight:normal'>mdr_t</b> pointers. Since the values
+returned for any field in a category for one host will not be different
+depending on how many category classes are allocated, <b style='mso-bidi-font-weight:
+normal'>mdr_performance_host_t</b> makes sure to only allocate one of each
+category for each host. Also maintained is a mapping of host names to [mappings
+of category names to category pointers].<span style='mso-spacerun:yes'> 
+</span>A point neglected throughout this paper is that all of the MDR classes, 
+including this one, can be constructed with an optional remote host name 
+parameter. It has not been discussed since it is not used anywhere in the 
+architecture and I do not foresee it being used. It depends on a remote daemon 
+process that uses an application layer protocol of my own devising which is
+not secure and its use is highly discouraged.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Since a
+static map is maintained by <b style='mso-bidi-font-weight:normal'>mdr_performance_host_t</b>
+containing pointers to category classes, there should be a mechanism for releasing
+these category classes to free memory. This is the purpose of the <span
+style='font-family:"Courier New"'>mdr_release_host</span> method. This method
+will release all of the MDR category classes allocated and stored in the static
+map. It will leave the entry in the host map pointing to the category mapping
+with nothing in it.</font></p>
+
+<h6 style='margin-top:12.0pt;margin-right:207.75pt;margin-bottom:3.0pt;
+margin-left:.5in'><span style='font-family:Arial'><font size="2">Performance
+Counter</font></span></h6>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-top:0in;margin-right:207.75pt;margin-bottom:
+0in;margin-left:.5in;margin-bottom:0;text-indent:0in'>
+<span
+style='mso-bidi-font-style:normal; font-style:italic'><font size="2">Synopsis:</font></span></p>
+<p class=StyleBodyTextLeft05Right049 style='margin-top:0in;margin-right:207.75pt;margin-bottom:
+0in;margin-left:.5in;margin-bottom:.0001pt;text-indent:0in'><font size="1">
+<span style="font-family: Courier">&nbsp;&nbsp;&nbsp; </span></font>
+<span
+style='mso-bidi-font-style:normal'><font face="Courier" size="1">mdr_performance_counter_t tuple(“Category”, “field”,
+“instance”);</font><o:p></o:p></p>
+
+</span>
+
+<p class=StyleBodyTextLeft05Right049><span
+style='mso-bidi-font-style:normal'><span style='font-family:
+Courier'><span style='mso-spacerun:yes'><font size="1">    </font></span><font size="1">mdr_performance_counter_t single(“Category”, “field”);</font></span><o:p></o:p></span></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">At the top
+level there is the performance host. It can return performance categories. Each
+of the performance categories is composed of performance counters. The <b
+style='mso-bidi-font-weight:normal'>mdr_performance_counter_t</b> class defines
+this abstraction at the higher level. Since all counters are contained within
+the category class, building a class that is an autonomous performance counter
+capable of being refreshed by itself is outside the design of the classes. What
+this class does is maintain a pointer to the category class that the counter is
+contained within and the field number of the counter. A refresh of the variable
+will cause a refresh of the underlying category class. A static map of <b
+style='mso-bidi-font-weight:normal'>mdr_t</b> and <b style='mso-bidi-font-weight:
+normal'>time_t</b> pairs keeps track of the last time the category was
+refreshed and keeps the category from being refreshed more frequently than once
+per second. The one second threshold on minimum frequency of updates can be 
+controlled by setting the environment variable <b>MDR_INTERVAL_THRESHOLD</b> to 
+the minimum number of milliseconds between updates. For instance, if you want 
+the library to re-read metrics from the operating system no more than once every 
+half second, this environment variable would be set to 500, meaning 500 
+milliseconds.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Refresh is
+not done the same way as the other classes. <b style='mso-bidi-font-weight:
+normal'>mdr_performance_counter_t</b> provides two methods for accessing the
+value of the counter. They are as defined here.</font></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span style='font-family:
+Courier'><font size="1">const mdr_value_t &amp;mdr_value(void);</font></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">const mdr_value_t
+&amp;mdr_next_value(void);</font></span></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The <span
+style='font-family:Courier'>mdr_value</span> function returns the value as it
+currently is. Calling it numerous times without calling <span style='font-family:
+Courier'>mdr_next_value</span> will return the same value over and again. The <span
+style='font-family:Courier'>mdr_next_value</span> method has the effect of
+running <span style='font-family:Courier'>mdr_refresh_rates</span> on the
+underlying category. The only other method in this class is <span
+style='font-family:Courier'>bool mdr_is_supported(void)</span>. This returns
+the value of the call to the same named method in the underlying category
+class. An example showing the three run queue values follows (using <span
+style='font-family:Courier'>printf</span> instead of <b>std::cout</b>). Note
+that two of the utility functions included with MDR are <span style='font-family:
+Courier'>operator&lt;&lt;</span> functions for printing out <b
+style='mso-bidi-font-weight:normal'>mdr_value_t</b> and <b style='mso-bidi-font-weight:
+normal'>mdr_os_flavor_t</b> values.</font></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">#include &lt;cstdio&gt;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">#include &quot;mdr_perf_counter.h&quot;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">using namespace mdr;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">int</font><font size="1"> main()</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">{</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">mdr_performance_counter_t one(MDR_MISC_NAME, &quot;1 Minute Run Queue Length&quot;);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">mdr_performance_counter_t five(MDR_MISC_NAME,&quot;5 Minute Run Queue Length&quot;);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">mdr_performance_counter_t fift(MDR_MISC_NAME,&quot;15 Minute Run Queue
+Length&quot;);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">printf(&quot;load average: %5.2f,%5.2f,%5.2f\n&quot;,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">one.mdr_value().mv_d, five.mdr_value().mv_d,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">fift.mdr_value().mv_d);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">return 0;</font></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">}</font></span></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">And to wrap
+up the MDR discussion, here is a program that dumps the entire “performance
+registry” of a UNIX machine and shows whether the counters are supported.</font></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">#include &lt;iostream&gt;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">#include
+&quot;mdr_perf_host.h&quot;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">int</font><font size="1"> main(int argc, char *argv[])</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">{</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">try {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">mdr::mdr_performance_host_t host(argv[1]);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">const mdr::mdr_keyset_t &amp;v = host.mdr_get_category_names();</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">for(size_t i=0; i&lt;v.size(); i++) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">std::cout &lt;&lt; v[i] &lt;&lt;
+std::endl;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">mdr::mdr_t *mdr =
+host.mdr_get_category_by_name(v[i]);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">for(int j=0;
+j&lt;mdr-&gt;mdr_field_count; j++) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">        </font> </span><font size="1">std::cout &lt;&lt; &quot;\t&quot;;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">        </font> </span><font size="1">std::cout.width(50);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">        </font> </span><font size="1">std::cout.setf(std::ios_base::left,</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">                      
+</font>
+</span><font size="1">std::ios_base::adjustfield);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">        </font> </span><font size="1">std::cout &lt;&lt;
+mdr-&gt;mdr_field_name(j);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">        </font> </span><font size="1">std::cout.width(4);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">        </font> </span><font size="1">std::cout &lt;&lt;
+(mdr-&gt;mdr_is_supported(j) ? &quot;yes&quot; : &quot;no&quot;)</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1"><span style='mso-spacerun:yes'>              </span>&lt;&lt; std::endl;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">delete mdr;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">} catch(std::exception &amp;e) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">std::cerr &lt;&lt; e.what() &lt;&lt; std::endl;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">return 1;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">return 0;</font></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">}</font></span></p>
+
+<p class=StyleHeading2Left05Right049 >
+<font size="3">JMDR</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">JMDR</font><font size="2"> is the
+Java version of MDR. It is a copy of the MDR library in Java with native methods
+to call into the C++. In effect, it’s the middle ground between pure Java and
+totally native C++. Although the entire MDR library was duplicated, it was not
+necessary in terms of what is needed by the layers above JMDR. But, who knows
+what the future will bring. I thought it would be a good idea to have complete
+implementations of all layers. That way, a totally native solution could be
+written in C++ or a native method implementation could be written with JMDR.
+This is obviously, the case only for UNIX, though. The category classes of MDR
+and JMDR represent a “static” implementation of classes that were defined by me
+for UNIX. Windows contains the registry with its <b>HKEY_PERFORMANCE_DATA</b>
+registry key and it is a dynamic entity. And the performance counters provided
+by Windows are not only different in the nature of the data they present but
+also in the way it is presented, that is, as rates instead of absolute values.
+It is not only impractical, but impossible to implement the same category
+classes on Windows with the same semantics.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">JMDR</font><font size="3">
+Patterns</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">As in MDR,
+JMDR has singletons and tuples and the base class, <b style='mso-bidi-font-weight:
+normal'>mdr_t</b> is inherited by all of the category classes. Tuples also
+implement the interface <b style='mso-bidi-font-weight:normal'>mdr_tuple_t</b>
+which simply defines the methods <span style='font-family:Courier'>mdr_size</span>
+and <span style='font-family:Courier'>mdr_keyset</span>. The common private
+variables in all of the JMDR classes are <span style='font-family:Courier'>handle</span>
+and <span style='font-family:Courier'>reason</span>. The <span
+style='font-family:Courier'>handle</span> member is <b style='mso-bidi-font-weight:
+normal'>long</b> type and contains a pointer to the native C++ class underlying
+that Java class. The <span style='font-family:Courier'>reason</span> member is <b>String</b>
+type and contains an error message to be thrown should a native method fail.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">JNI</font>:<font size="3"> The
+Other Side of the Coin</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Since JMDR
+does, in fact, have native methods, there must be a shared object (UNIX) or a
+DLL (Windows) that contains the native methods. The UNIX version contains all
+of the native methods of all the category classes of JMDR. The Windows version
+contains the native method implementations of only the following classes.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-left:1.0in;text-indent:-.25in;
+mso-list:l1 level1 lfo2;tab-stops:list .5in'><![if !supportLists]>
+<span style='mso-list:Ignore; font-family:Symbol; mso-fareast-font-family:Symbol; mso-bidi-font-family:Symbol'>
+<font size="2">·</font><span style='font-style:normal; font-variant:normal; font-weight:normal; font-family:Times New Roman'><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font>
+</span></span><![endif]><b><font size="2">mdr_performance_host_t</font></b></p>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-left:1.0in;text-indent:-.25in;
+mso-list:l1 level1 lfo2;tab-stops:list .5in'><![if !supportLists]>
+<span style='mso-list:Ignore; font-family:Symbol; mso-fareast-font-family:Symbol; mso-bidi-font-family:Symbol'>
+<font size="2">·</font><span style='font-style:normal; font-variant:normal; font-weight:normal; font-family:Times New Roman'><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font>
+</span></span><![endif]><b><font size="2">mdr_category_t</font></b></p>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-left:1.0in;text-indent:-.25in;
+mso-list:l1 level1 lfo2;tab-stops:list .5in'><![if !supportLists]>
+<span style='mso-list:Ignore; font-family:Symbol; mso-fareast-font-family:Symbol; mso-bidi-font-family:Symbol'>
+<font size="2">·</font><span style='font-style:normal; font-variant:normal; font-weight:normal; font-family:Times New Roman'><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font>
+</span></span><![endif]><b><font size="2">mdr_performance_counter_t</font></b></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">So, you can see
+that the view of JMDR from above JMDR, in the context of being platform
+independent, is restricted to these three classes. It is, however, a powerful
+abstraction, as it provides access to the complete performance registry of
+Windows and the pseudo-registry provided by the category classes of MDR.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The Windows
+implementation of the JNI uses Microsoft’s Performance Data Helper (PDH)
+library to access the performance counters in the registry. This is something
+of a life saver as the format of the raw data within the registry is incredibly
+convoluted. In addition, the PDH library is portable across releases of
+Windows. You can peruse the Windows JNI code at src/jmdr/lib/windows/jmdr/jmdr.
+The code is a bit cryptic because the library must span the chasm between the 
+PDH and MDR paradigms.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">Example</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">For
+comparison, the following is a Java version of the category and field printing
+example in the MDR section.</font></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">import
+com.capmet.metrics.jmdr.mdr_performance_host_t;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">import
+com.capmet.metrics.jmdr.mdr_category_t;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">import
+com.capmet.metrics.jmdr.mdr_exception_t;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">public class cats {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">public static void main(String[] args) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">try {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">new cats();</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">} catch(Exception e) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">System.out.println(e);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">public cats() throws mdr_exception_t {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">mdr_performance_host_t host = new mdr_performance_host_t();</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">String[] catNames = host.mdr_get_category_names();</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">for(String name : catNames) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">mdr_category_t c =
+host.mdr_get_category_by_name(name);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">System.out.println(name);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">for(int i=0; i&lt;c.mdr_field_count; i++)</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">        </font> </span><font size="1">System.out.printf(&quot;\t%-50.50s
+%s\n&quot;, c.mdr_field_name(i),</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">          </font> </span><font size="1">c.mdr_is_supported(i) ?
+&quot;yes&quot; : &quot;no&quot;);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">}</font></span></p>
+
+<p class=StyleHeading2Left05Right049 >
+<font size="3">RMI</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The Remote
+Method Invocation layer utilizes the JMDR library and provides network
+available interfaces to the big three classes in the bullet items above. RMI is
+composed of two parts; the client and the server. In the server we see the last
+vestige of native methods via its connection to JMDR. The client side is pure
+Java and frees the application from the association with the specifics of the
+underlying architecture or operating system. Well, not completely, but its very
+high level.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">Structure</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Normally,
+RMI is implemented by building a local class, a remote class and an interface
+that both sides use. For each class with a remote counterpart, there is a local
+object and a remote object. I modified this since the RMI classes that I
+defined are so closely related. I also stepped away from the convention to
+always bind a new connection for every object pair. It clutters the TCP
+connection table and is unnecessary. To this end, the class <b
+style='mso-bidi-font-weight:normal'>RMIAccessPoint</b> was created. This class
+looks up the URL of the requested connection in a table and if there is already
+a connection, it is returned. So, all of the RMI classes with remote
+counterparts will extend the <b style='mso-bidi-font-weight:normal'>RMIAccessPoint</b>
+class.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">The Big
+Three – RMI Style</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The three
+classes discussed in both MDR and JMDR now get Java-ized, losing their
+underscore names and prefix and become these three classes.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-left:1.0in;text-indent:-.25in;
+mso-list:l2 level1 lfo3;tab-stops:list .5in'><![if !supportLists]>
+<span style='mso-list:Ignore; font-family:Symbol; mso-fareast-font-family:Symbol; mso-bidi-font-family:Symbol'>
+<font size="2">·</font><span style='font-style:normal; font-variant:normal; font-weight:normal; font-family:Times New Roman'><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font>
+</span></span><![endif]><b><font size="2">PerformanceHost</font></b></p>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-left:1.0in;text-indent:-.25in;
+mso-list:l2 level1 lfo3;tab-stops:list .5in'><![if !supportLists]>
+<span style='mso-list:Ignore; font-family:Symbol; mso-fareast-font-family:Symbol; mso-bidi-font-family:Symbol'>
+<font size="2">·</font><span style='font-style:normal; font-variant:normal; font-weight:normal; font-family:Times New Roman'><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font>
+</span></span><![endif]><b><font size="2">PerformanceCategory</font></b></p>
+
+<p class=StyleBodyTextLeft05Right049 style='margin-left:1.0in;text-indent:-.25in;
+mso-list:l2 level1 lfo3;tab-stops:list .5in'><![if !supportLists]>
+<span style='mso-list:Ignore; font-family:Symbol; mso-fareast-font-family:Symbol; mso-bidi-font-family:Symbol'>
+<font size="2">·</font><span style='font-style:normal; font-variant:normal; font-weight:normal; font-family:Times New Roman'><font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font>
+</span></span><![endif]><b><font size="2">PerformanceField</font></b></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">For the most
+part, the methods are the same, only their names have been changed to mixed
+case instead of the underscore style. The javadocs for these classes have all
+the declarations and their usage.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">New Class</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">RMI</font><font size="2">
+introduces a new class for application use. This is the <b style='mso-bidi-font-weight:
+normal'>PerformanceCollection</b> class. Since the interface to the performance
+metrics has been modified to using a <b style='mso-bidi-font-weight:normal'>PerformanceField</b>
+class for every counter of interest, it can easily be seen how there can become
+an enormous number of classes. And for each of these classes, when a refresh of
+the data is requested, it generates a remote method invocation. If you think in
+terms of a process listing, there can be 10 or 20 counters per process and a
+process count going into the thousands. It would take quite a bite out of
+everything to execute 20,000 RMI calls to refresh variables. The <b
+style='mso-bidi-font-weight:normal'>PerformanceCollection</b> allows the
+aggregation of <b style='mso-bidi-font-weight:normal'>PerformanceField</b>
+variables into one place. The number of RMI calls is significantly reduced by
+generating bulk requests.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">Server Side</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The RMI
+server class in the RMI library is called <b style='mso-bidi-font-weight:normal'>RMIServer</b>.
+It is allocated by the CaptiveCollector and sent off to a Java RMI function. It
+allocates objects on behalf of the client process and returns to the client a
+<span style="font-family: Courier New">UID</span> of the object that the client
+can use to reference the object when dealing with the server. The client code
+takes care to clean up the server side objects upon exit. This is done using a “shutdown
+hook” in the JVM to tell the server to delete objects that the client was
+using. This code is contained within the <b style='mso-bidi-font-weight:normal'>RemoteJanitor</b>
+class in the RMI library.</font></p>
+
+<p class=StyleHeading3Left05Right049 >
+<font size="3">Example</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Once again,
+we’ll beat the category printer horse. This one needs the CaptiveCollector
+running to work.</font></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">import
+com.capmet.metrics.rmi.PerformanceHost;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">import
+com.capmet.metrics.rmi.PerformanceCategory;</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><font size="1">public class cats {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">public static void main(String[] args) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">try {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">String host = args.length == 0 ?
+&quot;localhost&quot; : args[0];</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1"> </font></span><font size="1"><span style='mso-spacerun:yes'>     </span>new
+cats(host);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">} catch(Exception e) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">System.out.println(e);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">public cats(String remoteHost) throws Exception {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">PerformanceHost host = new PerformanceHost(remoteHost);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">String[] catNames = host.getCategoryNames();</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><o:p><font size="1">&nbsp;</font></o:p></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">for(String name : catNames) {</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">PerformanceCategory c =
+host.getCategory(name);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">System.out.println(name);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">int n = c.getFieldCount();</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">      </font> </span><font size="1">for(int i=0; i&lt;n; i++)</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">        </font> </span><font size="1">System.out.printf(&quot;\t%-50.50s
+%s\n&quot;, c.getFieldName(i),</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span
+style='mso-spacerun:yes'><font size="1">          </font> </span><font size="1">c.isFieldSupported(i) ?
+&quot;yes&quot; : &quot;no&quot;);</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1">   
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLeft05Right049 >
+<span
+style='font-family:Courier'><span style='mso-spacerun:yes'><font size="1"> 
+</font>
+</span><font size="1">}</font></span></p>
+
+<p class=StyleCodeLastLineLeft05Right276><span style='font-family:Courier'>
+<font size="1">}</font></span></p>
+
+<p class=StyleHeading2Left05Right049 >
+<font size="3">CM – The
+Captive Metrics Library</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">Now that
+three layers have been traversed, we finally have a pure Java performance data
+source that is platform neutral. Granted, the UNIX side is something of
+shooting fish in a barrel, but nonetheless, the performance data is there and
+now something needs to be done with it.</font></p>
+
+<p class=StyleBodyTextLeft05Right049 >
+<font size="2">The CM
+library is intended as a re-distillation of performance categories, only done
+in a way that makes it platform indifferent. It provides static definitions of
+class members, but even those are CM types that contain an <span
+style='font-family:"Courier New"'>isSupported</span> method. The classes take
+on the burden of determining the flavor of the OS providing the performance
+data and requesting the appropriate counters. The CM category classes make use
+of the <b style='mso-bidi-font-weight:normal'>PerformanceCollection</b> to
+aggregate the counters of interest into one structure for bulk transfer.</font></p>
+<p class=StyleBodyTextLeft05Right049 >
+&nbsp;</p>
+<p class=StyleBodyTextLeft05Right049 >
+[THIS DOCUMENT IS WORK-IN-PROGRESS. MORE PROGRESS ON THIS DOCUMENT IS 
+FORTHCOMING.]</p>
+
+</div>
+
+</body>
+
+</html>

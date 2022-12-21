@@ -1,0 +1,326 @@
+                                The XE Toolkit
+
+                     Captive Metrics Software Corporation
+
+                                 Version 1.2
+                               April 15, 2008
+
+*********************
+* Changes since 1.1 *
+*********************
+Bug fixes
+  Solaris locking problems
+  Performance improvements in mdr
+  Locale problems in non-US-English Windows installs
+Support for AIX (5.3 base)
+Support for Linux on Power (IBM pSeries & iSeries)
+Support for Linux on s390 (IBM zSeries)
+Code restructuring and use of new "snap" utility
+  and command-line build for Windows
+VirtualGuru rotates log files when the day changes
+bbClient groovy script for monitoring BigBrother clients
+
+*********************
+* Changes since 1.0 *
+*********************
+
+Bug fixes
+  Windows collector cores
+  Solaris 10 collector fails when accessing TCP stats
+  IP address missing in network info on some Windows versions
+  Non-US locales caused collector to crash on Solaris & Windows
+Support for Windows Vista
+Support for Solaris 11
+Support for tickless kernel (Linux kernel 2.6.21+)
+Support for MacOS Intel
+Improved dependency check for Solaris
+Better error checking in CaptiveCollector script
+Windows binaries now have icons
+Windows.env file for exe files
+"system" directory now "System"
+Optional System-bat directory for starting collector with batch file
+CaptiveCollector and CaptiveControl are separate programs on Windows
+Platform packages are for that operating system only, though possibly
+  containing multiple architectures
+Windows and Mac platforms now put software in CaptiveMetrics/XEToolkit
+  directory for consistency
+
+
+The two most important changes in this release involved a change in  "the  way
+things are done" in the code.
+
+First, the tickless kernel fix involved removing all computations based on the
+delta  of  clock  ticks  over  an interval. All such computations are now done
+using the system clock to compute the passage of time. This required a  change
+to  the disk, ctlr, iostat and ctlrstat classes to change the fields that used
+ticks as a unit of measure. They now use milliseconds instead.  This  has  the
+added benefit of making the code easier to read and understand as well.
+
+The second such change is in the Darwin platform code. Since Apple is removing
+/dev/mem and /dev/kmem (in fact, they're already gone in the Intel port) using
+kvm is no longer an option. The Intel port does not even have  a  libkvm.dylib
+file  or  the associated kvm.h include file.  This change resulted in the loss
+of name cache and buffer cache stats and the "Total Interrupts" field  of  the
+misc  class  now only reflects the clock interrupts. It is a minor disruption,
+but overall it makes the code a better citizen.
+
+*********************
+* Known Issues      *
+*********************
+
+We are working with a customer with a gigantic Solaris server that has
+several issues with CaptiveCollector crashing. A test run of the v1.1 release
+improved the situation but there are sill issues.
+
+Both PowerPC and Intel ports to MacOS leak memory. We have narrowed it down
+to the serialization code of the native RMI code (which is part of Java).
+
+A test of v1.1 on FreeBSD 6.2 failed with flying colors. Many of the shared
+objects used by the code have up-reved and there also seems to be structure
+size issues with low level calls. It seems clear that a release unique to
+FreeBSD 6.x will be needed.
+
+                                 Version 1.0
+                               April 15, 2007
+
+**************************
+* Installing the Package *
+**************************
+
+XE is shipped in the native package format of several  operating  systems.  In
+order for the installation to complete correctly, Java 5 must be installed and
+the Java Virtual Machine (JVM) for Java 5 must be the  first  java  binary  to
+appear in the execution path. Running "java -version" should indicate that the
+virtual machine is  version  1.5.0  or  newer.  If  the  package  installation
+software  resets  the  path  to a default setting, the Java 5 JVM should be in
+this default path as the first JVM to be encountered. This may require you  to
+create  a  symbolic link to the JVM, copy the JVM to the default directory, or
+modify global system properties  that  direct  the  path  search  through  the
+location of the Java 5 JVM.
+
+All of the software makes use of new features  of  Java,  so  using  an  older
+version  of  the  virtual  machine  is  simply  not an option. The scripts are
+written to be aware of where they are installed, so there is no requirement on
+the  location  of the installation. Once installed on Unix-based hosts, the rc
+script that starts CaptiveCollector may be modified if the path to the virtual
+machine  is  either  not in the default path or there is more than one virtual
+machine and the default is the wrong version. The  same  modification  to  the
+PATH  variable should be made to the XERun script located in the bin directory
+of the installation.
+
+*******************
+* Platform Issues *
+*******************
+
+******************
+** Unix Systems **
+******************
+
+The  message  catalogs may need to be rebuilt on each platform XE is installed
+on.  If asking for the counter explanation in the  "Counters"  program  yields
+the  counter  name for the explanation, then the files need to be rebuilt.  To
+do this, follow these instructions (assuming TOP is the installation directory).
+
+# cd TOP/locale/en_US.UTF-8/LC_MESSAGES
+# make clean
+# make
+
+If  you  do  not  have  "make"   or   "msgfmt"   on   your   system,   contact
+support@captivemetrics.com  and  we'll  see  what  can  be  done  to fix this.
+
+If remaking the message catalogs is met with no success and you are in the "C"
+locale, try setting the environment variable  LC_ALL=en_US.UTF-8.  That  fixed
+the problem on our FreeBSD test machine.
+
+*********************
+** Windows Systems **
+*********************
+
+Before any of the programs will work on a Windows system that  does  NOT  have
+Visual  Studio  2005  installed  on  it, a free "redistributable package" from
+Microsoft needs to be installed. This package can be downloaded from Microsoft
+from
+
+http://www.microsoft.com/downloads/details.aspx?FamilyID=32bc1bee-a3f9-4c13-9c99-220b62a191ee&DisplayLang=en
+
+There is also a copy of the package in the TOP/system directory named
+vcredist_x86.exe.
+
+*******************
+** Solaris Notes **
+*******************
+
+The Solaris package can be used on any of the supported Solaris platforms  and
+will install all of the binaries required for any platform. This is convenient
+for using the CMxe directory as an export file system and serve the product to
+other  supported  platforms  on  the  network.  The package comes as a gzipped
+package stream or a gzipped directory hierarchy that can be  used  by  pkgadd.
+For the package stream, the usage would be
+
+# gunzip CMxe.pkg.gz
+# pkgadd -d CMxe.pkg
+
+and the installation proceeds with pkgadd interacting with the installer.
+
+The gzipped directory hierarchy install would be
+
+# gzcat CMxe.tar.gz | tar xvf -
+# pkgadd -d .
+
+and the installation proceeds with pkgadd interacting with the installer.
+
+Note that the -R option to pkgadd can also be used to locate the package in  a
+directory other than /opt.
+
+*****************
+** Linux Notes **
+*****************
+
+The rpm program on Linux is used to install XE on that platform.  The  package
+checks  to  verify  that  there  is  a  Java  virtual machine on the system at
+revision 1.5.0 or newer. This is done simply by calling  "java  -version".  If
+the java binary is not in the PATH then an error message will be issued and XE
+will not be installed. Unfortunately, putting the path of the  compliant  Java
+VM  within  the  PATH  variable is not enough since rpm sets PATH to a default
+value. This can be circumvented in at least 2 ways.
+
+1.  Put a symbolic link to the java binary in /usr/bin.
+2.  Run rpm with the environment variable JAVA set to the path of the
+    compliant VM, e.g. JAVA=/opt/java/bin/java rpm -i CMxe-1.0-1.i586.rpm.
+
+Linux Installs are Platform Dependent
+
+There are currently 2 install packages for Linux.
+
+1.  CMxe-1.0-1.i586.rpm
+2.  CMxe-1.0-1.x86_64.rpm
+
+The x86_64 package can be installed on a machine that serves both  32  and  64
+bit implementations of Linux. This is due to the feature of rpm which examines
+binaries contained in a package (at packaging time) to determine  what  shared
+objects  are  used  by  the binaries and then enforce a dependency rule on the
+existence of these files at installation time. Since the 64 bit Linux supports
+32  bit applications, both sets of libraries are present on the system. Not so
+for the 32 bit version though. Only the 32 bit libraries are present.  And  it
+goes  without  saying  that packaging Solaris binaries within the package does
+not work since they are ELF binaries and rpm determines  what  shared  objects
+those binaries require and they are certainly not present on a Linux system at
+install time.
+
+In  order  to create a multi-platform installation on a Linux machine that can
+be served to other platforms, use the CMxe.tar.gz tarball and  circumvent  the
+rpm  installation.  The tarball contains all binaries needed for all supported
+platforms.
+
+As a last point of emphasis, a successful installation of  XE  on  Linux  will
+require  Java  5  and  the  libstdc++.so.5 shared object. Absence of either of
+these prerequisites will result in a failed installation or  an  inability  of
+the software to run.
+
+Also note that rpm will install XE in /opt/CMxe by default.
+
+*******************
+**   AIX Notes   **
+*******************
+
+The collector gathers data from the snmp daemon on the system. If the daemon is
+not running, then there will be a delay in starting the collector and any metrics
+collected from snmpd will be zero. Currently, the IP, TCP, UDP and ICMP metrics
+in addition to the input and output failures of the netif metrics are gathered
+from snmpd.
+
+As with all other platforms, Java 5 must be installed for XE to work.
+
+*******************
+** Windows Notes **
+*******************
+
+Before installation of XE can take place on Windows, make sure that the Visual
+Studio 2005 redistributable package is installed on the system.  The  binaries
+will  not  run  without it. See the Platform Notes->Windows Systems section in
+this document.
+
+The  installation  package  for  Windows  is an "msi" file that installs XE in
+C:\Program_Files\Captive_Metrics\XE_Toolkit by default. Using the installer is
+similar to other installation programs on Windows and its use should be fairly
+easy to understand.
+
+*******************
+** FreeBSD Notes **
+*******************
+
+The package for FreeBSD was built on a 5.4 x86 system and is packaged for  use
+with  pkg_add.  By default, the package will install in /opt as is the default
+for XE Unix packages, but the -p prefix-dir option can be used with pkg_add to
+put the package in another directory.
+
+As is the case with all platforms, your PATH environment variable must include
+the  directory  containing the Java 5 virtual machine. pkg_add will fail if it
+cannot find a valid virtual machine.
+
+*******************
+** MacOS X Notes **
+*******************
+
+The  MacOS package is just that and it is contained within a "dmg" file.  Once
+the XE.dmg file is downloaded, double clicking on it will mount the disk image
+and  place  it  on the desktop or within the Macintosh HD dialog as XE. Double
+clicking on the XE icon will bring up a dialog with the "XE  Toolkit"  package
+in it. Double clicking on the "XE Toolkit" package will start the installation
+process and the applications will be installed in /Applications/XEToolkit.
+
+The        installer         requires         the         existence         of
+/System/Library/Frameworks/JavaVM.framework/Versions/1.5   since  XE  requires
+Java 5 in order to function.
+
+There is a memory leak in  CaptiveCollector on MacOS systems. Investigation of
+the problem points to an internal  problem with  Java. There is a printf-style
+call  that  seems  to  be  allocating  a large  chunk of memory and not always
+freeing it. This call is associated with the object serialization code.
+
+*****************************
+* Starting CaptiveCollector *
+*****************************
+
+******************
+** Unix Systems **
+******************
+
+The init.d directory at the top of the installation directory contains a shell
+script named CaptiveCollector. This is an init.d/rc.d style script that can be
+used to perform several functions  on  CaptiveCollector.  The  script  can  be
+placed  into  the  system init.d directory and be scheduled to start at system
+boot. If this is done, the script must be modified to indicate the actual  TOP
+directory where XE is installed.
+
+To start CaptiveCollector, run "CaptiveCollector  start"  or  optionally,  run
+"CaptiveCollector  control" which will bring up the CaptiveControl application
+which is a graphical  control  program  for  CaptiveCollector.   Pressing  the
+"Start"  button  will start the collector and after a few seconds, the display
+will change to indicate that CaptiveCollector has started.
+
+There  is  also  a symbolic link to CaptiveControl as running CaptiveCollector
+with no arguments has the same effect as "CaptiveCollector control".
+
+*********************
+** Windows Systems **
+*********************
+
+The self-installer does not start the  CaptiveCollector process  automatically
+nor  will  it  restart  automatically  when  the  system  is  restarted.  Once
+installed, run the CaptiveCollector process to  bring  up  the  CaptiveControl
+application  which  is  a  graphical  control  program  for  CaptiveCollector.
+Pressing the "Start" button will start the collector and after a few  seconds,
+the display will change to indicate that CaptiveCollector has started.
+
+To start the collector, either explore into the "system" directory  and  click
+on  CaptiveCollector  or  use  a cmd  window to  change  directories  into the
+"system" directory and start the process by hand. CaptiveCollector and all  of
+the programs are also installed under the Start->All Programs->XE Toolkit menu
+as well.
+
+*******************
+** MacOS Systems **
+*******************
+
+Same as Unix systems.

@@ -1,0 +1,13 @@
+[servidor]
+ip=
+porta=
+
+[seguranca]
+chaveprivada=client-key.pem
+certificado=client-cert.pem
+autoridade=ca-cert.pem
+caminhoautoridade=
+cifras=
+
+[cliente]
+versao=1

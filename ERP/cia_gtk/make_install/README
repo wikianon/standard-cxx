@@ -1,0 +1,41 @@
+CIA (Controle Integrado Administrativo) é um Planejador de Recursos Empresariais (ERP). 
+Através de um modelo abstrato é possível alta disponibilidade, 
+escalabilidade, segurança, padronização, especificação e personalização, à um baixo custo.
+
+CIA está disponível em http://sourceforge.net/projects/ciaerp/
+
+DEPENDENCIAS:
+==========================
+mysql-client-5.0
+libgtk2.0-0
+python2.5
+libfreetype6
+libcurl3
+libxml2
+unixodbc
+xpdf (sugestão)
+
+INSTALACAO:
+==========================
+$ cd sincronizar
+$ make
+$ cd ..
+$ cd Principal
+$ make
+$ sudo make install
+ou
+# make install
+
+DESINSTALACAO:
+==========================
+$ sudo make uninstall
+ou
+# make uninstall
+
+CONFIGURACOES:
+==========================
+Todas as configurações ficarão em ~/.cia
+
+EXECUCAO:
+==========================
+$ cia

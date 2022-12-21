@@ -1,0 +1,12 @@
+O Easy CRUD é uma arquitetura de aplicativo que pode ser
+estendida através de módulos externos (plugins) usando o Qt.
+Essa arquitetura foi projetada para fornecer as ferramentas
+básicas para criar formulários CRUD, 
+formulários de configuração e formulários de relatório.
+Também inclui o módulo raiz (mod_root), sua função é permitir
+que o usuário ROOT controle os privilégios de acesso do
+usuário do sistema, o usuário ROOT pode limitar os privilégios de usuários normais,
+isso é útil para sistemas que exigem níveis de segurança. 
+
+
+https://ayera.dl.sourceforge.net/project/easy-crud/sources/src-0.4.7z

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+
+if [ "$vasharecountInput" = "0" ]; then
+  exit 0;
+fi
+
+. ./exec/system/shell/domain/share/enable
+. ./exec/system/shell/apache2/webdav/enable

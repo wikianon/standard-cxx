@@ -1,0 +1,28 @@
+#!/bin/bash 
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+mkdir -p /opt/mne/homesave
+
+mne_error_ignore=1
+$sambabin/pdbedit -Lv $olduser >&$logfile 2>&1
+smbresult=$?
+mne_error_ignore=
+
+if [ "$smbresult" = "0" ]; then
+  $sambabin/pdbedit -x -u $olduser 1>&$logfile 2>&1
+fi
+
+mne_error_ignore=1
+olduserid=`id -u $olduser 2>&$logfile`
+result=$?
+mne_error_ignore=
+if [ "$result" = "0" ];then
+    if [ "$olduserid" -ge "10000" ];then
+      /usr/sbin/deluser --remove-home --backup  --backup-to "/opt/mne_homesave" $olduser 1>&$logfile 2>&1
+      mne_error_ignore=1
+      mv /opt/mne/homesave/$olduser.tar.bz2 "/opt/mne/homesave/$olduser""_$(date +%Y%m%d_%H%M%S).tar.bz2"
+      mne_error_ignore=
+    fi
+fi

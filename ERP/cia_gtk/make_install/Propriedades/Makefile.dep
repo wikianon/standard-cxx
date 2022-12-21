@@ -1,0 +1,5 @@
+DEP = ../Fonte/beFonte ../Cor/beCor ../Abrir/beAbrir ../Diretorio/beDiretorio ../Lista/beLista
+
+DEPS := $(DEPS) $(DEP)
+DEPS_I = $(foreach list,$(DEP),$(dir $(list))Makefile.dep)
+include $(DEPS_I)

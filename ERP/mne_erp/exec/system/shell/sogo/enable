@@ -1,0 +1,133 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+myscriptdir=$scriptdir
+
+i=`dpkg --get-selections mnesogo 2>&$logfile | expand | fgrep ' install' | wc -l`
+if [ ! "$i" = "1" ]; then
+    debconf-set-selections <<< "postfix postfix/mailname string $(hostname)"
+    debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+
+    apt-get update >&$logfile 2>&1
+    apt-get -y install mnesogo >&$logfile 2>&1
+    systemctl daemon-reload 
+fi
+
+find_script domain/detail  read.sh
+find_script apache2/detail read.sh
+find_script cert/ca        read.sh
+
+find_template sogoconf sogo/enable sogo.conf
+find_template sogosite sogo/enable site.conf
+
+conf=`get_data "$apacheconf"`
+apache_conf "$conf"
+
+domainconf=`get_data "$getdomain"`
+get_domain "$domainconf"
+
+conf=`get_data "$getcertconf"`
+get_certconf "$conf"
+
+sogouser="sogo"$(hostname)
+user="$sogouser"
+password=$(dd if=/dev/urandom bs=2048 count=1 2>/dev/null |tr -dc "a-zA-Z0-9"|fold -w 64 |head -1)
+bindpassword="$password"
+
+# ==================================================================
+# Datenbank und Datenbankbenutzer
+# ==================================================================
+pg_addaccess 'local.*erpdb.*postgres'     'local   erpdb       postgres                         trust'
+pg_addaccess "host.*$sogouser.*127.0.0.1" "host    erpdb       $sogouser          127.0.0.1/32  trust"
+
+pg_adduser $sogouser
+su - postgres -c "echo 'ALTER ROLE $sogouser SET search_path TO ext_sogo;' | psql $DB" >&$logfile 2>&1
+su - postgres -c "echo 'CREATE SCHEMA ext_sogo AUTHORIZATION $sogouser;'   | psql $DB" >&$logfile 2>&1
+
+# ==================================================================
+# Systembenutzer erzeugen
+# ==================================================================
+$sambabin/samba-tool user list | egrep "^$sogouser\$" >/dev/null
+if [ "$?" != "0" ]; then
+  . $myscriptdir/../domain/user/add_primary >&$logfile 2>&1
+fi 
+
+. $myscriptdir/../domain/user/setpasswd_primary >&$logfile 2>&1
+
+# ==================================================================
+# Conf File
+# ==================================================================
+domainconf=`get_data "$getdomain"`
+get_domain "$domainconf"
+domaindn=$(echo $domain | sed -e "s/^/dc=/" -e "s/\./,dc=/g")
+
+prog='/####BINDPASSWORD####/ { gsub(/####BINDPASSWORD####/, "'$bindpassword'");  }
+      /####BINDUSER####/     { gsub(/####BINDUSER####/,"'$sogouser'"); }
+      /####DOMAIN####/       { gsub(/####DOMAIN####/,"'$domain'"); }
+      /####DOMAINDN####/     { gsub(/####DOMAINDN####/,"'$domaindn'"); }
+      /####DATABASE####/     { gsub(/####DATABASE####/,"'$DB'"); }
+      /####EMAIL####/        { gsub(/####EMAIL####/,"'$sogouser'@'$domain'"); }
+                             { print $0 }'
+
+mkdir -p        /var/spool/sogo >&$logfile 2>&1
+chown www-data  /var/spool/sogo >&$logfile 2>&1
+chmod 700       /var/spool/sogo >&$logfile 2>&1
+
+mkdir -p /etc/sogo 1>&$logfile 2>&1
+ save_file /etc/sogo/sogo.conf
+ awk "$prog" < $sogoconf > /etc/sogo/sogo.conf
+
+mkdir -p /var/log/sogo >&$logfile 2>&1
+chown www-data:www-data /var/log/sogo
+
+systemctl enable mne_sogo.service 1>&$logfile 2>&1
+systemctl daemon-reload
+systemctl restart mne_sogo.service
+
+# ==================================================================
+# Apache Configuration
+# ==================================================================
+
+prog='/####HTTPPORT####/      { gsub(/####HTTPPORT####/, "'$port'");  }
+      /####HTTPSPORT####/     { gsub(/####HTTPSPORT####/,"'$sport'"); }
+      /####DATAROOT####/      { gsub(/####DATAROOT####/,"'$DATAROOT'"); }
+      /####DOMAIN####/        { gsub(/####DOMAIN####/,"'sogo'"); }
+      /####ALIAS####/        { gsub(/####ALIAS####/,"'sogo.$domain'"); }
+      /####NAME####/         { gsub(/####NAME####/,"sogo"); }
+      /####EMAIL####/        { gsub(/####EMAIL####/,"sogo@'$domain'"); }
+                              { print $0 }'
+
+awk "$prog" $sogosite > $apache2rootdir/sites-available/sogo.conf
+
+# ==================================================================
+# Zertifikate in Ordnung bringen
+# ==================================================================
+
+domainsave="$domain"
+aliases=
+if [ -f $certcertdir/$(hostname).crt ]; then
+  aliases=$(openssl x509 -in $certcertdir/$(hostname).crt -text -noout | awk '/Subject Alternative Name/ { printit=1; next } { if ( printit ) { print $0; exit }}' | sed -e 's/DNS://g' -e 's/,//g' -e 's/^ *//' )
+fi
+
+echo $aliases | fgrep "$(hostname).$domain" >&$logfile
+if [ "$?" != "0" ]; then
+    aliases="$aliases $(hostname).$domain"
+    domain=$(hostname)
+    . exec/system/shell/cert/http/mkcert
+fi
+
+if [  ! -e $certkeydir/sogo.key ] ||  [ ! -e $certcertdir/sogo.crt ]; then
+    aliases="sogo.$domain"
+    domain="sogo"
+    . exec/system/shell/cert/http/mkcert
+fi
+domain="$domainsave"
+
+. $myscriptdir/dovecot/enable
+. $myscriptdir/postfix/enable
+
+a2ensite sogo >&$logfile 2>&1
+$apache2reload >&$logfile 2>&1
+

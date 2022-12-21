@@ -1,0 +1,22 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+. exec/system/shell/allg/db.sh
+
+DELETE="SELECT mne_system.apachemod_del()"
+result=`get_data "$DELETE"`
+
+INSERT=
+for mod in `ls -1 $apache2rootdir/mods-available | sed -e 's/\.[^.]*$//g' | sort -u`
+do
+    enabled=false
+    if [ -f $apache2rootdir/mods-enabled/$mod.load ]; then
+        enabled=true
+    fi
+    INSERT="$INSERT""SELECT mne_system.apachemod_add('$mod', $enabled);";
+done
+
+result=`get_data "$INSERT"`;
+  

@@ -1,0 +1,35 @@
+#!/bin/bash
+
+find_template conffile domain/enable smb_$typ.conf
+
+i=`dpkg --get-selections mnesamba | expand | fgrep ' install' | wc -l`
+if [ ! "$i" = "1" ]; then
+    apt-get update > /dev/null 2>&1
+    apt-get install mnesamba > /dev/null 2>&1
+fi
+
+systemctl daemon-reload
+
+systemctl stop    samba.service
+systemctl disable samba.service
+
+systemctl enable smb.service
+systemctl enable nmb.service
+
+systemctl daemon-reload
+
+mkdir -p /var/log/samba 2>/dev/null
+
+prog='/####DOMAIN####/  {   gsub(/####DOMAIN####/, domain);  }
+      /####WORKGROUP####/ { gsub(/####WORKGROUP####/,workgroup); }
+      /####DESCRIPTION####/ { gsub(/####DESCRIPTION####/,description); }
+                          { print $0 }'
+
+mkdir -p $sambaconf > /dev/null 2>&1
+if [ -f "$sambaconf/smb.conf" ]; then
+   mv "$sambaconf/smb.conf" "$sambaconf/samba.conf"_`date +"%d.%m.%Y_%H:%M:%S"`
+fi
+awk "$prog" "workgroup=$workgroup" "domain=$domain" "description=$description" $conffile > $sambaconf/smb.conf
+
+systemctl restart smb.service
+systemctl restart nmb.service

@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment=
+Comment[en_US]=
+Encoding=UTF-8
+Exec=/opt/CMxe/bin/Top
+GenericName=
+GenericName[en_US]=
+Icon=/opt/CMxe/images/top.png
+MimeType=
+Name=Top
+Name[en_US]=Top
+Path=
+StartupNotify=false
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DCOP-ServiceType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

@@ -1,0 +1,5 @@
+#!/bin/sh
+# Por Luciano T. Pereira
+tar -cvvzPf `date +recuperar_erros_%d-%m-%Y_%H-%M-%S.tar.gz` /var/lib/mysql/suporte
+
+exit 0 

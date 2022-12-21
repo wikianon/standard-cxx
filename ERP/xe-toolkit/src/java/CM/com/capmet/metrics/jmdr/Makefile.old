@@ -1,0 +1,69 @@
+#############################################################################
+##
+## Copyright (c) 2006-2007 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file is part of the Captive Metrics library of Captivity.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+JFILES  = mc_can_t.java mci_can_t.java mcpu_can_t.java mctl_can_t.java \
+          md_can_t.java mdr_cache_t.java mdr_category_t.java \
+          mdr_cpuinfo_t.java mdr_cpustat_t.java mdr_cpu_t.java \
+          mdr_ctlrstat_t.java mdr_ctlr_t.java \
+          mdr_disk_t.java mdr_exception_t.java mdr_icmp_t.java \
+          mdr_iostat_t.java mdr_ip_t.java mdr_memory_t.java mdr_misc_t.java \
+          mdr_mnt_t.java mdr_mpstat_t.java mdr_mp_t.java mdr_netif_t.java \
+          mdr_os_flavor_t.java mdr_performance_counter_t.java \
+          mdr_performance_host_t.java mdr_pf_t.java mdr_ps_t.java \
+          mdr_string_t.java mdr_systat_t.java \
+          mdr_tcp_t.java mdr_thread_t.java mdr_t.java mdr_tuple_t.java \
+          mdr_udp_t.java mmnt_can_t.java mmp_can_t.java mmps_can_t.java \
+          mnet_can_t.java mpf_can_t.java mps_can_t.java \
+          mt_can_t.java mdr_proc_states_t.java
+BCFILES = mc_can_t.class mci_can_t.class mcpu_can_t.class mctl_can_t.class \
+          md_can_t.class mdr_cache_t.class mdr_category_t.class \
+          mdr_cpuinfo_t.class mdr_cpustat_t.class mdr_cpu_t.class \
+          mdr_ctlrstat_t.class mdr_ctlr_t.class \
+          mdr_disk_t.class mdr_exception_t.class mdr_icmp_t.class \
+          mdr_iostat_t.class mdr_ip_t.class mdr_memory_t.class \
+          mdr_misc_t.class mdr_mnt_t.class mdr_mpstat_t.class mdr_mp_t.class \
+          mdr_netif_t.class mdr_os_flavor_t.class \
+          mdr_performance_counter_t.class mdr_performance_host_t.class \
+          mdr_pf_t.class mdr_ps_t.class mdr_string_t.class \
+          mdr_systat_t.class mdr_tcp_t.class \
+          mdr_thread_t.class mdr_t.class mdr_tuple_t.class \
+          mdr_udp_t.class mmnt_can_t.class mmp_can_t.class mmps_can_t.class \
+          mnet_can_t.class mpf_can_t.class mps_can_t.class \
+          mt_can_t.class mdr_proc_states_t.class
+TOP     = ../../../..
+OPTIM   = -g
+.SUFFIXES: .java .class
+
+.java.class:
+	CLASSPATH=$(TOP):$(JF) javac $(OPTIM) $*.java
+
+default:	$(BCFILES)
+
+all:
+	CLASSPATH=$(TOP) javac $(OPTIM) $(JFILES)
+
+clean:
+	/bin/rm -fr *.class

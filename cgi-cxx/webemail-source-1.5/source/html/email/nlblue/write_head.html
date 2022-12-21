@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>Web E-Mail</title>
+<META HTTP-EQUIV="expires" content="0">
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#0000EF" alink="#FF0000" 
+background=/email/nlblue/bg1.gif>
+
+<table CELLSPACING=0 CELLPADDING=0 COLS=2 WIDTH="100%" NOSAVE>
+<tr NOSAVE><td NOSAVE>
+<img src="/email/nlblue/<!-#replace write_mode>.gif" >
+
+<font size=-1>&nbsp;&nbsp;&nbsp;(<!-#replace user_name>)</font>
+</td><td NOSAVE>
+<img src="/email/nlblue/shortcutbar.png" USEMAP="#barmap" border="0">
+
+<MAP NAME="barmap">
+<AREA SHAPE="rect" COORDS="19,15,71,38" HREF="<!-#replace url>" TARGET=_top>
+<AREA SHAPE="rect" COORDS="70,38,150,60" HREF="<!-#replace url>?write" TARGET=_top>
+<AREA SHAPE="rect" COORDS="108,13,239,34" HREF="<!-#replace url>?book" TARGET=_top>
+<AREA SHAPE="rect" COORDS="260,17,320,38" HREF="<!-#replace url>?about" TARGET=_top>
+<AREA SHAPE="rect" COORDS="187,38,558,60" HREF="<!-#replace url>?reset" TARGET=_top>
+</MAP>
+
+<div align=right>  
+</div>
+
+</td></tr></table><hr WIDTH="100%">
+
+<form EncType="Multipart/form-data" Method="post" action="<!-#replace url>?send">
+        
+To:&nbsp;<input type=text name=to size=25 value="<!-#replace to>">
+&nbsp;Cc:&nbsp;<input type=text name=cc size=25>
+&nbsp;&nbsp;&nbsp;
+<input type=Submit value="Send">
+&nbsp;<input type=reset value="Reset">
+<br>Subject:&nbsp;<input type=text name=subject size=50 value="<!-#replace subject>">
+        
+<br>Message:
+<br><textarea wrap=hard cols=80 rows=20 name=message>

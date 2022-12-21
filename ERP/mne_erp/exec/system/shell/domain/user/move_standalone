@@ -1,0 +1,56 @@
+#!/bin/bash 
+
+mne_error_ignore=1
+olduserid=`id -u $olduser 2>&$logfile`
+result=$?
+mne_error_ignore=
+
+mne_error_ignore=1
+$sambabin/pdbedit -Lv $olduser >&$logfile 2>&1
+smbresult=$?
+mne_error_ignore=
+
+if [ "$smbresult" = "0" ]; then
+    usid=$($sambabin/pdbedit -Lv $olduser 2>/dev/null | fgrep "User SID" | sed -e 's/ *//g' | cut -f 2 -d:)
+    $sambabin/pdbedit -x -u $olduser 1>&$logfile 2>&1
+fi
+
+if [ ! "$result" = "0" ];then
+  mne_error_ignore=1
+  id $user 1>&$logfile 2>&1
+  result=$?
+  mne_error_ignore=
+  if [ ! "$result" = "0" ];then
+    option=
+    if [ ! "$uid" = "" ]; then
+        option="--uid-number=$uid"
+    else
+        option="--firstuid 10000 --ingroup nogroup"
+    fi
+    /usr/sbin/adduser --shell /bin/false --no-create-home --disabled-password $option --gecos ",,,," $user 1>&$logfile 2>&1
+  fi
+elif [ "$olduser" != "$user" ]; then
+  mne_error_ignore=1
+  userid=`id -u $user 2>&$logfile`
+  result=$?
+  mne_error_ignore=
+  if [ "$result" = "0" ];then
+    if [ "$userid" -ge "10000" ]; then
+      echo "user $user exists - del $user"
+      mkdir -p /opt/mne_homesave >/dev/null 2>&1
+      /usr/sbin/deluser --remove-home --backup  --backup-to "/opt/mne_homesave" $user 1>&$logfile 2>&1
+      mv /opt/mne_homesave/$user.tar.bz2 "/opt/mne_homesave/$user""_$(date +%Y%m%d_%H%M%S).tar.bz2"
+    else
+        echo "user $user exits"
+        exit 1
+    fi
+  fi
+  /usr/sbin/usermod -l $user $olduser 1>&$logfile 2>&1
+fi
+
+if [ "$olduser" != "$user" ]; then
+  echo -ne "$password\n$password\n" | $sambabin/smbpasswd -a -s $user 1>&$logfile 2>&1
+  if [ "$smbresult" = "0" ]; then
+    $sambabin/pdbedit -u $user -U $usid 1>&$logfile 2>&1
+  fi
+fi

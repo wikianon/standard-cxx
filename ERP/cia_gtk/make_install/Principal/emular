@@ -1,0 +1,5 @@
+#!/bin/sh
+# Por Luciano T. Pereira
+valgrind --tool=memcheck --leak-check=full --show-reachable=yes main
+exit 0 
+ 

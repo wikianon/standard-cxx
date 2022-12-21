@@ -1,0 +1,135 @@
+1).......General info about Web E-Mail
+1.1).....Price
+2).......How to change the mail delivery program
+3).......Other web servers
+4).......Install/Uninstall
+5).......How do I get attachments to work
+5.1).......Configuring Apache for attachments
+6).......Security
+6.1).......Root suid
+6.2).......Ssl/plain test passwords
+6.3).......Plugins
+7).......Future
+7.1).......Ports
+
+1) General info about Web E-Mail
+  Web E-Mail was written by Andrew Shaw, who is now a junior at
+Loyola University Chicago.  The project was started in his sophomore
+year. Web E-Mail was designed to be easy to use and accessible from
+anywhere.  There are two home pages for Web E-Mail. There is
+www.execpc.com/~shaws and ashaw.dyn.cheapnet.net/webmail.  The execpc web
+page is up year round, but the ashaw.dyn.cheapnet.net web page has working
+demos and it is up most of the  school year.  Again there are two support
+E-Mail addresses, tiberiusj@yahoo.com,  and ashaw@acm.math.luc.edu.
+  I am always looking for a job. If you are in the Chicago or Milwaukee
+area; and you like the work, need a good reliable programmer or need
+anyone that is  good with computers, send me an e-mail OR you can send me
+stuff.  See below.
+
+1.1) Price
+  FREE!!!!!!!!!!!  However, if you like the work and if you would like to 
+send the author something like cash($25), A JOB!!, computer parts(an alpha
+would be  nice ;), or anything else you think I might like, e-mail me at
+tiberiusj@yahoo.com and I'll give you my current mailing address (or see
+the web e-mail home page).  
+  Note, this will NOT buy you a warranty or support but it will help to
+keep software like this coming.
+  
+
+2) How to change the mail delivery program
+***This only applies to versions 1.0c and above***
+  There is no support for any other mail delivery programs in
+this  version.  The send function was changed to incorparate
+attachments. The change in the send function, made wesend obsolete and
+changing mail delivery programs harder.  Support for other delivery will 
+be added in later versions.  If you have a sendmail compatable replacement
+you can set the sendmailpath var in the conf file.  However no support
+will be give for MTA other then sendmail.
+
+***This only applies to versions 1.0b and earler***
+  To change the mail delivery program, edit wesend which should be in your
+path.  (It was installed in a directory of your choosing during the
+installation).  To change this file it takes a bit of knowledge of shell
+programming.  The first half of wesend formats the e-mail message and
+stores the message in a file called ~/.webmail/emailtmp.  Then it is
+passed to sendmail or the mail delivery program of your choice.
+
+
+3) Other web servers
+  Web E-Mail should work, without modification, with any Unix web server
+that supports cgi 1.1 and http 1.1.  Web E-Mail has been  test on apache
+1.2 running on linux 2.0.36.  Attachments do require apache 1.3.
+
+
+4) Install/Uninstall
+  See README
+
+
+5) How do I get attachments to work
+  Web E-Mail supports attachments, but it is not enabled by
+default. Attachments do work, but you might want to test it before you let
+your system users use it.
+
+5.1) Configuring Apache for attachments
+   A change must be made to your Apache configuration file.  In  srm.conf
+file, or maybe httpd.conf depending on your configuration, you
+will find a line that looks like  
+
+  "ScriptAlias /cgi-bin/ /home/httpd/cgi-bin/"  
+Add the line
+  "ScriptAliasMatch ^/cgi-bin/attachments/(.*) /home/httpd/cgi-bin/email.cgi"
+
+BEFORE the first line!!!!  This is important, the added line needs to be
+added BEFORE the old line.  The paths in these  two lines are dependent on
+your system and might need to be  changed.  This is a bit confusing, if
+any one has a better way to explain this let me know. The general form for
+these lines are, 
+ScriptAliasMatch ^<your http cgi path to run web email>/attachments/(.*) <the path to the web email executable>
+ScriptAlias <your http cgi path> <your real cgi path>
+The directory attachments does NOT need to exist.
+
+
+6) Security
+
+6.1) Root suid
+  Web e-mail must be run as root and it must have the suid bit set.  This
+is a  security risk!  I have taken all of the precautions that I can to 
+minimize the  risk, after the user has logged in, web e-mail switches to
+that users id and  gives up its root privlages.  However, it is possible
+that I over looked  something.  Use this software at your own risk, if you
+get hacked I will not be held responsible.
+
+6.2) Ssl/plain text passwords
+  Web e-mail sends passwords in plain text.  This means anyone
+with a sniffer can see your password fly by.  This is very simular to
+telnet's security or lack of.  To fix this, use a web server with
+ssl.  Apache running with ssl has been shown to work with web e-mail.
+
+6.3) Plugins
+  The plugin DOES run as root at certain times.  Hopefully this
+will be fixed in future releases.  To protect yourself, only run
+trusted plugins, or plugins that you have looked at EVERY LINE!  The only
+code that should be in a plugin are "printf"s containing html tags and a
+few "if" statements.  
+IF THERE IS ANY OTHER CODE, DO NOT RUN THE PLUGIN!!! 
+IF YOU DO NOT UNDERSTAND WHAT THE CODE IS DOING, DO NOT RUN THE PLUGIN!!!
+
+
+7) Future
+  There are a few things in the works for future releases. Suggestions
+are welcome.  Current plans include 
+ 1. An NT port (not looking very likely)
+ 2. mime attachments (in final testing)
+ 3. folders (in final testing)
+ 4. Multi language support (depends on skin support)
+ 5. Skin support (in final testing)
+ 6. A BSD port (I am currenlty working on getting a bsd machine)
+
+  This may change in time.  For the NT port I need a sendmail 
+equivalent for NT and a machine running NT.  I can get the NT machine, but
+I haven't found a good sendmail replacement.
+
+7.1) Ports
+  Web e-mail has can be compiled on Solaris, however it has not been
+tested.  Work has been done to get web e-mail to compile on Mac OSX but
+we have run into a few difficults.  

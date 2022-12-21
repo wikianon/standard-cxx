@@ -1,0 +1,128 @@
+SUID - Nmail
+
+
+
+So, you don't like the fact that nmail is SUID mail SGID mail... Good for you.
+
+Can I ask a simple question:
+
+   Do you want ANYBODY to be able to read ALL your mail?
+
+
+
+To read someone's mail, you SHOULD HAVE TO HAVE "special" privledges (not 
+necessairly superuser privledges, just special privledges). Since we don't 
+want just anyone to be able to access anyone else's mail, the process 
+accessing it SHOULD have "special" privledges.
+ 
+"Well, once you have the password, can't you change over to the current
+user?"
+
+Sure ... if the process was running SUID ROOT. Even so, after the initial 
+login, where do you expect the program to get the password again? Caching it
+would be an extreme security risk. 
+
+
+
+To be able to access a mail file, the process running typically has to 
+have "special" privledges (not necessairly SUPERUSER). On some systems, 
+the files in the mail spool directory (typically /var/spool/mail) are 
+owned by the user and belong to the group mail. These files are RW by the 
+user and RW by the group mail. This way, the process running doesn't have 
+to have SUPERUSER privledges. It only has to belong to the group mail.
+
+Some systems are setup this way, others are not. On other systems, the 
+files in the mail spool directory are owned by the user and are RW only 
+by the user. To access files on these systems, the running process MUST 
+have SUPERUSER privledges.
+
+I don't like the second setup. It's situations like these that groups were 
+created? And by the way ... what other purpose does the group mail have? 
+
+
+So, here's what nmail does:
+-----------------------------
+
+Nmail is SGID mail (that's group not user) in order to access the files
+in the mail spool directory. If you're system is not configured to have
+the permissions in the mail spool directory RW by group mail, you will
+have to change it to such. I do NOT want nmail to have to run SUID ROOT.
+
+With nmail being SGID mail, it can now access the files in the mail spool
+directory. When nmail runs, it runs under the typical group your http server
+runs cgi scripts. It ONLY switches to the group mail when it needs
+special privledges to access the files in the mail spool directory.
+
+Now that nmail has permission to access mail in the mail spool directory, 
+we don't want just anyone to abuse nmail to read others mail. This is where
+the SUID and session files come in.
+
+When a user logs in, his password is checked. If the username and password
+check out okay, a session file is created and all navigation of the mailbox
+is done using that session file.
+
+To check a users password, the running process has to be ROOT if using shadow
+passwords because the shadow file is -rw------ root root. In keeping with
+the idea that I did not want nmail to be SUID root, I decided to make 
+another binary that was SUID root, but whose only purpose was to validate 
+user passwords. This file is login_validate and must be SUID root in order
+to access the shadow file. This file takes the username and password on the
+standard input and returns 0 if the username and password are valid, 
+255 otherwise. If the username does not exist, it returns the same. This
+way, someone cannot use this binary to find valid usernames. In order to
+prevent someone from using this to try to guess other user passwords, 
+each un-successful try the binary sleeps 2 seconds before exiting. All use
+of this file, weather successful or not, is logged.
+
+
+Now, the user can be authenticated and we can access the mail file. After
+the user initially logs in and the process terminates, the password is lost.
+Nmail needs a facility to keep track of who's logged in and be able to grant
+permission to the users wanting to navigate their inbox without requesting
+them to re-send their password each time they click on a hyperlink.
+
+This is where the session files nmail uses comes in. When a user logs in
+a session file is created in /var/nmail/lock. This file contains a unique
+random sessionID, the username of the person who logged in, and the remote
+IP they logged in from. When a user navigates his inbox by clicking on
+hyperlinks, his sessionID is passed to nmail. Nmail then looks up the
+sessionID. It then compares the saved IP to the remote IP the user is
+connecting from. The user is only granted access if the sessionID exists
+and his IP matches the remote IP the user logged in from.
+
+As you can see, the session files in /var/nmail/lock contain some sensitive
+information, but not much. I don't see any possible exploit by having these
+readable, but I chose to make them not anyway. The one thing we don't want
+is for anyone to be able to just write whatever they want in this directory.
+If they could write their own session file, they could read anyone's mail
+they wanted (although they would have to at least have to have a login shell).
+That's why this directory is RW only by the user mail and the nmail binary
+is SUID mail. I could have picked another user, but mail just sounded like
+the appropriate user for the job. The only reason nmail is SUID mail is
+to protect the session files in /var/nmail/lock. You can make nmail 
+SUID whatever_you_want, as long as you change the owner of the directories
+in /var/nmail/*. Nmail runs under the user the http server normally runs
+cgi scripts under and only changes to this user when it tries to access
+files in this directory.
+
+
+Even though nmail is probably pretty secure, there is still one thing I am 
+working on to tighten up security a little more. Future versions of 
+nmail will pull some random characters from /dev/urandom and pass this 
+string to the browser as a cookie. Nmail will then use the same crypt 
+function the system uses to save passwords to encrypt this random string
+and save it in the session file also. When a user then navigates his 
+mailbox, nmail can encrypt the returned cookie and compare it to
+the saved one in the session file also. Nmail is probably safe the way
+it is now, but you can never have too much security.
+
+
+
+
+
+
+
+
+
+
+

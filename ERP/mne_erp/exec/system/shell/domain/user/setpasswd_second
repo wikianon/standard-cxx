@@ -1,0 +1,3 @@
+#!/bin/bash 
+
+$sambabin/samba-tool user setpassword "$user" --newpassword="$password"

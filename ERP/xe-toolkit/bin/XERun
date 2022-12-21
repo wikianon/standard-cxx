@@ -1,0 +1,73 @@
+#! /bin/sh
+
+#############################################################################
+##
+## Copyright (c) 2006-2008 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+# The PATH must point to the Java 5 VM.
+# If the default path points to an old version,
+# modify the PATH variable here.
+
+# PATH=/opt/java/bin:$PATH
+
+TOP=`dirname $0`
+if [ "$TOP" = "." ]; then
+	TOP=`pwd`
+fi
+TOP=`dirname $TOP`
+
+# defines
+D="-Dcom.capmet.CaptiveCollector.Top=$TOP"
+
+# use IPv4
+v=`egrep -v '^#|^$' $TOP/etc/CaptiveCollector.properties | fgrep preferIPv4Stack`
+if [ -z "$v" ]; then
+  V4=""
+else
+  V4="-D""$v"
+fi
+unset v
+
+if [ "`uname -s`" = "Darwin" ]; then
+  N=`basename "$0"`
+  D="$D -Dcom.apple.mrj.application.apple.menu.about.name=$N"
+fi
+
+CLASSPATH=$TOP/jars/CM.jar:$TOP/jars/XE.jar:$TOP/jars/Captivity.jar
+CLASSPATH="$CLASSPATH":$TOP/jars/Chart2D.jar
+CLASSPATH="$CLASSPATH":$TOP/jars/forms.jar
+CLASSPATH="$CLASSPATH":$TOP/jars/looks.jar
+
+export CLASSPATH
+
+if [ -z "$DISPLAY" ]; then
+  # punt
+  DISPLAY=":0.0"
+  export DISPLAY
+fi
+
+# for use with jhat when investigating unintentional object retention
+#
+# java -Xrunhprof:file=dump.hprof,format=b $D $V4 com.capmet.tools.XE.programs.`basename $0` $@
+
+java $JFLAGS $D $V4 com.capmet.tools.XE.programs.`basename $0` "$@"

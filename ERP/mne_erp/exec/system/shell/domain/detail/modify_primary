@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# -------------------------------------------
+# check address is in /etc/hosts
+# -------------------------------------------
+addr=$(ip addr show $netdevice | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+add_host $addr $(hostname) $domain
+
+mod_netpar
+systemctl restart samba.service
+
+. $scriptdir/../dhcp/enable

@@ -1,0 +1,6 @@
+#!/bin/sh
+# Por Luciano Trindade Pereira
+openssl genrsa 2048 > ca-key.pem
+
+openssl req -new -x509 -nodes -days 1000 -key ca-key.pem > ca-cert.pem
+exit 0

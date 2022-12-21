@@ -1,0 +1,25 @@
+#!/bin/bash
+
+exit_status=0
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script domain/user read.sh
+
+if [ "$user" = "" ];then
+    user=$vapar2
+fi
+
+if [ ! "$user" = "" ]; then
+	mne_error_ignore=1
+	uid=$(id -u $user 2>&$logfile)
+	result=$?
+	mne_error_ignore=
+
+	if [ "$result" = "0" ];then
+		gid=$(id -g $user 2>&$logfile)
+		get_data "$updateuser" $user $uid $gid 1>&$logfile 2>&1
+	fi
+fi
+

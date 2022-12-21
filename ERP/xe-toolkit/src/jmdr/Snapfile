@@ -1,0 +1,144 @@
+#############################################################################
+##
+## Copyright (c) 2006-2007 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+type=shared_obj
+language=c++
+target=libjmdr.so
+optimize=-g
+
+if [ -z "$java_top" ]; then
+  java_top=/opt/java
+fi
+
+#
+# pre_snap: Makefile does not yet exist
+#
+pre_snap() {
+  case $os in
+  linux)
+    case $mach in
+    x86)
+      xflg=-m32
+      ;;
+    x86_64)
+      xflg=-m64
+      ;;
+    ppc)
+      xflg=-m32
+      ;;
+    ppc64)
+      xflg=-m64
+      ;;
+    s390)
+      xflg=-m31
+      ;;
+    s390x)
+      xflg=-m64
+      ;;
+    esac
+    defines="-D_LINUX -DOS_VERSION=`os_version` -D_POINTER_CAST_=$pcflg"
+    includes="-I../../../mdr -I$java_top/include -I$java_top/include/linux"
+    ccflags="$xflg -pthread $defines $includes"
+    ldflags="-L../../../../lib/$os/$mach -lmdr"
+    ;;
+  solaris)
+    case $mach in
+    x86)
+      xflg=''
+      pcflg="'(unsigned int)'"
+      ;;
+    x86_64)
+      xflg=-xarch=generic64
+      pcflg="''"
+      ;;
+    sparc)
+      xflg=''
+      pcflg="'(unsigned int)'"
+      ;;
+    sparcv9)
+      xflg=-xarch=v9
+      pcflg="''"
+      ;;
+    esac
+
+    defines="-D_SOLARIS -DOS_VERSION=`os_version` -D_POINTER_CAST_=$pcflg"
+    includes="-I../../../mdr -I$java_top/include -I$java_top/include/solaris"
+    ccflags="$xflg -mt $defines $includes"
+    top="../../../.."
+    ldflags="-L$top/lib/$os/$mach -lmdr -lkstat -lkvm -lm -ldl -lelf -lCstd -lpthread"
+    ;;
+  freebsd)
+    defines="-D_FREEBSD -DOS_VERSION=`os_version` -D_POINTER_CAST_='(unsigned int)'"
+    includes="-I../../../mdr -I/usr/local/include -I$java_top/include -I$java_top/include/freebsd"
+    ccflags="-pthread $defines $includes"
+    ldflags="-L../../../../lib/$os/$mach -lmdr -lkvm -ldevstat -lpthread"
+    ;;
+  darwin)
+    target=libjmdr.jnilib
+    defines="-D_DARWIN -DOS_VERSION=`os_version` -D_POINTER_CAST_='(unsigned int)'"
+    includes="-I../../../mdr -I/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Headers"
+    ccflags="$defines $includes"
+    ldflags="-L../../../../lib/$os/$mach -lmdr -framework CoreFoundation -framework IOKit -lpthread"
+    ;;
+  aix)
+    case $mach in
+    ppc)
+      xflg=-q32
+      pcflg="'(unsigned int)'"
+      Lflg=-L/usr/local/lib
+      Iflg=-I/usr/local/include
+      ;;
+    ppc64)
+      xflg=-q64
+      pcflg="''"
+      Lflg=-L/usr/local64/lib
+      Iflg=-I/usr/local64/include
+      ;;
+    esac
+    optimize="-g -qrtti=all -qdbxextra -qlinedebug"
+    defines="-D_AIX -DOS_VERSION=`os_version` -D_POINTER_CAST_=$pcflg"
+    includes="-I../../../mdr -I../../.. $Iflg -I$java_top/include"
+    ccflags="$xflg $defines $includes"
+    ldflags="-L../../../../lib/$os/$mach -lmdr -lperfstat $Lflg -lnetsnmp -lpthread -lintl"
+    ;;
+  esac
+}
+
+#
+# post_snap: Makefile exists; doctor it or append it
+#
+post_snap() {
+  makefile=$1
+  (
+    top=../../../..
+    $ECHO \\ninstall:\\t$target
+    $ECHO \\t-mv $top/lib/$os/$mach/$target $top/lib/$os/$mach/$target.old
+    $ECHO \\tcp $target $top/lib/$os/$mach/$target
+  ) >> $makefile
+
+  if [ "$os" = "darwin" ]; then
+    top=../../../..
+    $ECHO '\t(cd' $top/lib/$os/$mach '; ln -fs' $target libjmdr.dylib')' >> $makefile
+  fi
+}

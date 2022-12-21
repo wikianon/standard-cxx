@@ -1,0 +1,52 @@
+#############################################################################
+##
+## Copyright (c) 2008 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+target=Captivity.jar
+language=java
+type=jar_file
+target_dirs="CaptiveCollector"
+top=../../..
+java_package=com/capmet/Captivity
+J=../../../../../../jars
+classpath=../../..:../../../../CM:../../../../XE:$J/forms.jar:$J/looks.jar
+extra_obj="CaptiveCollector/RMIServer_Stub.class
+           CaptiveCollector/MessagesBundle.properties
+           CaptiveCollector/MessagesBundle_en_GB.properties
+           CaptiveCollector/MessagesBundle_en_US.properties
+           CaptiveCollector/images/Control.png"
+
+#
+# post_snap: Makefile exists; doctor it or append it
+#
+post_snap() {
+  makefile=$1
+  (
+    $ECHO '\nCaptiveCollector/RMIServer_Stub.class:\tCaptiveCollector/RMIServer.java'
+    $ECHO '\t(cd' $top '; rmic -classpath .:../CM com.capmet.Captivity.CaptiveCollector.RMIServer)'
+
+    head=../../../../../..
+    $ECHO \\ninstall:\\t$target
+    $ECHO \\tcp $target $head/jars
+  ) >> $makefile
+}

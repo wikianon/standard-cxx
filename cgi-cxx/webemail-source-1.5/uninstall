@@ -1,0 +1,106 @@
+#!/bin/bash
+#Uninstall script last updated for version 1.3x
+
+clear
+echo
+echo
+echo Thank you for trying Web E-Mail.
+echo
+echo Press ctrl c to quit. 
+echo
+
+
+echo Enter the path to your cgi script directory.
+echo Default: /home/httpd/cgi-bin/
+read cgitest 
+if test -z $cgitest
+then
+ cgidir='/home/httpd/cgi-bin'
+else
+ cgidir=$cgitest
+fi
+if test -d $cgidir
+then
+ echo > /dev/null
+else
+ echo Directory does not exist.
+ exit
+fi
+#echo $cgidir
+echo
+
+echo Enter the path to your web server\'s document root directory.
+echo Default: /home/httpd/html/
+read roottest
+if test -z $roottest
+then
+ rootdir='/home/httpd/html'
+else
+ rootdir=$roottest
+fi
+if test -d $rootdir
+then
+ echo > /dev/null
+else
+ echo Directory does not exist.
+ exit
+fi
+#echo $rootdir
+echo
+
+echo Enter the path where you placed the utils.
+echo Default: /bin/
+read bintest
+if test -z $bintest
+then
+ bindir='/bin'
+else
+ bindir=$bintest
+fi
+if test -d $bindir
+then
+ echo > /dev/null
+else
+ echo Directory does not exist.
+ exit
+fi
+#echo $bindir
+echo
+echo
+echo This is your last chance to quit... press ctrl-c to quit
+echo       Press anykey to continue with uninstall.
+echo
+read
+
+echo Removing wesetup...
+#rm -i $bindir/wesetup
+rm $bindir/wesetup
+
+echo Removing web e-mail executable...
+#rm -i $cgidir/email.cgi
+rm $cgidir/email.cgi
+
+echo Removing plugins...
+rm $cgidir/displugin.*.so
+rm $cgidir/mbplugin.*.so
+rm $cgidir/addrplugin.*.so
+
+echo Removing HTML graphics...
+#rm -i $rootdir/email/*
+#rmdir $rootdir/email/
+rm -R $rootdir/email/*
+rmdir $rootdir/email/
+
+echo Removing config file /etc/webemail.conf
+#rm -i /etc/webemail.conf
+rm /etc/webemail.conf
+
+echo Removing Documantion /usr/doc/webemail/
+rm /usr/doc/webemail/README
+rm /usr/doc/webemail/doc.txt
+rm /usr/doc/webemail/plugin.txt
+rmdir /usr/doc/webemail/
+
+echo
+echo Web E-Mail is now uninstalled.
+ 

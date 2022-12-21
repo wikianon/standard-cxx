@@ -1,0 +1,155 @@
+#!/bin/bash
+#Install script last updated for version 1.5
+
+clear
+echo
+echo
+echo Thank you for trying Web E-Mail.
+echo
+echo See README for more info.
+echo Press ctrl c to quit. 
+echo
+
+
+echo Enter the path to your cgi script directory.
+echo Default: /home/httpd/cgi-bin/
+read cgitest 
+if test -z $cgitest
+then
+ cgidir='/home/httpd/cgi-bin'
+else
+ cgidir=$cgitest
+fi
+if test -d $cgidir
+then
+ echo > /dev/null
+else
+ echo Directory does not exist.
+ exit
+fi
+#echo $cgidir
+echo
+
+echo Enter the path to your web server\'s document root directory.
+echo Default: /home/httpd/html/
+read roottest
+if test -z $roottest
+then
+ rootdir='/home/httpd/html'
+else
+ rootdir=$roottest
+fi
+if test -d $rootdir
+then
+ echo > /dev/null
+else
+ echo Directory does not exist.
+ exit
+fi
+#echo $rootdir
+echo
+
+echo Enter the path where you would like the utils to be placed.
+echo This path must be in the executable path.
+echo Default: /bin/
+read bintest
+if test -z $bintest
+then
+ bindir='/bin'
+else
+ bindir=$bintest
+fi
+if test -d $bindir
+then
+ echo > /dev/null
+else
+ echo Directory does not exist.
+ exit
+fi
+#echo $bindir
+echo
+echo
+
+echo "" > ./source/cgi-bin/conf.h
+
+if test -f /etc/shadow
+then
+ echo Using shadow passwords.
+ echo "#define HAS_SHADOW" > ./source/cgi-bin/conf.h
+fi
+echo
+
+echo Detecting OS...
+echo -n "#define OS_" >> ./source/cgi-bin/conf.h
+echo `uname -s` >> ./source/cgi-bin/conf.h
+
+#start of source install
+cd ./source/cgi-bin/
+echo Building...
+make
+cd ../..
+
+echo Copying utils...
+cp ./source/bin/* $bindir/
+chown root $bindir/wesetup
+chgrp root $bindir/wesetup
+chmod 755 $bindir/wesetup
+
+echo Copying web e-mail executable...
+cp ./source/cgi-bin/email.cgi $cgidir/
+chown root $cgidir/email.cgi
+chgrp root $cgidir/email.cgi
+chmod 4555 $cgidir/email.cgi
+
+echo Copying display plugins...
+cp ./source/cgi-bin/plugins/display/displugin.*.so $cgidir/
+chown root $cgidir/displugin.*.so
+chgrp root $cgidir/displugin.*.so
+chmod 755 $cgidir/displugin.*.so
+
+echo Copying mailbox plugins...
+cp ./source/cgi-bin/plugins/mailbox/mbplugin.*.so $cgidir/
+chown root $cgidir/mbplugin.*.so
+chgrp root $cgidir/mbplugin.*.so
+chmod 755 $cgidir/mbplugin.*.so
+
+echo Copying address plugins...
+cp ./source/cgi-bin/plugins/address/addrplugin.*.so $cgidir/
+chown root $cgidir/addrplugin.*.so
+chgrp root $cgidir/addrplugin.*.so
+chmod 755 $cgidir/addrplugin.*.so
+
+
+echo Copying html files...
+mkdir $rootdir/email/
+cp -R ./source/html/email/* $rootdir/email/ 
+chown -R root $rootdir/email/
+chgrp -R root $rootdir/email/
+chmod -R 644 $rootdir/email/
+chmod a+x $rootdir/email/
+
+chmod a+x $rootdir/email/gray/
+chmod a+x $rootdir/email/ns3/
+chmod a+x $rootdir/email/classic/
+
+
+echo Copying config file to /etc/webemail.conf
+cp ./conf/webemail.conf /etc/webemail.conf
+chown root /etc/webemail.conf
+chgrp root /etc/webemail.conf
+chmod 644 /etc/webemail.conf
+
+
+echo Copying Documention to /usr/doc/webemail
+mkdir /usr/doc/webemail
+cp ./README /usr/doc/webemail/README
+cp ./doc.txt /usr/doc/webemail/doc.txt
+cp ./plugin.txt /usr/doc/webemail/plugin.txt
+cp ./plugin.NOTICE /usr/doc/webemail/plugin.NOTICE
+chown root /usr/doc/webemail/*
+chgrp root /usr/doc/webemail/*
+chmod 644 /usr/doc/webemail/*
+
+echo
+echo Web E-Mail is now installed.  Please see README for licensing and 
+echo further information.

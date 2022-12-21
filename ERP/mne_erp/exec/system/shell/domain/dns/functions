@@ -1,0 +1,16 @@
+#!/bin/bash
+
+function check_passwd()
+{
+kinit -F -k -t /etc/mne/dns/dns.keytab dnsadmin@$(echo ${domain^^})
+}
+
+function read_domain()
+{
+find_script domain/detail read.sh
+domainconf=`get_data "$getdomain"`
+get_domain "$domainconf"
+
+export PATH=$sambabin:$sambasbin:$PATH
+
+}

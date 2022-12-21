@@ -1,0 +1,61 @@
+These tags are not avalable in all settings.  The form of the tags is <!-#replace tag>
+See the code for which tags are avalable and where they should be used. 
+
+
+--Tags--
+
+-General tags-
+user_name
+url
+server_name
+isp_url
+main_url
+link_text
+web_email_support
+web_email_ver
+
+-address tags-
+address_addedit
+address_name
+address_email
+address_phone
+address_fax
+address_line_1
+address_line_2
+address_notes
+address_number
+address_method
+group_number
+group_name
+group_addedit
+group_method
+
+-inbox and read tags-
+message_number
+toshow
+count
+*pop_check
+
+-error-
+error_message
+
+-write tags-
+write_mode
+to
+cc
+subject
+*hidden
+
+-intro tags-
+server_name
+author_info
+
+-config tags-
+config_forward
+config_sign
+config_pop_user
+config_pop_pass
+config_pop_server
+
+
+* contains html code with will.

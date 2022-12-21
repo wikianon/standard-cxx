@@ -1,0 +1,120 @@
+INSTALLING
+==========
+
+Prerequisite: UNIX or UNIX-like host with some Web server and sendmail.
+You will also require a C++ compiler and the GNU libg++ library.
+If your compiler isn't gcc, you're on your own with any problems.
+
+1. Read and accept the LICENSE file
+
+2. If you don't already have it, download and install the CGI++ library
+   from <URL:http://www.webthing.com/cgiplusplus/>.
+
+3. Create a user for WebThing on your system.  We suggest username
+   "webthing" with shell /bin/sh and home directory /usr/local/webthing.
+
+This will ensure WebThing data is secured from normal system users
+without requiring it to run as root.
+
+4. Log in as "webthing", and download and unpack the software distribution
+   to be installed.  To unpack it, go to the directory where you want to
+   install the programs, and
+	gzip -cd mailclient.tar.gz | tar xvf -
+
+5. Look carefully at the file "Config.local" (it's short but important).
+   You need to configure:
+	- The base path where WebThing will store data
+	- Your domain name for mail
+	- The base URL for the application.
+	- The name of the file where WebThing will log outgoing mail
+   Config.local in #included in Config.h, which uses the paths you
+   supplied to construct those required by the software.
+
+6. Now try "make".  Depending on your compiler configuration, you
+   may have to change the "cc" command in the Makefile.
+   NOTE: recent libg++ versions have dropped the String and Regexp
+   functions used by this software.  It is possible to use them,
+   but it will build most simply with GCC 2.6.x or 2.7.x.
+
+7. When the .cgi programs have been successfully built, ensure that
+   they are protected by HTTP Basic Authentication when accessed
+   via the Web.  For details, see your webserver's manual.  Setting
+   it up under Apache is described in the course of the tutorial at
+   <URL:http://www.webthing.com/tutorials/login.html>.
+
+================================================================
+You have now installed the software, but you still need to give
+WebThing an area to store its data (this must match the base path
+you set in Config.local, and might for example be /home/webthing).
+
+8. Run the install.sh script supplied.  This will create the basic
+   directory structure.
+
+9. For each user, run the adduser.sh script.  You will also need to
+   ensure that your server accepts them.
+
+===============================================================
+Setting up WebThing to receive incoming mail.
+
+You have several choices here:
+  (a)	ALL LOCAL MAIL - real and virtual users
+
+	To direct all local mail to WebThing, you should make it your
+	local delivery agent in sendmail.cf.  For example, if you
+	installed the software in /usr/local/webthing/mail/, you
+	would use
+		Mlocal, P=/usr/local/webthing/mail/deliver, ...
+
+  (b)	VIRTUAL DOMAIN - virtual users
+
+	To use WebThing for selected mail only, create a .forward
+	file directing incoming mail to WebThing's "deliver" program
+	("man vacation" or "man procmail" if you're not familiar with
+	.forward files).  This works well with a "virtual domain"
+	configuration for sendmail: see the sendmail FAQ for details.
+
+  (c)	REAL USERS ONLY
+
+	To use WebThing for 'real' users of your system, redirect their
+	mail to the webthing deliver program.  If you have existing
+	users - particularly if they are computer-literate and may
+	resent having change imposed on them - invite them to do this
+	themselves with their own .forward files instead.
+
+  (d)	MIX-AND-MATCH
+
+	You can combine (b) and (c) to give real users the option of
+	using WebThing for mail, while also supporting virtual users
+	(whose only use of your system is their WebThing account).
+
+  (e)	OTHER MTAs
+
+	It's usually straightforward to convert from sendmail to more
+	modern MTAs (since writing the above, all WebThing's own
+	machines have been switched to qmail).
+
+	With qmail, you would simply use
+		| preline /usr/local/webthing/mail/deliver
+	in your .qmail-default, or in users own .qmail files.
+
+  (f)	YOUR STANDARD MTA
+	Please watch this space for conversion utilities to build a
+	WebThing intray from a Mailbox or Maildir intray.  This is in
+	response to a number of users who have found receiving
+	incoming mail to be the hardest part of configuring this
+	software.
+
+================================================================
+Housekeeping
+
+WebThing uses two 'global' directories for incoming messages (this is
+to ensure that duplicates messages are not delivered to users).
+These are cleaned by a cron job.  You will need to add the following
+(or equivalent) to your crontab for WebThing:
+
+0 03 * * * nice find [webthing-data-path]/messages -mtime +1 -exec /bin/rm {};
+0 04 * * * nice find [webthing-data-path]/deliveries -mtime +1 -exec /bin/rm {};
+
+where of course [webthing-data-path] is the base directory
+you configured in Config.local and where you ran install.sh
+

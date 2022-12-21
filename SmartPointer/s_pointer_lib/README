@@ -1,0 +1,7 @@
+To use this C++ smart pointer implementation in a C++ source file,
+just add the following line of code:
+#include "Smart Pointers.h"
+
+
+For more detailed documentation visit the following website:
+http://smart-pointers.sourceforge.net

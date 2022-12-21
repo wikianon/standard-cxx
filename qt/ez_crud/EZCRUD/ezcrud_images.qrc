@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/ezcrud">
+        <file>images/closetab.png</file>
+        <file>images/crud/cancel.png</file>
+        <file>images/crud/create.png</file>
+        <file>images/crud/delete.png</file>
+        <file>images/crud/print.png</file>
+        <file>images/crud/save.png</file>
+        <file>images/crud/update.png</file>
+        <file>images/application2.png</file>
+    </qresource>
+</RCC>

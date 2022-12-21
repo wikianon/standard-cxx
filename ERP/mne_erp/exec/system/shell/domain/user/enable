@@ -1,0 +1,15 @@
+#!/bin/bash
+
+find_script domain/detail read.sh
+
+domainconf=`get_data "$getdomain"`
+get_domain "$domainconf"
+
+if [ "$typ" = "" ]; then
+    exit 0
+fi
+
+. $scriptdir/validuser
+. $scriptdir/../restart/$typ
+
+exit 0

@@ -1,0 +1,5 @@
+#!/bin/sh
+# Por Luciano T. Pereira
+tar -cvvzPf `date +copia_quente_%d-%m-%Y_%H-%M-%S.tar.gz` /var/lib/mysql/
+
+exit 0 

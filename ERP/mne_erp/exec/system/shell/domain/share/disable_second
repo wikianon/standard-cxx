@@ -1,0 +1,3 @@
+#!/bin/bash
+
+. $scriptdir/disable_primary

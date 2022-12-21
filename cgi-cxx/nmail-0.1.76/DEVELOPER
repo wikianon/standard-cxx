@@ -1,0 +1,59 @@
+DEVELOPER - Nmail
+
+
+
+Development info:
+-------------------- 
+
+For those who want to know the source. Some quick pointers:
+
+
+ - There are 2 binaries
+
+     /home/httpd/cgi-bin/nmail
+	This is the big cahuna.
+
+     /usr/sbin/login_validate
+	This handles login info. It verifies the users password against
+	/etc/shadow. Since /etc/shadow is read only by root, I had one of
+	two choices. Make the main binary SUID root, OR, make another
+	binary that was SUID root whose only purpose is to verify
+	passwords. For security reasons I chose the latter. I tried to keep
+	this binary as simple as possible. A cool side effect of this is:
+	If your system does not use shadow passwords, this should be the
+	only file you need to change.
+
+
+ - Other files/directories
+
+     /home/httpd/html/nmail/*
+	Contains pictures and icons for the program.
+
+     /var/nmail/lock/*
+	Contains local state info. In particular, when a user logs in, a 
+	session file is created in this directory that contains info such
+	as their username and REMOTEIP. Access is not allowed if the REMOTEIP
+	the user logged in from is not the same. If files in this directroy 
+	are not accessed within 30 minutes, they are removed. 
+
+     /var/nmail/tmp/*
+	Temp files are created here when a user needs to upload a file to 
+	the system (such as a mail attachment or address book import).
+	These files are usually deleted immediately, but if a tmp file 
+	exists whose session file no longer exists, it is removed.
+
+     /var/nmail/pref/*
+	User preferences files are stored here. Preference files include
+	users reply-to address and their address book.
+
+
+
+ - Within the nmail binary, there are 3 global structures
+	user_ses (session.h)		- info about the current session
+	user_env (environment.h)	- info about the current http env
+	user_pref (preferences.h)	- user preferences
+
+
+
+
+

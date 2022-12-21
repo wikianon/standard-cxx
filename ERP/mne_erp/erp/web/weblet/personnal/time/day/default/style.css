@@ -1,0 +1,24 @@
+.mne_personal_time_day #webletcontent > div {
+	margin-bottom: var(--qmargin);
+}
+
+.mne_personal_time_day #webletcontent > div:first-child div.button, .mne_personal_time_day #webletcontent > div:first-child div.ele-wrapper {
+	vertical-align: text-bottom;
+	transform: translateY(var(--ndmargin));
+}
+
+.mne_personal_time_day #webletcontent #detailTable {
+	display: inline-block;
+}
+
+.mne_personal_time_day #webletcontent #timeTable {
+	display: inline-block;
+	position: relative;
+}
+
+.mne_personal_time_day div.selectlisti:after, .mne_personal_time_day span.selectlisti:after {
+	height: 100%;
+    line-height: 0px;
+    position: absolute;
+    transform: translate(-150%, 50%);
+}

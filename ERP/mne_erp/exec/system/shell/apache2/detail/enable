@@ -1,0 +1,31 @@
+#!/bin/bash
+
+exit_status=0
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script apache2/detail read.sh
+
+find_template portfile  apache2/enable ports.conf
+
+i=`dpkg --get-selections apache2 | fgrep install | wc -l`
+if [ ! "$i" = "1" ]; then
+    apt-get update > /dev/null 2>&1
+    apt-get install apache2 > /dev/null 2>&1
+fi
+
+
+prog='/####HTTPPORT####/  { gsub(/####HTTPPORT####/, httpport);  }
+      /####HTTPSPORT####/ { gsub(/####HTTPSPORT####/,httpsport); }
+                          { print $0 }'
+
+conf=`get_data "$apacheconf"`
+apache_conf "$conf"
+
+mv $apache2rootdir/ports.conf $apache2rootdir/ports.conf""_`date +"%d.%m.%Y_%H:%M:%S"`
+awk "$prog" "httpport=$port" "httpsport=$sport" $portfile > $apache2rootdir/ports.conf
+
+$apache2restart 1>&$logfile 2>&1
+
+exit $exit_status

@@ -1,0 +1,5 @@
+800 Austin  programador 2 F Campinas  S 10000
+510 William analista    3 M Campinas  C 15000
+950 Melissa analista    3 F Vinhedo   S 12000
+750 Hawkins programador 2 M Campinas  S 12000
+620 Newton  programador 2 M Vinhedo   C 9000

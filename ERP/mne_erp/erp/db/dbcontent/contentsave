@@ -1,0 +1,131 @@
+#!/bin/bash
+
+read_table()
+{
+  pg_dump  --host $orighost --port $origport  --username $origuser --format plain --data-only --disable-triggers --column-inserts --table $schema.$1 $origdb 2> /dev/null | \
+    awk 'BEGIN { stopprint=0; }
+         /ALTER TABLE.*DISABLE/              { print $0; print "DELETE FROM " $3 ";" ; next; }
+          { print $0; }
+    '
+    if [ "${PIPESTATUS[0]}" != "0" ]; then
+       echo "error during reading table <$schema.$1>" 1>&2
+    fi
+}
+
+echo "SET SESSION AUTHORIZATION admindb;"
+echo "DROP SCHEMA IF EXISTS $schemasave CASCADE;"
+echo "CREATE SCHEMA $schemasave;"
+
+#===================================================
+# Usertables
+#===================================================
+echo "CREATE TABLE $schemasave.usertables AS SELECT * from $schema.usertables;"
+read_table usertables
+
+#===================================================
+# Userselectlist
+#===================================================
+echo "CREATE TABLE $schemasave.userselectlist AS SELECT * from $schema.userselectlist;"
+read_table userselectlist
+
+#===================================================
+# MENU
+#===================================================
+echo "CREATE TABLE $schemasave.menu AS SELECT * from $schema.menu WHERE custom=true;"
+read_table menu
+
+#===================================================
+# HTMLCOMPOSE
+#===================================================
+echo "CREATE TABLE $schemasave.htmlcompose AS SELECT * from $schema.htmlcompose WHERE custom=true;"
+echo "CREATE TABLE $schemasave.htmlcomposenames AS SELECT * from $schema.htmlcomposenames WHERE htmlcomposeid IN ( SELECT htmlcomposeid from $schema.htmlcompose WHERE custom=true);"
+echo "CREATE TABLE $schemasave.htmlcomposetab AS SELECT * from $schema.htmlcomposetab WHERE custom=true;"
+echo "CREATE TABLE $schemasave.htmlcomposetabnames AS SELECT * from $schema.htmlcomposetabnames WHERE custom=true;"
+echo "CREATE TABLE $schemasave.htmlcomposetabselect AS SELECT * from $schema.htmlcomposetabselect WHERE custom=true;"
+echo "CREATE TABLE $schemasave.htmlcomposetabslider AS SELECT * from $schema.htmlcomposetabslider WHERE custom=true;"
+
+read_table htmlcompose
+read_table htmlcomposenames
+read_table htmlcomposetab
+read_table htmlcomposetabnames
+read_table htmlcomposetabselect
+read_table htmlcomposetabslider
+
+#===================================================
+# JOINS
+#===================================================
+echo "CREATE TABLE $schemasave.joindef AS SELECT * from $schema.joindef;"
+read_table joindef
+
+#===================================================
+# QUERYS
+#===================================================
+echo "CREATE TABLE $schemasave.queryname     AS SELECT * from $schema.queryname     WHERE ( NOT \"schema\" like 'mne_%' AND NOT \"schema\" like 'ext_%' );"
+echo "CREATE TABLE $schemasave.querytables   AS SELECT * from $schema.querytables   WHERE queryid in ( SELECT queryid from $schemasave.queryname);"
+echo "CREATE TABLE $schemasave.querycolumns  AS SELECT * from $schema.querycolumns  WHERE queryid in ( SELECT queryid from $schemasave.queryname);"
+echo "CREATE TABLE $schemasave.querycolnames AS SELECT * from $schema.querycolnames WHERE ( NOT \"schema\" like 'mne_%' AND NOT \"schema\" like 'ext_%' );"
+echo "CREATE TABLE $schemasave.querywheres   AS SELECT * from $schema.querywheres   WHERE queryid in ( SELECT queryid from $schemasave.queryname);"
+
+read_table queryname
+read_table querytables
+read_table querycolumns
+read_table querycolnames
+read_table querywheres
+
+#===================================================
+# REPORTS
+#===================================================
+echo "CREATE TABLE $schemasave.reports      AS SELECT * from $schema.reports      WHERE NOT \"name\" like 'mne_%';"
+echo "CREATE TABLE $schemasave.reportsauto  AS SELECT * from $schema.reportsauto  WHERE NOT \"schema\" like 'mne_%';"
+echo "CREATE TABLE $schemasave.reportscache AS SELECT * from $schema.reportscache WHERE NOT \"reportscacheid\" like 'mne_%';"
+
+read_table reports
+read_table reportsauto
+read_table reportscache
+
+#===================================================
+# SELECTLIST
+#===================================================
+echo "CREATE TABLE $schemasave.selectlist AS SELECT * from $schema.selectlist WHERE name IN ( select distinct name from $schema.selectlist WHERE custom=true);"
+read_table selectlist
+
+#===================================================
+# TABLECOLNAMES
+#===================================================
+echo "CREATE TABLE $schemasave.tablecolnames  AS SELECT * from $schema.tablecolnames  WHERE NOT \"schema\" like 'mne_%' OR custom=true;"
+read_table tablecolnames
+
+#===================================================
+# CONSTRAINTSMELDUNGEN
+#===================================================
+echo "CREATE TABLE $schemasave.tableconstraintmessages  AS SELECT * from $schema.tableconstraintmessages  WHERE custom=true;"
+read_table tableconstraintmessages
+
+#===================================================
+# TRANSLATE
+#===================================================
+echo "CREATE TABLE $schemasave.translate  AS SELECT * from $schema.translate;"
+read_table translate
+
+#===================================================
+# TABLEREGEXP
+#===================================================
+echo "CREATE TABLE $schemasave.tableregexp  AS SELECT * from $schema.tableregexp;"
+read_table tableregexp
+
+#===================================================
+# WORKDAYADD
+#===================================================
+echo "CREATE TABLE $schemasave.workdaysadd  AS SELECT * from $schema.workdaysadd;"
+read_table workdaysadd
+
+#===================================================
+# TRUSTREQUEST
+#===================================================
+echo "CREATE TABLE $schemasave.trustrequest  AS SELECT * from $schema.trustrequest WHERE custom=true;"
+read_table trustrequest
+
+#===================================================
+# VERSION
+#===================================================
+read_table update

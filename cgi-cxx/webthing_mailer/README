@@ -1,0 +1,38 @@
+WebThing Mail Client: Source Distribution
+=========================================
+
+This Mail-by-Web software is available for download and installation
+on your server, subject to the terms described in the accompanying
+LICENSE.
+
+INSTALLATION
+To install the mailer on your system, follow the steps in the
+accompanying INSTALL instructions.
+
+DOCUMENTATION
+Limited source-level documentation is included in the header files.
+
+CUSTOMISING
+The file you're probably most interested in is "Layout.cc".  You can
+use it to change the global appearance.  You are welcome to edit out
+the link to WebThing that appears in every page as configured, but
+if you do so you are requested to put such a link in your page
+that leads users to the mail software (e.g. index.html in the mailer
+directory).
+
+WARRANTY
+Warranty cover is available from WebThing Ltd IF AND ONLY IF the
+application is installed by us on your server.
+
+SUPPORT
+Support contracts are available from WebThing Ltd.
+
+MAILSERVER
+The full mail-by-web software supports mailing lists and autoresponders
+via a Web interface, and includes spam filtering options.  These are
+not included in the Free Software.
+
+==============================================================
+Please see <URL:http://www.webthing.com/software/ for more information
+about this and other WebThing products and services.
+https://www.scriptbrasil.com.br/script/c/webthing%20mailer.tar

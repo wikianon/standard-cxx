@@ -1,0 +1,102 @@
+#############################################################################
+##
+## Copyright (c) 2008 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+type=shared_obj
+language=c++
+target=libsnmpmib.so
+optimize=-g
+
+#
+# pre_snap: Makefile does not yet exist
+#
+pre_snap() {
+  case $os in
+  solaris)
+    case $mach in
+    sparc | x86)
+      xflg=
+      ;;
+    sparcv9)
+      xflg=-xarch=v9
+      ;;
+    x86_64)
+      xflg=-m64
+      ;;
+    esac
+    ccflags="-D_SOLARIS $xflg -mt -I/usr/local/include"
+    ldflags="-L/usr/local/lib -lnetsnmp"
+    ;;
+  linux)
+    if [ "$mach" = "x86" ]; then
+      xflg=-m32
+    else
+      xflg=-m64
+    fi
+    ccflags="$xflg -pthread"
+    ldflags="-L/usr/local/lib -lnetsnmp"
+    ;;
+  darwin)
+    target=libmdr.dylib
+    ldflags="-flat_namespace -undefined suppress -single_module -framework CoreFoundation -framework IOKit -lintl -lpthread"
+    ;;
+  freebsd)
+    ccflags="-pthread -I/usr/local/include -D`uname -p`"
+    ldflags="-L/usr/local/lib -lintl -lpthread"
+    ;;
+  aix)
+    case $mach in
+    ppc)
+      xflg=-q32
+      Lflg=-L/usr/local/lib
+      Iflg=-I/usr/local/include
+      ;;
+    ppc64)
+      xflg=-q64
+      Lflg=-L/usr/local64/lib
+      Iflg=-I/usr/local64/include
+      ;;
+    esac
+    optimize="-g -qrtti=all -qdbxextra -qlinedebug"
+    ccflags="$xflg -D_AIX $Iflg"
+    ldflags="$Lflg -lnetsnmp"
+    ;;
+  esac
+}
+
+#
+# post_snap: Makefile exists; doctor it or append it
+#
+post_snap() {
+  makefile=$1
+  makedir=`dirname $makefile`
+sed 's/OBJ = s.o/OBJ =/' $makefile > $makedir/dick
+mv $makedir/dick $makefile
+
+  (
+    top=../../../..
+    $ECHO \\ninstall:\\t$target
+    $ECHO \\t-mv $top/lib/$os/$mach/$target $top/lib/$os/$mach/$target.old
+    $ECHO \\tcp $target $top/lib/$os/$mach/$target
+  ) >> $makefile
+}

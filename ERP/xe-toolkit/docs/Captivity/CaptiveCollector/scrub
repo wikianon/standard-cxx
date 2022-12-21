@@ -1,0 +1,9 @@
+#! /bin/sh
+
+for i in *
+do
+  case $i in
+  scrub | Makefile | package-list) ;;
+  *) /bin/rm -fr $i ;;
+  esac
+done

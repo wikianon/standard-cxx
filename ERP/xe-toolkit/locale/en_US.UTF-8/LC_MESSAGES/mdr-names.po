@@ -1,0 +1,965 @@
+#############################################################################
+##
+## Copyright (c) 2006-2007 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file is part of the localization catalogs of Captivity.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+#
+# Message catalog for the mdr library containing the names of categories
+# and the counter names within those categories.
+#
+
+#, fuzzy
+
+msgid ""
+msgstr ""
+
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: support@captivemetrics.com\n"
+"POT-Creation-Date: 2006-07-26 15:58-0400\n"
+"PO-Revision-Date: 2006-07-26 15:58-0400\n"
+"Last-Translator: Richard Pettit <richp@captivemetrics.com>\n"
+"Language-Team: English <support@captivemetrics.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: mdr.cpp:17
+msgid "Caches"
+msgstr "Caches"
+
+#: mdr.cpp:18
+msgid "CPU Utilization Data"
+msgstr "CPU Utilization Data"
+
+#: mdr.cpp:19
+msgid "CPU Information"
+msgstr "CPU Information"
+
+#: mdr.cpp:20
+msgid "Global CPU Metrics"
+msgstr "Global CPU Metrics"
+
+#: mdr.cpp:21
+msgid "Controllers"
+msgstr "Controllers"
+
+#: mdr.cpp:22
+msgid "Controller Metrics"
+msgstr "Controller Metrics"
+
+#: mdr.cpp:23
+msgid "Disks"
+msgstr "Disks"
+
+#: mdr.cpp:24
+msgid "ICMP Protocol"
+msgstr "ICMP Protocol"
+
+#: mdr.cpp:25
+msgid "Disk Metrics"
+msgstr "Disk Metrics"
+
+#: mdr.cpp:26
+msgid "IP Protocol"
+msgstr "IP Protocol"
+
+#: mdr.cpp:27
+msgid "Memory Data"
+msgstr "Memory Data"
+
+#: mdr.cpp:28
+msgid "Miscellaneous Data"
+msgstr "Miscellaneous Data"
+
+#: mdr.cpp:29
+msgid "Mount Points"
+msgstr "Mount Points"
+
+#: mdr.cpp:30
+msgid "Per-CPU Data"
+msgstr "Per-CPU Data"
+
+#: mdr.cpp:31
+msgid "Per-CPU Metrics"
+msgstr "Per-CPU Metrics"
+
+#: mdr.cpp:32
+msgid "Network Interfaces"
+msgstr "Network Interfaces"
+
+#: mdr.cpp:33
+msgid "Paging Files"
+msgstr "Paging Files"
+
+#: mdr.cpp:34
+msgid "Processes"
+msgstr "Processes"
+
+#: mdr.cpp:35
+msgid "System Metrics"
+msgstr "System Metrics"
+
+#: mdr.cpp:36
+msgid "TCP Protocol"
+msgstr "TCP Protocol"
+
+#: mdr.cpp:37
+msgid "Threads"
+msgstr "Threads"
+
+#: mdr.cpp:38
+msgid "UDP Protocol"
+msgstr "UDP Protocol"
+
+#: mdr.cpp:39
+msgid "Process States"
+msgstr "Process States"
+
+#: mdr_cache.cpp:24
+msgid "Cache Hits"
+msgstr "Cache Hits"
+
+#: mdr_cache.cpp:25
+msgid "Cache Misses"
+msgstr "Cache Misses"
+
+#: mdr_cache.cpp:26
+msgid "Hit Percentage"
+msgstr "Hit Percentage"
+
+#: mdr_cpu.cpp:34 mdr_mp.cpp:33
+msgid "User CPU Ticks"
+msgstr "User CPU Ticks"
+
+#: mdr_cpu.cpp:35 mdr_mp.cpp:34
+msgid "Kernel CPU Ticks"
+msgstr "Kernel CPU Ticks"
+
+#: mdr_cpu.cpp:36 mdr_mp.cpp:37
+msgid "Wait CPU Ticks"
+msgstr "Wait CPU Ticks"
+
+#: mdr_cpu.cpp:37 mdr_mp.cpp:36
+msgid "Nice CPU Ticks"
+msgstr "Nice CPU Ticks"
+
+#: mdr_cpu.cpp:38 mdr_mp.cpp:35
+msgid "Idle CPU Ticks"
+msgstr "Idle CPU Ticks"
+
+#: mdr_cpu.cpp:39 mdr_mp.cpp:38
+msgid "Hardware Interrupt Ticks"
+msgstr "Hardware Interrupt Ticks"
+
+#: mdr_cpu.cpp:40 mdr_mp.cpp:39
+msgid "Software Interrupt Ticks"
+msgstr "Software Interrupt Ticks"
+
+#: mdr_cpuinfo.cpp:21 mdr_mp.cpp:32
+msgid "CPU Instance Number"
+msgstr "CPU Instance Number"
+
+#: mdr_cpuinfo.cpp:22 mdr_misc.cpp:45
+msgid "CPU Architecture"
+msgstr "CPU Architecture"
+
+#: mdr_cpuinfo.cpp:23
+msgid "CPU Model Name"
+msgstr "CPU Model Name"
+
+#: mdr_cpuinfo.cpp:24
+msgid "CPU Speed in Megahertz"
+msgstr "CPU Speed in Megahertz"
+
+#: mdr_cpustat.cpp:8 mdr_mpstat.cpp:8 mdr_ps.cpp:83 mdr_systat.cpp:8
+#: mdr_thread.cpp:59
+msgid "Percent User Time"
+msgstr "Percent User Time"
+
+#: mdr_cpustat.cpp:9 mdr_mpstat.cpp:9 mdr_ps.cpp:84 mdr_systat.cpp:9
+#: mdr_thread.cpp:60
+msgid "Percent Kernel Time"
+msgstr "Percent Kernel Time"
+
+#: mdr_cpustat.cpp:10 mdr_mpstat.cpp:10 mdr_systat.cpp:10
+msgid "Percent Wait Time"
+msgstr "Percent Wait Time"
+
+#: mdr_cpustat.cpp:11 mdr_mpstat.cpp:11 mdr_systat.cpp:11
+msgid "Percent Idle Time"
+msgstr "Percent Idle Time"
+
+#: mdr_ctlr.cpp:41 mdr_disk.cpp:48
+msgid "Read Operations"
+msgstr "Read Operations"
+
+msgid "Read Operations/sec"
+msgstr "Read Operations/sec"
+
+#: mdr_ctlr.cpp:42 mdr_disk.cpp:49
+msgid "KBytes Read"
+msgstr "KBytes Read"
+
+msgid "KBytes Read/sec"
+msgstr "KBytes Read/sec"
+
+#: mdr_ctlr.cpp:43 mdr_disk.cpp:50
+msgid "Read Time"
+msgstr "Read Time"
+
+#: mdr_ctlr.cpp:44 mdr_disk.cpp:51
+msgid "Write Operations"
+msgstr "Write Operations"
+
+msgid "Write Operations/sec"
+msgstr "Write Operations/sec"
+
+#: mdr_ctlr.cpp:45 mdr_disk.cpp:52
+msgid "KBytes Written"
+msgstr "KBytes Written"
+
+msgid "KBytes Written/sec"
+msgstr "KBytes Written/sec"
+
+#: mdr_ctlr.cpp:46 mdr_disk.cpp:53
+msgid "Write Time"
+msgstr "Write Time"
+
+#: mdr_ctlr.cpp:47 mdr_disk.cpp:54
+msgid "Run Time"
+msgstr "Run Time"
+
+#: mdr_ctlr.cpp:48 mdr_disk.cpp:55
+msgid "Wait Time"
+msgstr "Wait Time"
+
+#: mdr_ctlr.cpp:49 mdr_disk.cpp:56
+msgid "Q-Length*Run-Time"
+msgstr "Q-Length*Run-Time"
+
+#: mdr_ctlr.cpp:50 mdr_disk.cpp:57
+msgid "Q-Length*Wait-Time"
+msgstr "Q-Length*Wait-Time"
+
+#: mdr_ctlr.cpp:51 mdr_disk.cpp:58
+msgid "Average Request Queue Length"
+msgstr "Average Request Queue Length"
+
+#: mdr_ctlr.cpp:52 mdr_disk.cpp:59
+msgid "Percent Time Busy"
+msgstr "Percent Time Busy"
+
+#: mdr_ctlr.cpp:53 mdr_disk.cpp:60
+msgid "Average Access Time"
+msgstr "Average Access Time"
+
+#: mdr_ctlr.cpp:54
+msgid "Disks on Controller"
+msgstr "Disks on Controller"
+
+#: mdr_disk.cpp:47
+msgid "Disk Type"
+msgstr "Disk Type"
+
+#: mdr_disk.cpp:61
+msgid "Megabytes of Capacity"
+msgstr "Megabytes of Capacity"
+
+msgid "Total Transfers"
+msgstr "Total Transfers"
+
+msgid "Total Transfers/sec"
+msgstr "Total Transfers/sec"
+
+#: mdr_icmp.cpp:43
+msgid "Messages Received"
+msgstr "Messages Received"
+
+#: mdr_icmp.cpp:44
+msgid "Messages Received mith Error"
+msgstr "Messages Received mith Error"
+
+#: mdr_icmp.cpp:45
+msgid "Dest. Unreach. Msgs. Received"
+msgstr "Dest. Unreach. Msgs. Received"
+
+#: mdr_icmp.cpp:46
+msgid "Time Exceeded Msgs. Received"
+msgstr "Time Exceeded Msgs. Received"
+
+#: mdr_icmp.cpp:47
+msgid "Param. Prob. Msgs. Received"
+msgstr "Param. Prob. Msgs. Received"
+
+#: mdr_icmp.cpp:48
+msgid "Source Quench Msgs. Received"
+msgstr "Source Quench Msgs. Received"
+
+#: mdr_icmp.cpp:49
+msgid "ICMP Redirect Msgs. Received"
+msgstr "ICMP Redirect Msgs. Received"
+
+#: mdr_icmp.cpp:50
+msgid "Echo Request Msgs. Received"
+msgstr "Echo Request Msgs. Received"
+
+#: mdr_icmp.cpp:51
+msgid "Echo Reply Msgs. Received"
+msgstr "Echo Reply Msgs. Received"
+
+#: mdr_icmp.cpp:52
+msgid "Timestamp Msgs. Received"
+msgstr "Timestamp Msgs. Received"
+
+#: mdr_icmp.cpp:53
+msgid "Timestamp Reply Msgs. Received"
+msgstr "Timestamp Reply Msgs. Received"
+
+#: mdr_icmp.cpp:54
+msgid "Addr. Mask Req. Msgs. Received"
+msgstr "Addr. Mask Req. Msgs. Received"
+
+#: mdr_icmp.cpp:55
+msgid "Addr. Mask Reply Msgs. Received"
+msgstr "Addr. Mask Reply Msgs. Received"
+
+#: mdr_icmp.cpp:56
+msgid "Messages Transmitted"
+msgstr "Messages Transmitted"
+
+#: mdr_icmp.cpp:57
+msgid "Messages Transmitted for Errors"
+msgstr "Messages Transmitted for Errors"
+
+#: mdr_icmp.cpp:58
+msgid "Dest. Unreach. Msgs. Transmitted"
+msgstr "Dest. Unreach. Msgs. Transmitted"
+
+#: mdr_icmp.cpp:59
+msgid "Time Exceeded Msgs. Transmitted"
+msgstr "Time Exceeded Msgs. Transmitted"
+
+#: mdr_icmp.cpp:60
+msgid "Param. Prob. Msgs. Transmitted"
+msgstr "Param. Prob. Msgs. Transmitted"
+
+#: mdr_icmp.cpp:61
+msgid "Source Quench Msgs. Transmitted"
+msgstr "Source Quench Msgs. Transmitted"
+
+#: mdr_icmp.cpp:62
+msgid "ICMP Redirect Msgs. Transmitted"
+msgstr "ICMP Redirect Msgs. Transmitted"
+
+#: mdr_icmp.cpp:63
+msgid "Echo Request Msgs. Transmitted"
+msgstr "Echo Request Msgs. Transmitted"
+
+#: mdr_icmp.cpp:64
+msgid "Echo Reply Msgs. Transmitted"
+msgstr "Echo Reply Msgs. Transmitted"
+
+#: mdr_icmp.cpp:65
+msgid "Timestamp Msgs. Transmitted"
+msgstr "Timestamp Msgs. Transmitted"
+
+#: mdr_icmp.cpp:66
+msgid "Timestamp Reply Msgs. Transmitted"
+msgstr "Timestamp Reply Msgs. Transmitted"
+
+#: mdr_icmp.cpp:67
+msgid "Addr. Mask Req. Msgs. Transmitted"
+msgstr "Addr. Mask Req. Msgs. Transmitted"
+
+#: mdr_icmp.cpp:68
+msgid "Addr. Mask Reply Msgs. Transmitted"
+msgstr "Addr. Mask Reply Msgs. Transmitted"
+
+#: mdr_ip.cpp:41
+msgid "Forwarder"
+msgstr "Forwarder"
+
+#: mdr_ip.cpp:42
+msgid "Time-to-Live"
+msgstr "Time-to-Live"
+
+#: mdr_ip.cpp:43 mdr_udp.cpp:21
+msgid "Datagrams Received"
+msgstr "Datagrams Received"
+
+#: mdr_ip.cpp:44
+msgid "In Discards from Header Errors"
+msgstr "In Discards from Header Errors"
+
+#: mdr_ip.cpp:45
+msgid "In Discards from Address Errors"
+msgstr "In Discards from Address Errors"
+
+#: mdr_ip.cpp:46
+msgid "Datagrams Forwarded"
+msgstr "Datagrams Forwarded"
+
+#: mdr_ip.cpp:47
+msgid "In Discards from Unknown Protocol"
+msgstr "In Discards from Unknown Protocol"
+
+#: mdr_ip.cpp:48
+msgid "In Discards of Good Datagrams"
+msgstr "In Discards of Good Datagrams"
+
+#: mdr_ip.cpp:49
+msgid "Datagrams Sent Upstream"
+msgstr "Datagrams Sent Upstream"
+
+#: mdr_ip.cpp:50
+msgid "Upstream Output Requests"
+msgstr "Upstream Output Requests"
+
+#: mdr_ip.cpp:51
+msgid "Out Discards of Good Datagrams"
+msgstr "Out Discards of Good Datagrams"
+
+#: mdr_ip.cpp:52
+msgid "Out Discards from No Route"
+msgstr "Out Discards from No Route"
+
+#: mdr_ip.cpp:53
+msgid "Fragment Reassemble Timeout"
+msgstr "Fragment Reassemble Timeout"
+
+#: mdr_ip.cpp:54
+msgid "Fragment Reassemblies Required"
+msgstr "Fragment Reassemblies Required"
+
+#: mdr_ip.cpp:55
+msgid "Fragments Reassembled"
+msgstr "Fragments Reassembled"
+
+#: mdr_ip.cpp:56
+msgid "Fragment Reassembly Failures"
+msgstr "Fragment Reassembly Failures"
+
+#: mdr_ip.cpp:57
+msgid "Datagrams Fragmented"
+msgstr "Datagrams Fragmented"
+
+#: mdr_ip.cpp:58
+msgid "Fragment Discards from No-Fragment Flag"
+msgstr "Fragment Discards from No-Fragment Flag"
+
+#: mdr_ip.cpp:59
+msgid "Fragments Created"
+msgstr "Fragments Created"
+
+#: mdr_ip.cpp:60
+msgid "Routing Entries Discarded"
+msgstr "Routing Entries Discarded"
+
+#: mdr_memory.cpp:25
+msgid "KBytes Free Memory"
+msgstr "KBytes Free Memory"
+
+#: mdr_memory.cpp:26
+msgid "KBytes Memory Paged In"
+msgstr "KBytes Memory Paged In"
+
+#: mdr_memory.cpp:27
+msgid "KBytes Memory Paged Out"
+msgstr "KBytes Memory Paged Out"
+
+#: mdr_memory.cpp:28
+msgid "Pages Scanned"
+msgstr "Pages Scanned"
+
+#: mdr_memory.cpp:29
+msgid "KBytes Memory Freed"
+msgstr "KBytes Memory Freed"
+
+#: mdr_memory.cpp
+msgid "Total Page Faults"
+msgstr "Total Page Faults"
+
+#: mdr_misc.cpp:40
+msgid "Host Name"
+msgstr "Host Name"
+
+#: mdr_misc.cpp:41
+msgid "OS Name"
+msgstr "OS Name"
+
+#: mdr_misc.cpp:42
+msgid "OS Version"
+msgstr "OS Version"
+
+#: mdr_misc.cpp:43
+msgid "Physical Pages"
+msgstr "Physical Pages"
+
+#: mdr_misc.cpp:44
+msgid "Page Size"
+msgstr "Page Size"
+
+#: mdr_misc.cpp:46
+msgid "CPUs Configured"
+msgstr "CPUs Configured"
+
+#: mdr_misc.cpp:47
+msgid "CPUs On-line"
+msgstr "CPUs On-line"
+
+#: mdr_misc.cpp:48
+msgid "Clock Ticks/sec"
+msgstr "Clock Ticks/sec"
+
+#: mdr_misc.cpp:49
+msgid "Boot Time"
+msgstr "Boot Time"
+
+#: mdr_misc.cpp:50
+msgid "Total Interrupts"
+msgstr "Total Interrupts"
+
+#: mdr_misc.cpp:51
+msgid "Clock Interrupts"
+msgstr "Clock Interrupts"
+
+#: mdr_misc.cpp:52 mdr_ps.cpp:90
+msgid "System Calls"
+msgstr "System Calls"
+
+#: mdr_misc.cpp:53
+msgid "Context Switches"
+msgstr "Context Switches"
+
+#: mdr_misc.cpp:54
+msgid "Process Count"
+msgstr "Process Count"
+
+#: mdr_misc.cpp:55
+msgid "1 Minute Run Queue Length"
+msgstr "1 Minute Run Queue Length"
+
+#: mdr_misc.cpp:56
+msgid "5 Minute Run Queue Length"
+msgstr "5 Minute Run Queue Length"
+
+#: mdr_misc.cpp:57
+msgid "15 Minute Run Queue Length"
+msgstr "15 Minute Run Queue Length"
+
+#: mdr_misc.cpp:58
+msgid "Current Time"
+msgstr "Current Time"
+
+#: mdr_mnt.cpp:35
+msgid "Special File"
+msgstr "Special File"
+
+#: mdr_mnt.cpp:36
+msgid "Mount Point"
+msgstr "Mount Point"
+
+#: mdr_mnt.cpp:37
+msgid "File System Type"
+msgstr "File System Type"
+
+#: mdr_mnt.cpp:38
+msgid "Mount Options"
+msgstr "Mount Options"
+
+#: mdr_mnt.cpp:39
+msgid "Mount Time"
+msgstr "Mount Time"
+
+#: mdr_mnt.cpp:40
+msgid "KBytes Space Total"
+msgstr "KBytes Space Total"
+
+#: mdr_mnt.cpp:41
+msgid "KBytes Space Used"
+msgstr "KBytes Space Used"
+
+#: mdr_mnt.cpp:42
+msgid "KBytes Space Free"
+msgstr "KBytes Space Free"
+
+#: mdr_mnt.cpp:43
+msgid "Percent Used"
+msgstr "Percent Used"
+
+#: mdr_mnt.cpp:44
+msgid "Inode Count"
+msgstr "Inode Count"
+
+#: mdr_mnt.cpp:45
+msgid "Free Inode Count"
+msgstr "Free Inode Count"
+
+#: mdr_mnt.cpp:46
+msgid "Major Number"
+msgstr "Major Number"
+
+#: mdr_mnt.cpp:47
+msgid "Minor Number"
+msgstr "Minor Number"
+
+#: mdr_mnt.cpp:48
+msgid "File System ID"
+msgstr "File System ID"
+
+#: mdr_netif.cpp:37
+msgid "IP Address"
+msgstr "IP Address"
+
+#: mdr_netif.cpp:38
+msgid "Network Mask"
+msgstr "Network Mask"
+
+#: mdr_netif.cpp:39
+msgid "Broadcast Address"
+msgstr "Broadcast Address"
+
+#: mdr_netif.cpp:40
+msgid "Maximum Transfer Unit"
+msgstr "Maximum Transfer Unit"
+
+#: mdr_netif.cpp:41
+msgid "Bytes Received"
+msgstr "Bytes Received"
+
+#: mdr_netif.cpp:42
+msgid "Bytes Transmitted"
+msgstr "Bytes Transmitted"
+
+#: mdr_netif.cpp:43
+msgid "Packets Received"
+msgstr "Packets Received"
+
+#: mdr_netif.cpp:44
+msgid "Packets Transmitted"
+msgstr "Packets Transmitted"
+
+#: mdr_netif.cpp:45
+msgid "Errors on Receipt"
+msgstr "Errors on Receipt"
+
+#: mdr_netif.cpp:46
+msgid "Errors on Transmission"
+msgstr "Errors on Transmission"
+
+#: mdr_netif.cpp:47
+msgid "Failures on Receipt"
+msgstr "Failures on Receipt"
+
+#: mdr_netif.cpp:48
+msgid "Failures on Transmission"
+msgstr "Failures on Transmission"
+
+#: mdr_netif.cpp:49
+msgid "Collisions on Transmission"
+msgstr "Collisions on Transmission"
+
+#: mdr_netif.cpp:50
+msgid "Interface Speed (b/s)"
+msgstr "Interface Speed (b/s)"
+
+#: mdr_netif.cpp:51
+msgid "Collision Percent"
+msgstr "Collision Percent"
+
+#: mdr_netif.cpp:52
+msgid "Interface is Full Duplex"
+msgstr "Interface is Full Duplex"
+
+#: mdr_pf.cpp:23
+msgid "KBytes Total"
+msgstr "KBytes Total"
+
+#: mdr_pf.cpp:24
+msgid "KBytes Free"
+msgstr "KBytes Free"
+
+#: mdr_pf.cpp:25
+msgid "KBytes Used"
+msgstr "KBytes Used"
+
+#: mdr_proc_states.cpp:29
+msgid "Runnable"
+msgstr "Runnable"
+
+#: mdr_proc_states.cpp:30
+msgid "Sleeping"
+msgstr "Sleeping"
+
+#: mdr_proc_states.cpp:31
+msgid "Stopped"
+msgstr "Stopped"
+
+#: mdr_proc_states.cpp:32
+msgid "Blocked"
+msgstr "Blocked"
+
+#: mdr_proc_states.cpp:33
+msgid "Unreaped"
+msgstr "Unreaped"
+
+#: mdr_proc_states.cpp:34
+msgid "Specific"
+msgstr "Specific"
+
+#: mdr_ps.cpp:71
+msgid "Start Time"
+msgstr "Start Time"
+
+#: mdr_ps.cpp:72
+msgid "User ID"
+msgstr "User ID"
+
+#: mdr_ps.cpp:73
+msgid "Effective User ID"
+msgstr "Effective User ID"
+
+#: mdr_ps.cpp:74
+msgid "Process ID"
+msgstr "Process ID"
+
+#: mdr_ps.cpp:75
+msgid "Parent Process ID"
+msgstr "Parent Process ID"
+
+#: mdr_ps.cpp:76
+msgid "Terminal Device ID"
+msgstr "Terminal Device ID"
+
+#: mdr_ps.cpp:77
+msgid "File Name"
+msgstr "File Name"
+
+#: mdr_ps.cpp:78
+msgid "Full Command"
+msgstr "Full Command"
+
+#: mdr_ps.cpp:79
+msgid "First Argument"
+msgstr "First Argument"
+
+#: mdr_ps.cpp:80 mdr_thread.cpp:56
+msgid "Total CPU Seconds"
+msgstr "Total CPU Seconds"
+
+#: mdr_ps.cpp:81 mdr_thread.cpp:57
+msgid "User CPU Seconds"
+msgstr "User CPU Seconds"
+
+#: mdr_ps.cpp:82 mdr_thread.cpp:58
+msgid "Kernel CPU Seconds"
+msgstr "Kernel CPU Seconds"
+
+#: mdr_ps.cpp:85 mdr_thread.cpp:61
+msgid "Total Size"
+msgstr "Total Size"
+
+#: mdr_ps.cpp:86 mdr_thread.cpp:62
+msgid "Resident Size"
+msgstr "Resident Size"
+
+#: mdr_ps.cpp:87 mdr_thread.cpp:63
+msgid "Total I/O"
+msgstr "Total I/O"
+
+#: mdr_ps.cpp:88 mdr_thread.cpp:64
+msgid "Percent CPU Use"
+msgstr "Percent CPU Use"
+
+#: mdr_ps.cpp:89 mdr_thread.cpp:65
+msgid "Percent Physmem Use"
+msgstr "Percent Physmem Use"
+
+#: mdr_ps.cpp:91 mdr_thread.cpp:66
+msgid "Voluntary Context Switches"
+msgstr "Voluntary Context Switches"
+
+#: mdr_ps.cpp:92 mdr_thread.cpp:67
+msgid "Involuntary Context Switches"
+msgstr "Involuntary Context Switches"
+
+#: mdr_ps.cpp:93 mdr_thread.cpp:68
+msgid "Major Page Faults"
+msgstr "Major Page Faults"
+
+#: mdr_ps.cpp:94 mdr_thread.cpp:69
+msgid "Minor Page Faults"
+msgstr "Minor Page Faults"
+
+#: mdr_ps.cpp:95
+msgid "Process State"
+msgstr "Process State"
+
+#: mdr_ps.cpp:96 mdr_thread.cpp:71
+msgid "Global Priority"
+msgstr "Global Priority"
+
+#: mdr_ps.cpp:97 mdr_thread.cpp:72
+msgid "Unix Nice Value"
+msgstr "Unix Nice Value"
+
+#: mdr_ps.cpp:98
+msgid "Number of Threads"
+msgstr "Number of Threads"
+
+#: mdr_ps.cpp:99 mdr_thread.cpp:73
+msgid "Total Size Delta"
+msgstr "Total Size Delta"
+
+#: mdr_ps.cpp:100 mdr_thread.cpp:74
+msgid "Resident Size Delta"
+msgstr "Resident Size Delta"
+
+#: mdr_ps.cpp:101
+msgid "User Name"
+msgstr "User Name"
+
+#: mdr_ps.cpp:102
+msgid "Effective User Name"
+msgstr "Effective User Name"
+
+#: mdr_systat.cpp:12
+msgid "KBytes Paged in/sec"
+msgstr "KBytes Paged in/sec"
+
+#: mdr_systat.cpp:13
+msgid "KBytes Paged out/sec"
+msgstr "KBytes Paged out/sec"
+
+#: mdr_systat.cpp:14
+msgid "Interrupts/sec"
+msgstr "Interrupts/sec"
+
+#: mdr_systat.cpp:15
+msgid "Context Switches/sec"
+msgstr "Context Switches/sec"
+
+#: mdr_systat.cpp:16
+msgid "System Calls/sec"
+msgstr "System Calls/sec"
+
+#: mdr_systat.cpp:17
+msgid "Runnable Processes"
+msgstr "Runnable Processes"
+
+#: mdr_systat.cpp:18
+msgid "Blocked Processes"
+msgstr "Blocked Processes"
+
+#: mdr_systat.cpp:19
+msgid "Zombie Processes"
+msgstr "Zombie Processes"
+
+#: mdr_systat.cpp:20
+msgid "Percent Memory Free"
+msgstr "Percent Memory Free"
+
+#: mdr_systat.cpp:21
+msgid "Percent Paging File Free"
+msgstr "Percent Paging File Free"
+
+#: mdr_tcp.cpp:35
+msgid "Retransmit Timeout Algorithm"
+msgstr "Retransmit Timeout Algorithm"
+
+#: mdr_tcp.cpp:36
+msgid "Minimum Retransmission Timeout"
+msgstr "Minimum Retransmission Timeout"
+
+#: mdr_tcp.cpp:37
+msgid "Maximum Retransmission Timeout"
+msgstr "Maximum Retransmission Timeout"
+
+#: mdr_tcp.cpp:38
+msgid "Maximum Connection Count"
+msgstr "Maximum Connection Count"
+
+#: mdr_tcp.cpp:39
+msgid "Active Opens"
+msgstr "Active Opens"
+
+#: mdr_tcp.cpp:40
+msgid "Passive Opens"
+msgstr "Passive Opens"
+
+#: mdr_tcp.cpp:41
+msgid "Open Failures"
+msgstr "Open Failures"
+
+#: mdr_tcp.cpp:42
+msgid "Connection Resets"
+msgstr "Connection Resets"
+
+#: mdr_tcp.cpp:43
+msgid "Established Connections"
+msgstr "Established Connections"
+
+#: mdr_tcp.cpp:44
+msgid "Segments Received"
+msgstr "Segments Received"
+
+#: mdr_tcp.cpp:45
+msgid "Segments Transmitted"
+msgstr "Segments Transmitted"
+
+#: mdr_tcp.cpp:46
+msgid "Segments Retransmitted"
+msgstr "Segments Retransmitted"
+
+#: mdr_tcp.cpp:47
+msgid "Segments Received mith Error"
+msgstr "Segments Received mith Error"
+
+#: mdr_tcp.cpp:48
+msgid "RST Segments Transmitted"
+msgstr "RST Segments Transmitted"
+
+#: mdr_thread.cpp:55
+msgid "Thread ID"
+msgstr "Thread ID"
+
+#: mdr_thread.cpp:70
+msgid "Thread State"
+msgstr "Thread State"
+
+#: mdr_thread.cpp:75
+msgid "Id of Encapsulating Process"
+msgstr "Id of Encapsulating Process"
+
+#: mdr_udp.cpp:22
+msgid "Undeliverable Datagrams Received"
+msgstr "Undeliverable Datagrams Received"
+
+#: mdr_udp.cpp:23
+msgid "Datagrams Received mith Error"
+msgstr "Datagrams Received mith Error"
+
+#: mdr_udp.cpp:24
+msgid "Datagrams Transmitted"
+msgstr "Datagrams Transmitted"

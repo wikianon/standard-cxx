@@ -1,0 +1,15 @@
+1) Be sure to completely read the LICENSE files contained within this package.
+   You MUST use the correct version of XE dpending on your intended use!
+   Start by reading LICENSE-DUAL.txt which explains the dual license mechanism.
+   Then, depending on your intended use of XE, read the appropriate license,
+   either LICENSE-GPL.txt or LICENSE-COMMERCIAL.txt.
+
+2) The top level of the HTML documentation starts at docs/index.html.
+   The XE User Manual is docs/User_Manual/XE/index.html.
+
+3) For a quick start after installation, do this:
+
+  # cd init.d
+  # CaptiveCollector start
+  # cd ../bin
+  # Top

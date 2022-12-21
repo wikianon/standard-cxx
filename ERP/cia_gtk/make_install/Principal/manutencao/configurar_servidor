@@ -1,0 +1,10 @@
+#!/bin/sh
+# Por Luciano T. Pereira
+mv /etc/mysql/my.cnf /etc/mysql/my.cnf.bk
+cp my.cnf /etc/mysql/
+cp certificado_ssl/ca-cert.pem /etc/mysql/
+cp certificado_ssl/server-cert.pem /etc/mysql/
+cp certificado_ssl/server-key.pem /etc/mysql/
+#chmod 400 /etc/mysql/my.cnf
+chown mysql:mysql /etc/mysql/my.cnf
+exit 0 

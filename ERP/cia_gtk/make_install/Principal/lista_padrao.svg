@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="297mm"
+   height="210mm"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docbase="d:\documents and settings\e158738\Meus documentos\Desenvolvimento\CIA_GTK\relatorio"
+   sodipodi:docname="lista_padrao.svg"
+   version="1.0"
+   x="0.0000000"
+   y="0.0000000"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 372.04724 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1052.3622 : 372.04724 : 1"
+       inkscape:persp3d-origin="526.18109 : 248.03149 : 1"
+       id="perspective46" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.1743975"
+     inkscape:cx="110.86929"
+     inkscape:cy="604.46677"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer9"
+     inkscape:window-width="1024"
+     inkscape:window-height="721"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     showgrid="false" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     style="display:inline"
+     id="layer1"
+     inkscape:label="FUNDO">
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffaa00;stroke-width:4.00000381;stroke-miterlimit:1.5;stroke-dasharray:none;stroke-opacity:1"
+       id="LISTAS"
+       width="951"
+       height="584"
+       x="66"
+       y="109" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     style="display:inline"
+     id="layer2"
+     inkscape:label="DADOS" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer9"
+     inkscape:label="LISTAS">
+    <g
+       id="g2811">
+      <rect
+         width="84"
+         x="66"
+         y="109"
+         height="14"
+         id="rect7972"
+         style="fill:#ffffee;fill-opacity:1;fill-rule:evenodd;stroke:#898989;stroke-width:0.625;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:1.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
+      <text
+         xml:space="preserve"
+         x="112"
+         y="120"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial"
+         id="text6512"
+         script="teste"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5030"
+           x="112"
+           y="119">$valores</tspan></text>
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="ROTULOS"
+     style="display:inline">
+    <g
+       style="display:inline"
+       id="g2806">
+      <rect
+         width="84"
+         x="66"
+         y="94"
+         height="15"
+         style="fill:#ededed;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.62499988;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:1.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect1364" />
+      <text
+         xml:space="preserve"
+         x="112.96938"
+         y="103"
+         style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="text1366"
+         script="teste"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan2792"
+           x="112.96938"
+           y="103">$campos</tspan></text>
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="INDICES">
+    <g
+       style="display:inline"
+       id="g3542">
+      <rect
+         width="30"
+         x="36"
+         y="109"
+         height="14"
+         id="rect3544"
+         style="fill:#ededed;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:1.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline" />
+      <text
+         xml:space="preserve"
+         x="50.360828"
+         y="119"
+         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="text3546"
+         script="teste"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4276"
+           x="50.360828"
+           y="118">$r</tspan></text>
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer8"
+     inkscape:label="FORMULARIOS"
+     style="display:inline" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="PAGINA"
+     style="display:inline">
+    <rect
+       id="rect1337"
+       style="opacity:0.1;fill:#ffff00;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.62500048;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:1.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       height="16.337788"
+       y="692.72174"
+       x="896.66248"
+       width="120.39617" />
+    <text
+       xml:space="preserve"
+       x="1013.5361"
+       y="704"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial"
+       id="text1404"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan1339"
+         x="1013.5361"
+         y="704">Página $p de $P</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     style="display:inline"
+     id="layer4"
+     inkscape:label="RODAPE">
+    <rect
+       width="981"
+       x="36"
+       y="693"
+       height="16.337788"
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:1.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       id="rect1398" />
+    <text
+       xml:space="preserve"
+       x="224.97278"
+       y="704"
+       style="font-size:12px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial"
+       id="text1400"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2799"
+         x="224.97278"
+         y="704">$w, $d/$m/$Y às $H:$M:$S</tspan></text>
+    <text
+       xml:space="preserve"
+       x="531.44708"
+       y="704"
+       style="font-size:10px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial"
+       id="text4232"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan1335"
+         x="531.44708"
+         y="704">$produto</tspan></text>
+    <text
+       xml:space="preserve"
+       x="38.282219"
+       y="704"
+       style="font-size:7px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial"
+       id="text2194"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3171"
+         x="38.282219"
+         y="704">Usuário: $usuario</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     style="display:inline"
+     id="layer3"
+     inkscape:label="CABECALHO">
+    <text
+       sodipodi:linespacing="125%"
+       script="teste"
+       id="fantasia"
+       style="font-size:22px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial"
+       y="59.236866"
+       x="515.55933"
+       xml:space="preserve"><tspan
+         sodipodi:role="line"
+         id="tspan1340"
+         x="515.55933"
+         y="59.236866">$nomefantasia</tspan></text>
+    <image
+       id="logotipo"
+       xlink:href="logo.png"
+       height="26.312336"
+       y="39.109425"
+       x="38.823212"
+       sodipodi:absref="/mnt/hda2/Producao/Linguagem C/biblioteca/bepdf/suporte/logo.jpg"
+       width="157.67746"
+       style="fill:none;fill-opacity:1;stroke:none;stroke-opacity:1" />
+    <g
+       id="g2795">
+      <rect
+         id="rect2116"
+         style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:1.5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         height="25"
+         y="69"
+         x="36"
+         width="981" />
+      <text
+         sodipodi:linespacing="125%"
+         script="teste"
+         id="text2848"
+         style="font-size:14px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Arial"
+         y="87.527885"
+         x="504.46994"
+         xml:space="preserve"><tspan
+           sodipodi:role="line"
+           id="tspan2791"
+           x="504.46994"
+           y="87.527885">$relatorio</tspan></text>
+    </g>
+    <rect
+       width="981"
+       x="36"
+       y="36"
+       height="673"
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:1.5;stroke-dasharray:none;stroke-dashoffset:1.625;stroke-opacity:1;display:inline"
+       id="rect1580" />
+  </g>
+</svg>

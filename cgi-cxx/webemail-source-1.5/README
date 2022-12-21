@@ -1,0 +1,100 @@
+https://www.scriptbrasil.com.br/script/c/webemail-source-1.5.tar.gz
+Web E-Mail é uma cliente de email que roda na web debaixo de um ambiente Unix.
+
+Web E-Mail 1.5
+
+[1] Installation
+[2] Uninstall
+[3] Automatic Installation
+[4] Manual Installation
+[5] Automatic Uninstall
+[6] Manual Uninstall
+[7] Once installed
+[8] Paths of support programs
+[9] Legal
+[10] More Help
+ 
+
+[1] ---Installation---
+There are two methods for installation.  Manual and automatic. 
+Automatic installation is recommended.  The doc.txt contains
+additional information.  The automatic installation should be 
+able to detect shadow passwords.
+
+[2] ---Uninstall---
+Once again there are two methods for uninstall.  Manual and
+automatic.  Automatic uninstall is recommended.  The doc.txt
+contains additional information.
+
+[3] ---Automatic installation---
+Run the script called "install" and follow the instructions.
+
+[4] ---Manual installation---
+1) edit ./source/cgi-bin/email.cpp.  Comment the line that says 
+#include "conf.h".  Add the line #define HAS_SHADOW
+if your system uses shadow passwords.
+
+2) change your directory to ./source/cgi-bin/
+run make
+
+3) copy email.cgi from ./source/cgi-bin/ to your cgi
+directory.
+
+4) copy *.so from ./source/cgi-bin/plugins/display/ to your
+cgi directory. 
+
+5) set the owner of email.cgi to root, set the suid bit and make 
+sure your web server can run it.  Use the commands 
+"chown root email.cgi"
+then "chmod 4755 email.cgi"
+
+6) copy ./source/html/* to your web servers html document root
+
+7) copy ./source/bin/wesetup to any directory which resides 
+in the path.  IE /bin. Your web server will need to be able 
+to run wesetup.
+
+8) copy ./conf/* to /etc/
+
+[5] ---Automatic Uninstall---
+Run uninstall
+
+[6] ---Manual Uninstall---
+This will depend on which paths you choose to install web e-mail to,
+but all you have to do is delete the files
+/{bin path}/wesetup
+/{cgi path}/email.cgi
+/{cgi path}/libdisplugin.*.so
+/{htmlpath}/email/*
+/{htmlpath}/email/
+/etc/webmail.conf
+
+[7] ---Once installed---
+To run Web E-Mail, point your browser to
+http://yourhost/your_cgi_dir/email.cgi
+
+[8] ---Paths of support programs---
+There are several programs which are needed in order to run web e-mail.
+They are cat and sendmail.  In order to use attachments, uuencode and 
+mimencode must be installed and in the correct directory.  In order
+to use an external mail box, fetch mail must be installed and in the
+correct directory.
+
+The correct directories are:
+cat: /bin/
+uuencode: /usr/bin/
+uudecode: /usr/bin/
+mimencode: /usr/bin/
+sendmail: any directory, see config file.
+fetchmail: /usr/bin/
+
+[9] ---Legal--- 
+THERE IS NO WARRANTY EXPRESSED OR IMPLIED.  USE AT YOUR OWN RISK, I WILL NOT BE RESPONSIBLE FOR
+ANY DATA LOSE OR DAMAGE.  THIS LICENSE GIVES YOU THE RIGHT TO MODIFY AND REDISTRIBUTE THE
+CODE.  YOU MUST MAKE YOUR MODIFICATIONS FREE AND AVAILABLE TO THE PUBLIC.  YOU MAY SELL YOUR
+MODIFICATIONS (AS LONG AS THE CODE IS FREE AND AVAILABE).  THIS LICENSE
+IS SUBJECT TO CHANGE WITH OUT NOTICE. 
+
+[10] ---More Help---
+For more help E-Mail tiberiusj@yahoo.com or go to
+ashaw.dyn.cheapnet.net/webmail

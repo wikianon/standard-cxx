@@ -1,0 +1,83 @@
+type=default
+language=c++
+optimize=-g
+
+pre_snap() {
+  case $os in
+  solaris)
+    ccflags="-I../../.. -D_SOLARIS"
+    curses=-lcurses
+    pre_R=
+    R_flag=-R../../../../../lib/$os/$mach
+    ldflags="-L../../../../../lib/$os/$mach -lmdr -lsocket -lnsl"
+    ;;
+  linux)
+    case $mach in
+    x86)
+      xflg=-m32
+      ;;
+    x86_64)
+      xflg=-m64
+      ;;
+    ppc)
+      xflg=-m32
+      ;;
+    ppc64)
+      xflg=-m64
+      ;;
+    s390)
+      xflg=-m31
+      ;;
+    s390x)
+      xflg=-m64
+      ;;
+    esac
+    ccflags="$xflg -I../../.. -D_LINUX"
+    curses=-lncurses
+    pre_R=LD_RUN_PATH=../../../../../lib/$os/$mach
+    R_flag=
+    ldflags="-L../../../../../lib/$os/$mach -lmdr"
+    ;;
+  darwin)
+    ccflags="-I../../.. -D_DARWIN -DOS_VERSION=`os_version`"
+    curses=-lncurses
+    pre_R=DYLD_LIBRARY_PATH=../../../../../lib/$os/$mach
+    R_flag=
+    ldflags="-L../../../../../lib/$os/$mach -lmdr -lintl"
+    ;;
+  freebsd)
+    ccflags="-I/usr/local/include -I../../.. -D_FREEBSD"
+    curses=-lncurses
+    pre_R=
+    R_flag=-R../../../../../lib/$os/$mach
+    ldflags="-L../../../../../lib/$os/$mach -lmdr -L/usr/local/lib -lintl -lkvm -ldevstat"
+    ;;
+  aix)
+    optimize="-g -qrtti=all -qdbxextra -qlinedebug"
+    ccflags="-I/usr/local/include -I../../.. -I../../../.. -D_AIX"
+    curses=-lcurses
+    pre_R=
+    R_flag=
+    ldflags="-brtl -lperfstat -lpthread -lintl -L../../../../../lib/$os/$mach -lsnmpmib -lmdr -L/usr/local/lib -bstatic -lnetsnmp -bdynamic"
+    ;;
+  esac
+}
+
+post_snap() {
+  makefile=$1
+
+  $ECHO \\nall:\\tany cpus ctlrstat dfstat ifstat iostat mpstat osflavor prsys systat vps tcpstat >> $makefile
+
+  for i in any cpus ctlrstat dfstat ifstat iostat mpstat osflavor prsys systat tcpstat
+  do
+    (
+     $ECHO \\n$i:\\t$i.o
+     $ECHO \\t$pre_R '$(CXX) $(CCFLAGS)' $i.o $R_flag '$(LDFLAGS)' -o $i
+    ) >> $makefile
+  done
+
+  (
+   $ECHO \\nvps:	vps.o
+   $ECHO \\t$pre_R '$(CXX) $(CCFLAGS) vps.o' $R_flag '$(LDFLAGS)' $curses -o vps
+  ) >> $makefile
+}

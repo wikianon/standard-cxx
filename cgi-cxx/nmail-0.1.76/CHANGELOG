@@ -1,0 +1,55 @@
+CHANGELOG - Nmail
+
+0.1.76
+	* Apparently the META expires tag is not enough to keep some proxy
+	  servers from caching pages. Added a HTTP header to resolve this.
+	* Changed cgi parsing entirely. Some browsers would send other, 
+	  unexpected headers with forms that were post/multipart.
+	* Fixed problem where some browsers would send form data for 
+	  post/multipart in different order than the input fields were 
+	  actually listed
+
+0.1.75
+	* Added MIME-Version header field which fixed some clients that
+	  expected it for MIME attachments
+	* Changed it so Reply-To header reflected user so bounced messages
+	  would come back properly
+	* Fixed problem where incorrectly configured sendmail would cause
+	  messages trying to be sent to return error, even though sent properly
+	* Fixed problem that resulted from Netscape for linux not sending
+	  Content-Type with multipart form attachments
+	* Added more verbose error descriptions
+	* Fixed few minor bugs
+
+0.1.74
+	* Added support for RFC2047 (non-ascii characters encoded in 
+	  header file). This not only fixed display problems, but also
+	  problems resulting from the filenames of attachments being encoded
+	  in this format.
+	* Fixed problem with filenames that had spaces
+	* Fixed problem where ending boundary was sent with text MIME 
+	  attachments
+
+0.1.73
+	* Fixed errors that could occur if Content-Disposition header
+	  entry came before other entries that required parameters
+	* Fixed spelling of Original when reply/forward message
+
+0.1.72
+	* Changed crypt library. Now compiles on distros:
+	  Redhat-6.x, Mandrake-7.0, SuSE-6.3, Slackware-7.0, Caldera-2.3
+	* Fixed date/time display on message view
+
+0.1.71
+	* Fixed problem with reply to addresses that are in address book not
+	  appearing in compose message form
+
+0.1.70
+	* Initial public release
+
+0.1.xx
+	* Many development versions
+
+0.1.01
+	* Initial development version - April 3, 2000
+

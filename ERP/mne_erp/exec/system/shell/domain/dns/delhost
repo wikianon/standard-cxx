@@ -1,0 +1,22 @@
+#!/bin/bash
+
+exit_status=0
+
+vaadminpasswordInputignore=1
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+. $scriptdir/functions
+
+find_script domain/dns read.sh
+
+read_domain
+if [ "$typ" = "primary" ] || [ "$typ" = "second" ]; then
+
+  acttime=$(date +%s)
+  check_passwd
+
+  get_dnsaddress "$(get_data "$getdnsaddress" $vadnsaddressidInput_old)"
+  samba-tool dns delete $(hostname) $domain $name $record "$address" -k yes 1>&$logfile 2>&1
+    
+fi

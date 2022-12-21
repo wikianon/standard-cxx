@@ -1,0 +1,351 @@
+#include "../../displugin.h"
+#include <stdlib.h>
+#include <string.h>
+
+//--internal functions, not part of the interface--------------
+// You may have any helper functions you need here.
+// You do not have to have the same helper functions as the 
+// in this interface file.
+
+void display_escapeprint(char * data)
+{
+//cut
+}
+
+
+
+void display_header(struct plugin_data *info, char *title)
+{
+
+}
+
+void display_tail(struct plugin_data *info)
+{
+
+}
+//--
+
+
+
+//---------------------------------------------------------
+//---------------------------------------------------------
+//---------------------------------------------------------
+//---------------------------------------------------------
+
+
+
+
+//-- General ---------------------------------
+
+int get_interface_version()
+{
+	//Interface version 1
+	return 1;  
+}
+int get_plugin_subsystem()
+{
+	//The subsystem for the plugin, always 1
+	return 1; 
+}
+
+double get_plugin_version()
+{
+	//This is the version of the plugin, not webemail or the interface
+	return 0.9;
+}
+
+char* get_language() //reports the language 
+{
+	//Returns the language for the plugin
+	//Must make on heap or on a plugin unload problems could arise.
+	return char*;
+}
+char* get_plugin_name() //report plug in name
+{
+	//Returns the name of the plugin
+	//Must make on heap or on a plugin unload problems could arise
+	return char*;
+}
+
+//-- Main -------------------------------------
+
+void display_main_window(struct plugin_data *info, char *toshow) //probably aframe
+{
+	// Sets up the main window, usally 3 frames
+	// however it could be few if you get creative
+}
+void display_main_title(struct plugin_data *info)
+{
+	// One of the frames, usally the top banner
+}
+void display_main_menu(struct plugin_data *info)
+{
+	// One of the frames, usally contains the menu
+}
+
+//-- Inbox ------------------------------------
+
+void display_menu_head(struct plugin_data *info)
+{
+	// top part of the list of emails
+}
+
+void display_menu_entree(struct plugin_data *info,
+char *from, char *subject, char *status, int message_number)
+{
+	//prints an individual entree in the list of emails
+}
+void display_menu_tail(struct plugin_data *info, int quota_on, int total_messages)
+{
+	//bottom part of the list of emails
+}
+
+//-- Inbox saved------------------------------------
+
+void display_saved_menu_head(struct plugin_data *info)
+{
+	//
+}
+void display_saved_menu_entree(struct plugin_data *info,
+char *from, char *subject, char *status, int message_number)
+{
+
+}
+void display_saved_menu_tail(struct plugin_data *info, int quota_on, int total_messages)
+{
+
+}
+
+//-- Inbox sent ------------------------------------
+
+void display_sent_menu_head(struct plugin_data *info)
+{
+
+}
+
+void display_sent_menu_entree(struct plugin_data *info,
+char *from, char *subject, char *status, int message_number)
+{
+
+}
+void display_sent_menu_tail(struct plugin_data *info, int quota_on, int total_messages)
+{
+
+}
+
+
+//-- Read -------------------------------------
+
+//display everything up to message
+void display_read_head(struct plugin_data *info, int message_number)
+{
+
+}
+
+//display everything after message but before attachments
+void display_read_middle(struct plugin_data *info, int message_number)
+{
+
+}
+
+void display_read_attachments_head(struct plugin_data *info, int message_number)
+{
+
+}
+
+//display attachments
+void display_read_attachments(struct plugin_data *info, int message_number,
+int attachment_number, char *file_name, char *mode)
+{
+
+}
+
+void display_read_attachments_tail(struct plugin_data *info, int
+message_number)
+{
+
+}
+
+//display tail
+void display_read_tail(struct plugin_data *info, int message_number)
+{
+
+}
+//-- Read saved -------------------------------------
+
+//display everything up to message
+void display_saved_read_head(struct plugin_data *info, int message_number)
+{
+
+}
+
+//display everything after message but before attachments
+void display_saved_read_middle(struct plugin_data *info, int message_number)
+{
+
+}
+
+void display_saved_read_attachments_head(struct plugin_data *info, int message_number)
+{
+
+}
+
+//display attachments
+void display_saved_read_attachments(struct plugin_data *info, int message_number,
+int attachment_number, char *file_name, char *mode)
+{
+
+}
+
+void display_saved_read_attachments_tail(struct plugin_data *info, int message_number)
+{
+
+}
+
+//display tail
+void display_saved_read_tail(struct plugin_data *info, int message_number)
+{
+
+}
+//-- Read sent -------------------------------------
+
+//display everything up to message
+void display_sent_read_head(struct plugin_data *info, int message_number)
+{
+
+}
+
+//display everything after message but before attachments
+void display_sent_read_middle(struct plugin_data *info, int message_number)
+{
+
+}
+
+void display_sent_read_attachments_head(struct plugin_data *info, int message_number)
+{
+
+}
+
+//display attachments
+void display_sent_read_attachments(struct plugin_data *info, int message_number,
+int attachment_number, char *file_name, char *mode)
+{
+
+}
+
+void display_sent_read_attachments_tail(struct plugin_data *info, int message_number)
+{
+
+}
+
+//display tail
+void display_sent_read_tail(struct plugin_data *info, int message_number)
+{
+
+}
+
+//-- Write -------------------------------------
+
+//write every thing up to message
+void display_write_head(struct plugin_data *info, struct wewrite_data *wewriteinfo) 
+//what ever write gets + hidden tags
+{
+
+}
+
+
+//write every thing after message 
+void display_write_tail(struct plugin_data *info, struct wewrite_data *wewriteinfo)
+{
+
+}
+
+//-- Config ------------------------------------
+
+void display_config(struct plugin_data *info, struct config_data *configinfo)
+{
+
+}
+
+//-- About -------------------------------------
+
+void display_about(struct plugin_data *info)
+{
+
+}
+
+//-- Login -------------------------------------
+
+void display_login(struct plugin_data *info)
+{
+
+}
+
+//-- Error -------------------------------------
+
+void display_error(struct plugin_data *info, char *error_message)
+{
+
+}
+
+//-- Address Book -----------------------------
+
+void display_address_head(struct plugin_data *info)
+{
+
+}
+
+void display_address_letterbreak(struct plugin_data *info, char letter)
+{
+
+}
+
+void display_single_entre(struct plugin_data *info, struct address_data *addressdata)
+{
+
+}
+
+void display_group_entre(struct plugin_data *info, struct group_data *groupdata)
+{
+
+}
+
+void display_address_tail(struct plugin_data *info)
+{
+
+}
+
+void display_address_add_group_head(struct plugin_data *info, struct group_data *groupdata)
+{
+
+}
+void display_address_add_group_tail(struct plugin_data *info, struct group_data *groupdata)
+{
+
+}
+
+
+void display_address_add_single(struct plugin_data *info, struct address_data *addressdata)
+{
+
+}
+
+//-- view html --------------------------------------------
+void display_view_html_head(struct plugin_data *info, int message_number)
+{
+
+}
+
+void display_view_html_tail(struct plugin_data *info, int message_number)
+{
+
+}
+
+void display_java_script_head(struct plugin_data *info)
+{
+	//Java script will be displayed after this message, do not interfear with it!!!!!!
+}
+void display_java_script_tail(struct plugin_data *info)
+{
+
+}

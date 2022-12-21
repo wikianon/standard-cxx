@@ -1,0 +1,4 @@
+#!/bin/bash
+
+. ./exec/system/shell/domain/share/disable
+. ./exec/system/shell/apache/webdav/enable

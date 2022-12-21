@@ -1,0 +1,5 @@
+#!/bin/sh
+cd /etc/cia_gtk
+./cia_gtk --novasenha
+
+exit 0

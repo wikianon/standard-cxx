@@ -1,0 +1,19 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script domain/detail read.sh
+
+domainconf=`get_data "$getdomain"`
+get_domain "$domainconf"
+
+if [ "$typ" = "" ]; then
+    exit 0
+fi
+
+. exec/system/shell/domain/user/move_$typ
+. exec/system/shell/domain/user/validuser
+. exec/system/shell/domain/restart/$typ
+
+exit 0

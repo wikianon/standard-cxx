@@ -1,0 +1,21 @@
+# Definições globais de compilação: Entradas
+PROG = main
+
+ifndef OS # Linux
+	CC = gcc
+	COBJ_F = -Wall -c -g
+	COBJ_E = -g.o
+	COBJ_L = `pkg-config --cflags gtk+-2.0` `pkg-config --cflags gthread-2.0` `pkg-config --cflags gmodule-2.0` `curl-config --cflags` `mysql_config --cflags` `xml2-config --cflags` `freetype-config --cflags` `python2.5-config --includes`
+	PROG_F = -Wall -g
+	PROG_E = -g
+	PROG_L = `pkg-config --libs --cflags gtk+-2.0` `pkg-config --libs --cflags gmodule-2.0` `pkg-config --libs --cflags gthread-2.0` `curl-config --libs --cflags` `mysql_config --libs --include --cflags` `xml2-config --cflags --libs` `freetype-config --libs --cflags` -lodbc `python2.5-config --include` `python2.5-config --libs`
+
+else # Windows
+	CC = gcc
+	COBJ_F = -Wall -c -g
+	COBJ_E = -g.obj
+	COBJ_L = `pkg-config --cflags gtk+-2.0` `pkg-config --cflags gthread-2.0` `pkg-config --cflags gmodule-2.0` `pkg-config --cflags libxml-2.0` -IC:/Dev-Cpp/include -IC:/Dev-Cpp/include/mysql
+	PROG_F = -Wall -g
+	PROG_E = -g.exe
+	PROG_L = `pkg-config --libs --cflags gtk+-2.0` `pkg-config --libs --cflags gmodule-2.0` `pkg-config --libs --cflags gthread-2.0` `pkg-config --libs --cflags libxml-2.0` -IC:/Dev-Cpp/include/mysql C:/Dev-Cpp/lib/libcurldll.a -lpython25 -lodbc32 C:/Dev-Cpp/lib/libmysql.a -lcurl
+endif

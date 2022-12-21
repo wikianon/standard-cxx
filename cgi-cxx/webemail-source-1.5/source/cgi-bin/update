@@ -1,0 +1,16 @@
+#!/bin/bash
+# This is used for developers only.  This script will not
+# be of any use to any one else.  Note it does NOT update
+# old version of web e-mail.
+
+make
+mv email.cgi /home/httpd/cgi-bin/
+mv ./plugins/display/*.so /home/httpd/cgi-bin/
+mv ./plugins/mailbox/*.so /home/httpd/cgi-bin/
+mv ./plugins/address/*.so /home/httpd/cgi-bin/
+
+cp -R ../html/email/* /home/httpd/html/email/
+
+chown root /home/httpd/cgi-bin/email.cgi
+chmod 4755 /home/httpd/cgi-bin/email.cgi
+

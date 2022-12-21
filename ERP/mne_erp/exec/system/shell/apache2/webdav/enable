@@ -1,0 +1,45 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script apache2/webdav read.sh
+
+find_template conffile      apache2/webdav webdav.conf
+find_template conffile_dirs apache2/webdav webdav_directories.conf
+
+conf=
+dirs=
+
+prog='/####RELEASENAME####/ { gsub(/####RELEASENAME####/,releasename); }
+      /####FOLDERNAME####/  { gsub(/####FOLDERNAME####/,foldername);   }
+      /####DESCRIPTION####/ { gsub(/####DESCRIPTION####/,description); }
+                            { print $0 }'
+
+dirs=`( get_data "$getreleases" | \
+  while read line; 
+  do
+     get_releases "$line"
+     dir=\`awk "$prog" "releasename=$name" "foldername=$DATAROOT$location" "description=$description" $conffile_dirs\`
+     echo "$dir"
+  done )`
+
+prog='/####DIRECTORYS####/ { gsub(/####DIRECTORYS####/,directories); printf($0); next; }
+      /####DB####/         { gsub(/####DB####/,db); }
+      /####DBUSER####/     { gsub(/####DBUSER####/,dbuser); }
+                           { print $0 }'
+                           
+dirs=`echo "$dirs" | awk '{ gsub("%", "%%"); printf("%s\\\\n", $0);}'`
+
+conf=`awk "$prog" "directories=$dirs" "db=$DB" "dbuser=$DBUSER" $conffile`
+
+rm -f $apache2confdir/mne_webdav.conf 2>&1 >/dev/null
+echo "$conf" >   $apache2confdir/mne_webdav.conf
+
+if [ "$apache2enconf" != "" ]; then
+  $apache2enconf mne_webdav.conf 2>&1 > /dev/null
+fi
+
+$apache2reload 2>&1 > /dev/null
+
+exit $exit_status

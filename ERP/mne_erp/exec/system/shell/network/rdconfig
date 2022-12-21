@@ -1,0 +1,42 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+. exec/system/shell/allg/db.sh
+
+DELETE="SELECT mne_system.network_del()"
+get_data "$DELETE" >&$logfile 2>&1
+
+devices=
+for device in `ls /sys/class/net`
+do
+  if [ "$device" != "lo" ]; then
+    devices="$devices '$device'"
+    declare netaddr= netmask= netbcast= netgateway= dnssearch= dnsnameserver= dnsdomain=
+    declare `awk 'BEGIN { devfound=0; }
+         /^#/                     { next }
+         /^[ \t]*$/               { next }
+         /^auto/                  { devfound=0 }
+         /^auto[ \t]+'$device'/   { devfound=1 }
+         /iface[ \t]+'$device'/   { if ( devfound ) printf("netaddr=%s ", $4); if ( $4 == "dhcp" ) devfound=0 }
+         /^[ \t]+address/         { if ( devfound ) printf("netaddr=%s ", $2); }
+         /^[ \t]+netmask/         { if ( devfound ) printf("netmask=%s ", $2); }
+         /^[ \t]+broadcast/       { if ( devfound ) printf("netbcast=%s ", $2); }
+         /^[ \t]+metric/          { if ( devfound ) printf("netmetric=%s ", $2); }
+         /^[ \t]+gateway/         { if ( devfound ) printf("netgateway=%s ", $2); }
+         /^[ \t]+dns-nameserver/  { if ( devfound ) printf("dnsnameserver=%s ", $2); }
+         /^[ \t]+dns-domain/      { if ( devfound ) printf("dnsdomain=%s ", $2); }
+         /^[ \t]+dns-search/      { if ( devfound ) printf("dnssearch=%s ", $2); }
+         END                      { print "netdev=ready" }
+      ' $netinterfaces`
+
+    INSERT="SELECT mne_system.network_add('$device', '$netaddr', '$netmask', '$netbcast', '$netgateway', '$dnssearch', '$dnsnameserver', '$dnsdomain')";
+    result=`get_data "$INSERT"`
+  
+    if [ "$result" != 'ok' ]; then
+        echo "error during inserting parameter" 1>&2
+        exit 2
+    fi
+  fi
+done

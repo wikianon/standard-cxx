@@ -1,0 +1,703 @@
+#! /bin/sh
+
+#############################################################################
+##
+## Copyright (c) 2008 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+#
+# snap: build something without the medieval agony of autoconf
+#
+
+# Go to the end of the file. There are two calls: 1) main 2) exit
+# All of the "main program" logic is in the function called main.
+
+makefile_common_commands() {
+  $ECHO CC = $cc
+  $ECHO CXX = $cxx
+  $ECHO JAVAC = $javac
+  $ECHO AR = $ar
+  $ECHO RANLIB = $ranlib
+  $ECHO OPTIMIZE = $optimize
+}
+
+makefile_common_c() {
+  makefile_common_commands
+
+  files=
+  if [ "$target_dirs" = "." ]; then
+    files=`eval $ECHO *.c`
+  else
+    for i in $target_dirs ; do
+      if [ "$i" = "." ]; then
+        files="$files `eval $ECHO *.c`"
+      else
+        files="$files `eval $ECHO $i/*.c`"
+      fi
+    done
+  fi
+
+  if [ -n "$extra_files" ]; then
+    files="$files $extra_files"
+  fi
+
+  $ECHO SRC = $files
+  obj=`$ECHO $files | sed 's/\.c/.o/g'`
+  if [ -n "$extra_obj" ]; then
+    obj="$obj $extra_obj"
+  fi
+  $ECHO OBJ = $obj
+  $ECHO CFLAGS = $cflags '$(OPTIMIZE)'
+  $ECHO LDFLAGS = $ldflags
+  $ECHO '\n.c.o:'
+  $ECHO '\t$(CC) -c $(CFLAGS) $*.c -o' '$*.o'
+}
+
+makefile_common_cpp() {
+  if [ -z "*.cpp" -a -z "extension" ]; then
+    $ECHO Cannot find any C++ source files. Set extension= in Snapfile. >&2
+    exit 1
+  fi
+  makefile_common_commands
+  if [ -z "$extension" ]; then
+    extension=cpp
+  fi
+
+  files=
+  if [ "$target_dirs" = "." ]; then
+    files=`eval $ECHO *.$extension`
+  else
+    for i in $target_dirs ; do
+      if [ "$i" = "." ]; then
+        files="$files `eval $ECHO *.$extension`"
+      else
+        files="$files `eval $ECHO $i/*.$extension`"
+      fi
+    done
+  fi
+
+  if [ -n "$extra_files" ]; then
+    files="$files $extra_files"
+  fi
+
+  $ECHO SRC = $files
+  sx="s/\.$extension/.o/g"
+  obj=`$ECHO $files | sed $sx`
+  if [ -n "$extra_obj" ]; then
+    obj="$obj $extra_obj"
+  fi
+  $ECHO OBJ = $obj
+  $ECHO CCFLAGS = $ccflags '$(OPTIMIZE)'
+  $ECHO LDFLAGS = $ldflags
+  $ECHO .SUFFIXES: .$extension
+  $ECHO \\n.$extension.o:
+  $ECHO '\t$(CXX) -c $(CCFLAGS) $*.cpp -o' '$*.o'
+}
+
+makefile_common_java() {
+  makefile_common_commands
+
+  files=
+  if [ "$target_dirs" = "." ]; then
+    files=`eval $ECHO *.java`
+  else
+    for i in $target_dirs ; do
+      if [ "$i" = "." ]; then
+        files="$files `eval $ECHO *.java`"
+      else
+        files="$files `eval $ECHO $i/*.java`"
+      fi
+    done
+  fi
+
+  if [ -n "$extra_files" ]; then
+    files="$files $extra_files"
+  fi
+
+  $ECHO SRC = $files
+  obj=`$ECHO $files | sed 's/\.java/.class/g'`
+  if [ -n "$extra_obj" ]; then
+    obj="$obj $extra_obj"
+  fi
+  $ECHO OBJ = $obj
+  if [ -n "$classpath" ]; then
+    jflags="-classpath $classpath $jflags"
+  fi
+  $ECHO JFLAGS = $jflags '$(OPTIMIZE)'
+  $ECHO .SUFFIXES: .java .class
+  $ECHO '\n.java.class:'
+  $ECHO '\t$(JAVAC) $(JFLAGS) $*.java'
+}
+
+makefile_common_end() {
+  $ECHO '\nclean:\n\t'/bin/rm -f '$(OBJ)' $target
+  top_h=`eval $ECHO *.h`
+  if [ "$top_h" = '*.h' ]; then
+    top_h=
+  fi
+  sub_h=
+  if [ ! "$target_dirs" = "." ]; then
+    for i in $target_dirs ; do
+      if [ ! "$i" = "." ]; then
+        h=`eval $ECHO $i/*.h`
+        if [ ! $h = $i/'*.h' ]; then
+          sub_h="$sub_h $h"
+        fi
+      fi
+    done
+  fi
+  cd $out_dir
+  all_files="$files $top_h $sub_h"
+  for i in $all_files ; do
+    pre_dot=`echo $i | awk -F/ '{ for(i=0; i<NF; i++) printf("../"); }'`
+    copy=../$pre_dot$i
+    if [ ! -f $i ]; then
+      ln -s $copy $i
+    fi
+  done
+  cd ../..
+}
+
+build_app() {
+  case $language in
+  c)
+    makefile_common_c >> $makefile
+    $ECHO \\n$target:\\t'$(OBJ)' >> $makefile
+    $ECHO \\t'$(CC) $(CFLAGS)' -o $target '$(OBJ)' '$(LDFLAGS)' >> $makefile
+    $ECHO \\nall:\\t$target >> $makefile
+    makefile_common_end >> $makefile
+    ;;
+  c++)
+    makefile_common_cpp >> $makefile
+    $ECHO \\n$target:\\t'$(OBJ)'
+    $ECHO \\t'$(CXX) $(CCFLAGS)' -o $target '$(OBJ)' '$(LDFLAGS)' >> $makefile
+    $ECHO \\nall:\\t$target >> $makefile
+    makefile_common_end >> $makefile
+    ;;
+  java)
+    makefile_common_java >> $makefile
+    $ECHO \\ndefault:\\t'$(OBJ)' >> $makefile
+    $ECHO '\nall:\n\t$(JAVAC) $(JFLAGS) $(SRC)' >> $makefile
+    clean=
+    if [ -n "$target_dirs" ]; then
+      for i in $target_dirs ; do
+        if [ "$i" = "." ]; then
+          clean="$clean "'*.class'
+        else
+          clean="$clean $i/"'*.class'
+        fi
+      done
+    fi
+    $ECHO '\nclean:\n\t/bin/rm -f' "$clean" >> $makefile
+    ;;
+  *)
+    $ECHO No grokkie $language.
+    exit 1
+    ;;
+  esac
+}
+
+build_lib() {
+  case $language in
+  c)
+    makefile_common_c >> $makefile
+    $ECHO \\n$target:\\t'$(OBJ)' >> $makefile
+    $ECHO \\t'$(AR)' $arflags $target '$(OBJ)' >> $makefile
+    $ECHO \\t'$(RANLIB)' $target >> $makefile
+    $ECHO \\nall:\\t$target >> $makefile
+    ;;
+  c++)
+    makefile_common_cpp >> $makefile
+    $ECHO \\n$target:\\t'$(OBJ)' >> $makefile
+    $ECHO \\t'$(AR)' $arflags $target '$(OBJ)' >> $makefile
+    $ECHO \\t'$(RANLIB)' $target >> $makefile
+    $ECHO \\nall:\\t$target >> $makefile
+    ;;
+  *)
+    $ECHO No grokkie $language.
+    exit 1
+    ;;
+  esac
+
+  makefile_common_end >> $makefile
+}
+
+build_shared_obj() {
+  cflags="$cflags $picflag"
+  ccflags="$ccflags $picflag"
+
+  case $language in
+  c)
+    makefile_common_c >> $makefile
+    $ECHO \\n$target:\\t'$(OBJ)' >> $makefile
+    $ECHO \\t'$(CC) $(CFLAGS)' $shlibflag -o $target '$(OBJ)' '$(LDFLAGS)' >> $makefile
+    $ECHO \\nall:\\t$target >> $makefile
+    ;;
+  c++)
+    makefile_common_cpp >> $makefile
+    $ECHO \\n$target:\\t'$(OBJ)' >> $makefile
+    $ECHO \\t'$(CXX) $(CCFLAGS)' $shlibflag -o $target '$(OBJ)' '$(LDFLAGS)' >> $makefile
+    $ECHO \\nall:\\t$target >> $makefile
+    ;;
+  *)
+    $ECHO No grokkie $language.
+    exit 1
+    ;;
+  esac
+
+  makefile_common_end >> $makefile
+}
+
+filetype() {
+  dir=`dirname $1`
+  file=`basename $1`
+  extension=`echo $file | awk -F. '{ print $NF }'`
+  echo $dir $file $extension
+}
+
+build_jar_file() {
+  if [ ! "$language" = "java" ]; then
+    $ECHO type=jar_file type must specify language=java.
+    exit 1
+  fi
+
+  makefile_common_java >> $makefile
+  $ECHO \\n$target:\\t'$(OBJ)' >> $makefile
+  if [ -n "$java_package" ]; then
+     classes=`$ECHO $obj | tr ' ' '\012' |
+       sed "s-^-$java_package/-" | tr '\012' ' '`
+  else
+    classes=$obj
+  fi
+  jarable=`for i in $classes ; do
+    filetype $i
+  done | awk '{
+    if ($3 == "class")
+      what = $3;
+    else
+      what = $2;
+    r = aa[$1];
+    if (r == "")
+      aa[$1] = what;
+    else
+      aa[$1] = r "," what;
+  } END {
+    for(i in aa) {
+      n = split(aa[i], xx, ",");
+      for(q=1; q<=n; q++)
+        if (xx[q] == "class")
+          printf("%s/*.class\n", i);
+        else
+          printf("%s/%s\n", i, xx[q]);
+    }
+  }' | sort -u | tr '\012' ' '`
+  if [ ! "$top" = "." ]; then
+    $ECHO '\t(cd'" $top"' ; jar cvf' "$target" "$jarable"')' >> $makefile
+    $ECHO \\t\\tmv $top/$target . >> $makefile
+  else
+    $ECHO \\tjar cvf $target "$jarable" >> $makefile
+  fi
+  $ECHO '\nall:\n\t$(JAVAC) $(JFLAGS) $(SRC)' >> $makefile
+  if [ ! "$top" = "." ]; then
+    $ECHO '\t(cd'" $top"' ; jar cvf' "$target" "$jarable"')' >> $makefile
+    $ECHO \\t\\tmv $top/$target . >> $makefile
+  else
+    $ECHO \\tjar cvf $target "$jarable" >> $makefile
+  fi
+  clean=
+  if [ -n "$target_dirs" ]; then
+    for i in $target_dirs ; do
+      if [ "$i" = "." ]; then
+        clean="$clean "'*.class'
+      else
+        clean="$clean $i/"'*.class'
+      fi
+    done
+  fi
+  $ECHO '\nclean:\n\t/bin/rm -f' "$clean" $target >> $makefile
+}
+
+build_default() {
+  case $language in
+  c)
+    makefile_common_c >> $makefile
+    $ECHO '\nall:\t$(OBJ)' >> $makefile
+    makefile_common_end >> $makefile
+    ;;
+  c++)
+    makefile_common_cpp >> $makefile
+    $ECHO '\nall:\t$(OBJ)' >> $makefile
+    makefile_common_end >> $makefile
+    ;;
+  java)
+    makefile_common_java >> $makefile
+    $ECHO \\ndefault:\\t'$(OBJ)' >> $makefile
+    $ECHO '\nall:\n\t$(JAVAC) $(JFLAGS) $(SRC)' >> $makefile
+    clean=
+    if [ -n "$target_dirs" ]; then
+      for i in $target_dirs ; do
+        if [ ! "$i" = "." ]; then
+          clean="$clean $i/"'*.class'
+        fi
+      done
+    fi
+    $ECHO '\nclean:\n\t/bin/rm -f' "$clean" >> $makefile
+    ;;
+  *)
+    $ECHO No grokkie $language.
+    exit 1
+    ;;
+  esac
+}
+
+build_subdirs() {
+  here=`pwd`
+  for i in $subdirs ; do
+    cd $i
+    $SNAP $@
+    if [ $? -ne 0 ]; then
+      $ECHO subdirs failed. Exiting.
+      exit 1
+    fi
+    cd $here
+  done
+}
+
+os_version() {
+  sys=`uname -s`
+
+  case $sys in
+  Linux | FreeBSD)
+    echo `uname -r | awk '{ printf("%5.0f\n", $1 * 100); }'`
+    ;;
+  SunOS | Darwin)
+    echo `uname -r | awk -F. '{
+      n = $1 * 100;
+      n += ($2 * 10);
+      printf("%5.0f\n", n);
+    }'`
+    ;;
+  AIX)
+    echo `uname -v` `uname -r` | awk '{
+      n = $1 * 100;
+      n += ($2 * 10);
+      printf("%d\n", n);
+    }'
+    ;;
+  esac
+}
+
+main() {
+
+  dir=`dirname $0`
+  if [ "$dir" = "." ]; then
+    dir=`pwd`
+  else
+    case $dir in
+    /*) ;;
+     *) dir=`pwd`/$dir
+        ;;
+    esac
+  fi
+
+  SNAP=$dir/snap
+
+  # you really better know what you're doing...
+  if [ -n "$os" ]; then
+    masq_os=$os
+  fi
+
+  os=`uname -s`
+
+  case $os in
+  SunOS)
+    os=solaris
+    ECHO=echo
+    ;;
+  Linux)
+    os=linux
+    ECHO="echo -e"
+    ;;
+  Darwin)
+    os=darwin
+    echo \\n | fgrep n > /dev/null
+    if [ $? -eq 1 ]; then
+      ECHO=echo
+    else
+      ECHO="echo -e"
+    fi
+    ;;
+  FreeBSD)
+    os=freebsd
+    ECHO="echo -e"
+    ;;
+  AIX)
+    os=aix
+    ECHO="echo"
+    ;;
+  *)
+    echo Add $os to snap.
+    exit 1
+    ;;
+  esac
+
+  if [ -n "$masq_os" ]; then
+    os=$masq_os
+  fi
+
+  # build sparcv9 on sparc for instance
+  if [ -z "$mach" ]; then
+    mach=`uname -p`
+
+    case $mach in
+    i386|i486|i586|i686) mach=x86;;
+    powerpc) mach=ppc;;
+    *) ;;
+    esac
+  fi
+
+  if [ -z "$snapfile" ]; then
+    snapfile=`pwd`/Snapfile
+  fi
+
+  if [ ! -f $snapfile ]; then
+    $ECHO No Snapfile in `pwd`.
+    exit 1
+  fi
+
+  . $snapfile
+
+  if [ -z "$type" ]; then
+    $ECHO No type keyword found.
+    exit 1
+  fi
+
+  if [ ! "$type" = "subdirs" -a -z "$language" ]; then
+    $ECHO No language keyword found.
+    exit 1
+  fi
+
+  need_target=true
+  if [ "$language" = "java" -a "$type" = "application" ]; then
+    need_target=false
+  fi
+  if [ "$type" = "default" -o "$type" = "subdirs" ]; then
+    need_target=false
+  fi
+
+  if [ "$need_target" = "true" -a -z "$target" ]; then
+    $ECHO No target keyword found.
+    exit 1
+  fi
+
+  if [ "$type" = "subdirs" ]; then
+    if [ -z "$subdirs" ]; then
+      $ECHO No subdirs keyword found.
+      exit 1
+    fi
+    build_subdirs $@
+    exit 0
+  fi
+
+  case $os in
+  solaris)
+    if [ -z "$cc" ]; then
+      cc=cc
+      ar=ar
+    fi
+    if [ -z "$cxx" ]; then
+      cxx=CC
+      ar=CC
+      arflags='-xar -o '
+    fi
+    if [ -z "$javac" ]; then
+      javac=javac
+    fi
+    ranlib=true
+    picflag=-KPIC
+    shlibflag=-G
+    ;;
+  linux)
+    if [ -z "$cc" ]; then
+      cc=gcc
+    fi
+    if [ -z "$cxx" ]; then
+      cxx=g++
+    fi
+    if [ -z "$javac" ]; then
+      javac=javac
+    fi
+    ranlib=ranlib
+    picflag=-fPIC
+    shlibflag=-shared
+    ;;
+  darwin)
+    if [ -z "$cc" ]; then
+      cc=gcc
+    fi
+    if [ -z "$cxx" ]; then
+      cxx=g++
+    fi
+    if [ -z "$javac" ]; then
+      javac=javac
+    fi
+    ranlib=ranlib
+    picflag=-fPIC
+    shlibflag=-dynamiclib
+    ;;
+  freebsd)
+    if [ -z "$cc" ]; then
+      cc=gcc
+    fi
+    if [ -z "$cxx" ]; then
+      cxx=g++
+    fi
+    if [ -z "$javac" ]; then
+      javac=javac
+    fi
+    ranlib=ranlib
+    picflag=-fPIC
+    shlibflag=-shared
+    ;;
+  aix)
+    if [ -z "$cc" ]; then
+      cc=xlc_r
+    fi
+    if [ -z "$cxx" ]; then
+      cxx=xlC_r
+    fi
+    if [ -z "$javac" ]; then
+      javac=javac
+    fi
+    ranlib=ranlib
+    picflag=-qpic=large
+    shlibflag=-G
+    ;;
+  *)
+    ;;
+  esac
+
+  case $language in
+  c | c++)
+    out_dir=build/$os-$mach
+    if [ ! -d $out_dir ]; then
+      mkdir -p $out_dir
+    fi
+    ;;
+  java)
+    out_dir=.
+    ;;
+  *)
+    $ECHO No grokkie $language.
+    exit 1
+    ;;
+  esac
+
+  makefile=$out_dir/Makefile
+  $ECHO '# This Makefile was generated by snap.\n#\n' > $makefile
+
+  type pre_snap > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    pre_snap $makefile
+  fi
+
+  if [ -z "$top" ]; then
+    top=.
+  fi
+
+  if [ -z "$target_dirs" ]; then
+    target_dirs="."
+  fi
+
+  for i in $target_dirs ; do
+    if [ ! "$i" = "." ]; then
+      echo $i | grep '^/' > /dev/null
+      if [ $? -eq 0 ]; then
+        $ECHO target_dirs may not contain absolute paths.
+        exit 1
+      fi
+      if [ ! -d $out_dir/$i ]; then
+        mkdir -p $out_dir/$i
+      fi
+    fi
+  done
+
+  if [ -n "$extra_files" ]; then
+    for i in $extra_files ; do
+      if [ ! "$language" = "java" ]; then
+        echo $i | grep '^/' > /dev/null
+        if [ $? -eq 0 ]; then
+          $ECHO extra_files may not contain absolute paths.
+          exit 1
+        fi
+      fi
+      if [ ! -f $i ]; then
+        $ECHO $i does not name a file.
+        exit 1
+      fi
+      if [ ! "$language" = "java" ]; then
+        xdir=`dirname $i`
+        if [ ! -d $out_dir/$xdir ]; then
+          mkdir -p $out_dir/$xdir
+        fi
+      fi
+    done
+  fi
+
+  case $type in
+  application) build_app;;
+  library)     build_lib;;
+  shared_obj)  build_shared_obj;;
+  jar_file)    build_jar_file;;
+  default)     build_default;;
+  *)           $ECHO unknown type: $type;;
+  esac
+
+  type post_snap > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    post_snap $makefile
+  fi
+
+  if [ -z "$make" ]; then
+    case $os in
+    solaris)
+      if [ -x /usr/bin/make ]; then
+        make=/usr/bin/make
+      elif [ -x /usr/ccs/bin/make ]; then
+        make=/usr/ccs/bin/make
+      else
+        $ECHO Cannot find make.
+        exit 1
+      fi
+      ;;
+    *)
+      make=/usr/bin/make;;
+    esac
+  fi
+
+  cd $out_dir
+  $make $@
+}
+
+# the main function is directly above this line
+main $@
+exit $?

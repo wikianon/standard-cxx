@@ -1,0 +1,36 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script apache2/mod read.sh
+
+exit_status=0
+
+get_data "$getmods" | \
+  while read line; 
+  do
+     get_mods "$line"
+     if [ "$enabled" = "t" ]; then
+         if [ ! -f $apache2rootdir/mods-enabled/$name.load ]; then 
+             a2enmod $name 2>&1 > /dev/null
+             if [ $? != 0 ]; then
+                 echo "error in enable $name" 1>&2;
+                 exit_status=1 
+             fi
+         fi
+     else
+         if [ -f $apache2rootdir/mods-enabled/$name.load ]; then 
+             a2dismod $name 2>&1 > /dev/null
+             if [ $? != 0 ]; then
+                 echo "error in disable $name" 1>&2;
+                 exit_status=1 
+             fi
+         fi
+     fi
+  done
+
+$apache2restart 2>&1 > /dev/null
+
+exit $exit_status
+

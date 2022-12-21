@@ -1,0 +1,43 @@
+#!/bin/bash
+
+#Setup program for Web E-Mail 1.1. 
+#This program MUST be in the path.
+
+cd ~
+if [ ! -d ".webmail" ]
+then
+  mkdir .webmail
+  chmod u+rwx .webmail
+fi
+cd .webmail
+
+if [ ! -f "tmp" ] 
+then
+  touch tmp
+  chmod u+rw tmp
+fi
+if [ ! -f "book" ] 
+then
+  touch book
+  chmod u+rw book
+fi
+if [ ! -f "gbook" ] 
+then
+  touch gbook
+  chmod u+rw gbook
+fi
+if [ ! -f "flock" ] 
+then
+  touch flock
+  chmod u+rw flock
+fi
+
+
+#remove old mail box
+if [ -f "data" ] 
+then
+  USER=`whoami`
+  cat data >> /var/spool/mail/$USER
+  rm data
+fi
+

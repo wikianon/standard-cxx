@@ -1,0 +1,27 @@
+#!/bin/bash
+
+exit_status=0
+
+vaadminpasswordInputignore=1
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+myscriptdir=$scriptdir
+
+find_script domain/detail read.sh
+domainconf=`get_data "$getdomain"`
+get_domain "$domainconf"
+
+if [ "$description" = "" ]; then
+    description="%h server (Samba, Ubuntu)"
+fi
+
+udomain=$(echo "$domain"| awk '{print toupper($0)}')
+domaindn=$(echo $domain | sed -e "s/^/dc=/" -e "s/\./,dc=/g")
+
+export PATH=$sambabin:$sambasbin:$PATH
+
+. $myscriptdir/functions
+. $myscriptdir/enable_$typ
+. $myscriptdir/../dhcp/enable

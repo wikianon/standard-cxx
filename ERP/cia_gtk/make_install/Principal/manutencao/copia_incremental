@@ -1,0 +1,6 @@
+#!/bin/sh
+# Por Luciano Trindade Pereira
+#cp -r -u /var/log/mysql/* backup
+tar -cvvzPf `date +copia_incremental_%d-%m-%Y_%H-%M-%S.tar.gz` /var/log/mysql/
+
+exit 0 

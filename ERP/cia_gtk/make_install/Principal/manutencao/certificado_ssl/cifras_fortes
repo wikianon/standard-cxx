@@ -1,0 +1,4 @@
+#!/bin/sh
+# Por Luciano Trindade Pereira
+openssl ciphers HIGH > lista_cifras_fortes
+exit 0

@@ -1,0 +1,3 @@
+#!/bin/bash 
+
+. exec/system/shell/domain/user/add_primary

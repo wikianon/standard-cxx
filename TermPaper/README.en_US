@@ -1,0 +1,9 @@
+This example was created for the purpose of learning to use get set and encapsulation methods in C ++.
+To compile the program just enter the folder srcmain / give execute permission to the install script, 
+execute the same to install the headers then enter the srcmain folder and do make. 
+
+bash-4.4$ cd srcmain/ 
+
+bash-4.4$ make install
+
+bash-4.4$ make

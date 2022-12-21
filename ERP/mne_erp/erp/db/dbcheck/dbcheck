@@ -1,0 +1,92 @@
+#!/bin/bash
+
+. ../dbcfg
+
+noowncloud=
+while [ $# -gt 0 ] ; do
+  case $1 in
+    -c)       docopy="c"; shift 1;;
+    -sdb)     origdb=$2; shift 2;;
+    -shost)   orighost=$2; shift 2;;
+    -ddb)     checkdb=$2; shift 2;;
+    -dhost)   checkhost=$2; shift 2;;
+    -noclean) noclean=1; shift 1;;
+    -r)       reverse=1; shift 1;;
+    -cusschemas) cus_schemas=$2; shift 2;;
+    -schemas) ovschemas=$2; shift 2;;
+    -noown) noowncloud=1; shift 1;;
+     *)       shift 1 ;;
+  esac
+done
+
+if [ "$reverse" = "1" ];then
+  tmp=$origdb;
+  origdb=$checkdb;
+  checkdb=$tmp;
+
+  tmp=$orighost;
+  orighost=$checkhost;
+  checkhost=$tmp;
+fi
+
+if [ "$docopy" = "c" ]; then 
+  echo Copy $orighost':'$origdb to $checkhost':'$checkdb 2>&1
+else
+  echo Do Update $orighost':'$origdb to $checkhost':'$checkdb 2>&1
+fi
+
+. dbread
+
+rm -f modify.sql 2>/dev/null
+rm -f drop.sql   2>/dev/null
+
+echo "SET SESSION AUTHORIZATION admindb;" > modify.sql
+
+rdschemas="SELECT schemata.schema_name FROM information_schema.schemata"
+checkschemas=`get_checkdata "$rdschemas"`
+
+for s in $schemas
+do
+    found=0
+    for cs in $checkschemas 
+    do
+        if [ "$s" = "$cs" ]; then
+          found=1
+          break
+        fi
+    done
+    
+    if [ "$found" = "0" ]; then
+        echo "CREATE SCHEMA $s;" >> modify.sql
+    fi
+done
+
+
+. delconstraint >> modify.sql
+
+awk 'BEGIN { stopprint=0; }
+    /ALTER TABLE.*DROP[ \t]+CONSTRAINT/  { next; }
+    /DROP TABLE/               { next; }
+    /row_security/             { next; }
+    /DROP SCHEMA/              { stopprint = 1; next; }
+    /DROP SEQUENCE/            { next; }
+    /Start Schema/             { stopprint = 0 }
+                               { if ( stopprint == 0 ) print $0 }
+    ' check.db >> modify.sql
+
+. checktablecols    >> modify.sql
+echo -ne "                                             \r" >&2
+
+awk 'BEGIN             { stopprint=0; }
+    /row_security/     { next; }
+    /CREATE SCHEMA/    { act_schema = $3 ; next; }
+    /CREATE TABLE/     { stopprint = 1; }
+    /CREATE SEQUENCE/  { stopprint = 1; }
+    /ALTER TABLE/      { stopprint = 0; }
+    /^\);$/            { if ( stopprint == 1 ) { stopprint = 0; next; } }
+                       { if ( stopprint == 0 ) print $0 }
+    ' orig.db >> modify.sql
+
+if [ "$noclean" = "" ]; then
+  . dbcleanup
+ fi

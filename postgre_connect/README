@@ -1,0 +1,7 @@
+https://www.tutorialspoint.com/postgresql/postgresql_c_cpp.htm
+
+bash-4.4$ wget -c https://packages.slackonly.com/pub/packages/14.1-x86_64/libraries/libpqxx/libpqxx-4.0.1-x86_64-5_slack.txz
+
+bash-4.4$ su -c "installpkg libpqxx-4.0.1-x86_64-5_slack.txz"
+
+bash-4.4$ g++ connection1.cxx -lpqxx -lpq

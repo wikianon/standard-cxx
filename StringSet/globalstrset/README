@@ -1,0 +1,19 @@
+entre dentro da pasta include e copie tudo que tem dentro para /usr/include:
+
+depois faça make dentro da pasta srcmain:
+
+make 
+
+limpe os objetos:
+
+make clean
+
+execute o programa:
+
+make exec
+
+limpe os binarios:
+
+make remove
+
+

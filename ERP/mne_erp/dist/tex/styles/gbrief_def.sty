@@ -1,0 +1,93 @@
+% bank-Option, setzt Bankverbindung
+\newif\if@bankch
+\@bankchfalse
+\DeclareOption{bank-ch}{\@bankchtrue}
+
+\newif\if@bankde
+\@bankdefalse
+\DeclareOption{bank-de}{\@bankdetrue}
+
+\newif\if@intl
+\@intlfalse
+\DeclareOption{intl}{\@intltrue}
+
+\newif\if@unter
+\@unterfalse
+\DeclareOption{unter}{\@untertrue}
+
+\newif\if@doris
+\@dorisfalse
+\DeclareOption{doris}{\@doristrue}
+
+\newif\if@en
+\@enfalse
+\DeclareOption{en}{\@entrue}
+\DeclareOption{de}{}
+
+\ProcessOptions
+
+\lochermarke
+\faltmarken
+%\fenstermarken
+%\trennlinien
+%\klassisch
+
+\usepackage{mnemacros}
+
+\Logo                {}
+\Name                {\if\checkvariable{watermark}1\watermarkred{\watermark}\fi%
+                      \vbox{\hbox{\sf\Huge Arge Kirchberg/Praglowski}\hrule height 0pt\vskip2pt%
+					                  \hbox{\sf\small}}}
+
+\Strasse             {}
+\Zusatz              {}
+
+\if@intl
+   \Telefon             {+49/241 xxxxxx}
+   \Ort                 {D }
+   \if@en\Land          {Germany}
+   \else\Land           {Deutschland}
+   \fi
+   \RetourAdresse       {Arge Kirchberg/Praglowski}
+\else
+   \Telefon             {0241 xxxxxxxx}
+   \Ort                 {}
+   \Land                {}
+   \RetourAdresse       {Arge Kirchberg/Praglowski}
+\fi
+
+\Telefax             {}
+\Telex               {}
+\HTTP                {}
+\EMail               {}
+
+\if@bankde
+   \Bank                {}
+   \BLZ                 {}
+   \Konto               {}
+\fi
+
+\if@bankch
+   \Bank                {}
+   \BLZ                 {}
+   \Konto               {}
+   \def\kontotext       {}
+\fi
+
+\Unterschrift        {\hspace{1cm}}
+
+\Postvermerk         {}
+
+%\Datum               {\today}
+
+\if@unter
+   \Gruss               {Freundliche Grüsse\\\includegraphics[width=60mm,height=18mm]{unterschrift.bmp}}{1cm}
+\else
+   \if@en
+         \Gruss        {Yours sincerely}{1cm}
+   \else
+         \Gruss        {Freundliche Grüsse}{1cm}
+   \fi
+\fi
+
+\def\leerzeichen{ }%

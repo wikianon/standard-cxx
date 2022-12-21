@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Web E-Mail</title>
+<META HTTP-EQUIV="expires" content="0">
+</head>
+<body text="#000000" bgcolor="#FFFFFF"
+link="#0000EF" vlink="#0000EF" alink="#FF0000" background=/email/nlblue/bg1.gif>
+<b></b>&nbsp;
+
+<table CELLSPACING=0 CELLPADDING=0 COLS=2 WIDTH="100%" NOSAVE>
+<tr NOSAVE><td NOSAVE>
+<b><font size="+4"><!-#replace address_addedit> Address Entree</font></b>
+<font size=-1>&nbsp;&nbsp;&nbsp;(<!-#replace user_name>)</font>
+</td><td NOSAVE>
+<div align=right>
+&lt;&nbsp;<a href="<!-#replace url>" TARGET=_top>Main</a>&nbsp;-&nbsp;
+<a href="<!-#replace url>?write" TARGET=_top>Compose</a>&nbsp;-&nbsp;
+<a href="<!-#replace url>?book" TARGET=_top>Address Book</a>&nbsp;-&nbsp;
+<a href="<!-#replace url>?about" TARGET=_top>About</a>&nbsp;-&nbsp;
+<a href="<!-#replace url>?reset" TARGET=_top>Logout</a>&nbsp;>
+</div>
+</td></tr></table><hr WIDTH="100%">
+
+<form method="post" action="<!-#replace url>?<!-#replace address_method>">
+
+<table CELLSPACING=0 CELLPADDING=0 WIDTH="100%" NOSAVE>
+<tr NOSAVE>
+<td NOSAVE>   
+<div align=right>Name:</div>
+</td>
+<td><input type=text name=name size=25 value="<!-#replace address_name>"></td>
+<td>
+<div align=right>E-Mail:</div>
+</td>
+<td><input type=text name=email size=25 value="<!-#replace address_email>"></td>
+</tr>
+<tr NOSAVE>
+<td>
+<div align=right>Phone:&nbsp;</div>
+</td>
+<td><input type=text name=phone size=25 value="<!-#replace address_phone>"></td>
+<td>
+<div align=right>Address line 1:</div>
+</td>
+<td NOSAVE><input type=text name=addressline1 size=25 value="<!-#replace address_line_1>"></td>
+</tr>
+<tr>
+<td>  
+<div align=right>Fax:&nbsp;</div>
+</td>
+<td><input type=text name=fax size=25 value="<!-#replace address_fax>"></td>
+<td>
+<div align=right>Address line 2:</div>
+</td>
+<td><input type=text name=addressline2 size=25 value="<!-#replace address_line_2>"></td>
+</tr>
+<tr NOSAVE>
+<td>
+<div align=right>Notes:</div>
+</td>
+<td COLSPAN="3" NOSAVE><input type=text name=notes size=50 value="<!-#replace address_notes>"></td>
+<td></td>
+<td></td>   
+</tr>
+</table>
+<input type=Submit value="Add Entree"><input type=reset value=Reset ></form>
+<br>
+        
+<hr WIDTH="100%">
+<br>Questions or comments? Refer to 
+<a href="<!-#replace web_email_support>"><!-#replace web_email_support></a>
+        
+</body>
+</html>
+

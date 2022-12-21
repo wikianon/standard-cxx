@@ -1,0 +1,38 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script domain/share read.sh
+find_script domain/detail read.sh
+
+find_template conffile domain/share shares_primary.conf
+
+prog='/####RELEASENAME####/ { gsub(/####RELEASENAME####/,releasename); }
+      /####FOLDERNAME####/  { gsub(/####FOLDERNAME####/,foldername);   }
+      /####DESCRIPTION####/ { gsub(/####DESCRIPTION####/,description); }
+      /####WORKGROUP####/   { gsub(/####WORKGROUP####/,workgroup);     }
+                            { print $0 }'
+
+dirs=
+workgroup=$($sambabin/samba-tool domain info 127.0.0.1 | fgrep 'Netbios domain' | sed -e 's/  *//g' | cut -f2 -d:)
+dirs=`( get_data "$getreleases" | \
+  while read line; 
+  do
+     get_releases "$line"
+     awk "$prog" "releasename=$name" "foldername=$DATAROOT$location" "description=$description" "workgroup=$workgroup" $conffile
+  done )`
+  
+echo "$dirs" > $sambaconf/shares.conf
+
+$sambabin/samba-tool group list | fgrep "Mneshare" | sed -e 's/^Mneshare //' -e 's/ Read$//' | sort -u | \
+  while read name;
+  do
+    egrep -i "^\\[$name\\][ \t]*$" $sambaconf/shares.conf >&$logfile 2>&1 
+    if [ ! "$?" = "0" ]; then
+      $sambabin/samba-tool group delete "Mneshare $name"      >&$logfile 2>&1
+      $sambabin/samba-tool group delete "Mneshare $name Read" >&$logfile 2>&1
+    fi
+  done
+
+. ./exec/system/shell/domain/restart/$typ

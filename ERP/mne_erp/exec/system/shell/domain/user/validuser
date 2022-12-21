@@ -1,0 +1,24 @@
+#!/bin/bash
+
+exit_status=0
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script domain/user read.sh
+
+validuser=`get_data "$getvaliduser"`
+get_domain "$valid"
+
+echo -n "    valid users =" > $sambaconf/validuser.conf
+
+get_data "$getvaliduser" | \
+  while read line; 
+  do
+     get_validuser "$line"
+     echo -n " $user," >> $sambaconf/validuser.conf
+  done
+
+echo "" >> $sambaconf/validuser.conf
+
+exit $exitstatus

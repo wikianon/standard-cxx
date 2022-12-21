@@ -1,0 +1,136 @@
+unique_ptr
+é um ponteiro inteligente que possui um objeto exclusivamente.
+
+shared_ptr
+é um ponteiro inteligente para a propriedade compartilhada. 
+É copiável e móvel. Múltiplas instâncias de ponteiro inteligente podem possuir o mesmo recurso. 
+Assim que o último ponteiro inteligente possuir o recurso não for abrangido, o recurso será liberado.
+
+/*
+ * https://www.codeproject.com/Articles/15351/Implementing-a-simple-smart-pointer-in-c
+ * https://codereview.stackexchange.com/questions/26353/efficient-smart-pointer-implementation-in-c
+ * https://www.geeksforgeeks.org/smart-pointers-cpp/
+ Introdução:
+ 
+ O que são ponteiros inteligentes? A resposta é bastante simples; um ponteiro 
+ inteligente é um ponteiro que é inteligente. O que isso significa? Na verdade, ponteiros 
+ inteligentes são objetos que se comportam como ponteiros, mas fazem mais do que um 
+ ponteiro. Esses objetos são flexíveis como ponteiros e têm a vantagem de ser um 
+ objeto (como o construtor e os destrutores chamados automaticamente). Um ponteiro 
+ inteligente é projetado para lidar com os problemas causados ​​pelo uso de ponteiros 
+ normais (daí chamado smart).
+
+ 
+ Problemas com ponteiros
+
+ Quais são os problemas comuns que enfrentamos nos programas C ++ ao usar ponteiros? 
+ A resposta é gerenciamento de memória. Dê uma olhada no seguinte código:
+
+ char* pName  = new char[1024];
+ …
+ SetName(pName);
+ …
+ …
+ if(null != pName)
+ {
+       delete[] pName; 
+ }
+ 
+ Quantas vezes encontramos um erro causado porque esqueciamos de excluir pName. 
+ Seria ótimo se alguém pudesse cuidar de liberar a memória quando o ponteiro 
+ não é útil (não estamos falando sobre o coletor de lixo aqui). 
+ E se o ponteiro em si cuida disso? Sim, é exatamente isso que os ponteiros inteligentes 
+ pretendem fazer. Deixe-nos escrever um ponteiro inteligente e ver como podemos 
+ lidar com um ponteiro melhor.
+*/
+
+//Começaremos com um exemplo realista. Digamos que temos uma classe chamada 
+//Pessoa que é definida como abaixo.
+
+
+/*
+   Agora devemos escrever o código do cliente para usar Pessoa.
+
+int main()
+{
+    Person* pPerson  = new Person("Scott", 25);
+    pPerson->display();
+    delete pPerson;
+    
+    return 0;
+}
+
+
+ * Agora, olhe esse código acima, toda vez que eu crio um ponteiro, 
+ * eu preciso cuidar de excluí-lo. Isso é exatamente o que eu quero evitar. 
+ * Preciso de algum mecanismo automático que exclua o ponteiro. 
+ * Uma coisa que me atinge é um destruidor. Mas ponteiros não têm destrutadores, 
+ * então o que? Nosso ponteiro inteligente pode ter um. Então, 
+ * vamos criar uma classe chamada SmartPointer que pode conter um ponteiro para a 
+ * classe Pessoa e excluirá o ponteiro quando o seu destruidor for chamado. 
+ * Daí o código do meu cliente mudará para algo como isto abaixo:
+ 
+int main()
+{
+  SmartPointer sp(new Person("Scott", 25));
+  sp->display(); // Não precisa apagar o ponteiro da pessoa.
+}
+
+ Interface para um ponteiro inteligente
+
+ Uma vez que o ponteiro inteligente deve se comportar como um ponteiro, 
+ ele deve suportar a mesma interface que os ponteiros; ou seja, 
+ eles devem suportar as seguintes operações.
+
+ Dereferencing (operador *)
+ Indireccional (operador ->)    
+
+*//*
+
+class SmartPointer
+{
+ Person*    pData; // ponteiro para a classe de pessoa
+   
+  public:
+    SmartPointer(Person* pValue) : pData(pValue){}
+    
+    ~SmartPointer()
+    {
+     delete pData; // Ponteiro não mais necessário
+    }
+    
+    Person& operator*()
+    {
+     return *pData;
+    }
+    
+    Person* operator->()
+    {    
+     return pData;
+    }
+};
+
+int main()
+{
+    SmartPointer sp(new Person("Scott", 25));
+    sp->display(); // Não precisa apagar o ponteiro da pessoa.
+}
+*/
+
+/*
+  A classe GenericSmartPointer é a nossa classe de ponteiro inteligente. 
+  A responsabilidade principal desta classe é manter um ponteiro para a 
+  classe Pessoa e depois excluí-la quando o seu destruidor for chamado. 
+  Também deve suportar a interface do ponteiro.
+       
+  Classe de ponteiro inteligente genérico
+
+  Um problema que vemos aqui é que podemos usar essa classe 
+  de ponteiro inteligente para um ponteiro da classe Pessoa somente. 
+  Isso significa que temos que criar uma classe de ponteiro 
+  inteligente para cada tipo, e isso não é fácil. 
+  Podemos resolver esse problema fazendo uso de modelos e 
+  fazendo com que esse classificador de classe de ponteiro inteligente seja genérico. 
+  
+  Então, vamos alterar o código assim:
+*/       

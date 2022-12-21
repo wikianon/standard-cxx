@@ -1,0 +1,19 @@
+#!/bin/bash
+
+exit_status=0
+vapar1ignore=1
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+user=$vapar0
+password=$vapar1
+
+if [ "$user" = "" ] || [ "$password" = "" ]; then
+    echo "need username and password" 1>&2;
+    exit 1
+fi
+
+. exec/system/shell/domain/user/setpasswd
+
+exit $exit_status

@@ -1,0 +1,5 @@
+#!/bin/sh
+# Por Luciano T. Pereira
+mysqladmin shutdown -u root -p
+#service mysql stop
+exit 0 

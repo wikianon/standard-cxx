@@ -1,0 +1,43 @@
+https://github.com/LacobusVentura/CPF-Gen/blob/master/cpfgen.c
+
+site que gera cpf's validos
+http://geradordecpf.clevert.com.br/
+Programinha em C++ que checa se um número de CPF é válido
+
+Gerador de pessoas validas.
+https://www.4devs.com.br/gerador_de_pessoas
+
+http://tiagoporto.github.io/gerador-validador-cpf/
+
+Identificar o Estado onde um CPF foi registrado.
+
+Quando registrei meu CPF, aos 16 anos de idade, fi-lo pelo Banco do Brasil, onde eu trabalhava.
+Minha colega abriu uma gaveta com um monte de etiquetinhas adesivas previamente numeradas, 
+colou no papel que eu assinara, e pronto, lá estava eu oficialmente um cidadão brasileiro.
+
+Obviamente, meu cérebro linear pensava que aquela lista era sequencial, 
+e que se o meu CPF terminava em 710 o próximo deveria ser 711. Mas não era.
+
+Quando mudei para São Paulo percebi que todos os CPFs eram 
+terminados em 8 (antes dos dois dígitos verificadores).
+
+
+Tabela de identificação de CPF conforme o Estado
+
+Dígito	Estado(s)
+0	Rio Grande do Sul
+1	Distrito Federal, Goiás, Mato Grosso, Mato Grosso do Sul e Tocantins
+2	Amazonas, Pará, Roraima, Amapá, Acre e Rondônia
+3	Ceará, Maranhão e Piauí
+4	Paraíba, Pernambuco, Alagoas e Rio Grande do Norte
+5	Bahia e Sergipe
+6	Minas Gerais
+7	Rio de Janeiro e Espírito Santo
+8	São Paulo
+9	Paraná e Santa Catarina
+
+Para saber de onde é um CPF, basta ignorar os dois dígitos verificadores e 
+observar o último algarismo da “parte inteira”. A tabela acima dirá de onde ele é.
+
+Por exemplo: se existisse, o CPF 629353495-31 seria da Bahia ou do Sergipe, porque 5,
+o último algarismo antes dos dígitos verificadores, identifica esses dois Estados.

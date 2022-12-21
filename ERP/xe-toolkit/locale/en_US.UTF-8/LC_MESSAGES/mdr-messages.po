@@ -1,0 +1,96 @@
+#############################################################################
+##
+## Copyright (c) 2006-2007 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file is part of the localization catalogs of Captivity.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+#
+# Message catalog for the mdr library containing message strings.
+#
+
+#, fuzzy
+
+msgid ""
+msgstr ""
+
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: support@captivemetrics.com\n"
+"POT-Creation-Date: 2006-07-26 15:58-0400\n"
+"PO-Revision-Date: 2006-07-26 15:58-0400\n"
+"Last-Translator: Richard Pettit <richp@captivemetrics.com>\n"
+"Language-Team: English <support@captivemetrics.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: mdr.h:103
+msgid "object requires a key"
+msgstr "object requires a key"
+
+#: mdr.h:108 mdr.h:113
+msgid "object is a singleton"
+msgstr "object is a singleton"
+
+#: mdr.cpp:210 mdr.cpp:221
+msgid "FIELD NOT FOUND"
+msgstr "FIELD NOT FOUND"
+
+#: mdr.cpp:309
+msgid "true"
+msgstr "true"
+
+#: mdr.cpp:309
+msgid "false"
+msgstr "false"
+
+#: mdr.cpp:330
+msgid "Category : "
+msgstr "Category : "
+
+#: mdr.cpp:331
+msgid "Singleton: "
+msgstr "Singleton: "
+
+#: mdr.cpp:331 mdr.cpp:333 mdr.cpp:344
+msgid "yes"
+msgstr "yes"
+
+#: mdr.cpp:331 mdr.cpp:333 mdr.cpp:344
+msgid "no"
+msgstr "no"
+
+#: mdr.cpp:333
+msgid "Supported: "
+msgstr "Supported: "
+
+#: mdr.cpp:339
+msgid "Description"
+msgstr "Description"
+
+#: mdr.cpp:340
+msgid "Supported?"
+msgstr "Supported?"
+
+#: mdr_perf_host.cpp:137
+msgid "Unknown: "
+msgstr "Unknown: "

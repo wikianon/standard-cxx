@@ -1,0 +1,111 @@
+1..... Intro to plugins.
+2..... Using plugins.
+3..... Pros/cons of plugins.
+4..... Writing plugins.
+4.1..... Compiling a plugin.
+5..... Plugins that ship with web email.
+5.1..... file plugin.
+5.2..... Modifing skins.
+
+[1] Intro to plugins.
+  Starting with version 1.3 of Web E-Mail, all pages are created
+by plugins.  In versions before 1.3, all pages were hard coded into
+the main program.  This made it very difficult if not impossible to
+customize and multible executables were needed if one wished to have a
+dynamic web e-mail system.  I.e., one executable for each skin.  In
+version 1.3 all of the display code was moved into a plugin.  This allows
+the sys admin to swap out the display interface in favor of another with
+out the need to rewrite and recompile the main executable.  Plugins also
+allow for web e-mail to dynamically choose the most appropriate plugin for
+the user's web browser.  Currently there are three plugins for web email,
+a text only, suitable for browsers like lynx and the classic plugin for
+browsers like Netscape and IE and the file plugin with is explained later.
+In the near future I hope to have a demo plugin which will aid in creating 
+plugins.  Currently only the display subsystem has been extracted
+to a plugin.  In the distant future, the mail box subsystem and the
+mail sending subsystem will also be extracted into plugins.  Hopefully
+this will allow for the use of mta other then sendmail and possibly
+the use of a high end data base back end instead of a simple text file for
+the mailboxes.
+
+[2] Using plugins.
+  Plugins are controlled by the file /etc/webemail.conf using the
+keyword browsertype.  It is relatively simple to config.  After the
+keyword, place the browser's HTTP_USER_AGENT name, then the name of 
+the plugin.  If the plugin take parameters, place them next.
+For example, if we wanted Lynx to use the text plugin, we would put 
+
+browsertype lynx ./displugin.text.so
+
+  We would do that for each browser then we wanted.  "other" may be
+used as a default catch all.  The order is not important, but if you have
+several entrees with simular names and it is not behaving as expected,
+then mix them up a bit.  It might be matching the shorter entree and not
+the correct entree.
+
+
+[3] Pros/cons of plugins.
+  The obvious pros of plugins is on the fly displaying and easier
+code maintanance.  However there are a few cons too.  The code might
+be slower (more over head).  I have not done extensive test, so I don't
+know how much slower.  It also might be a bit more buggy since it is still
+in the testing phases.  One major con is that it could be a security
+hole, since the plugin DOES run as root at certain times.  Hopefully this
+will be fixed in future releases.  To protect your self, only run trusted
+plugins, or plugins that you have looked at every line.  The only code
+that should be in a plugin are printfs containing html and a few if
+statements.  IF THERE IS ANY OTHER CODE DO NOT RUN THE PLUGIN!!!!!!!!!!!!
+
+[4] Writting plugins. 
+  As of now, the best way to write a plugin is to look at the three
+included plugins and modify them.  Try not to drift too far from those
+examples as it might not work with the back end.  It hasn't been
+extensively tested.  Plugins are still in the beta stage and hopefully
+this section will be updated soon.
+
+[4.1] Compiling a plugin.
+  Compiling takes two steps.  First you compile your plugin just as you
+would compile any other program but you need to add the -fPIC.  This
+makes the code Position Independent.  Second you need to compile it as a
+shared lib.  
+
+First.
+gcc -fPIC -c {plugin source}
+Second.
+gcc -shared -o displugin.{plugin name}.so {object file}
+
+Example.
+gcc -fPIC -c displugin.classic.c
+gcc -shared -o displugin.classic.so displugin.classic.o
+
+
+[5] Plugins that ship with web email.
+  Currently three plugins ship with web email.  The default plug in is
+the classic plugin.  It is a basic no setup plugin, which works for
+most browser.  The text plugin is sutable for text only browsers like
+lynx.  Again there is no set up for this plugin.  Finally there is 
+the file plugin which reads html file from a skin directory, then displays
+them after adding the correct information.  See below on how to use the file
+plugin.
+
+[5.1] file plugin.
+  The file plugin takes two more parameters when set up in /etc/webemail.conf. 
+The first parameter is the path to the web email html directory.  The second
+parameter is the skin to use.  The skin name is a name of a directory in the
+web email html directory.  NOTE: Do not include the skin name in the path 
+parameter, there needs to be a space between the path and the skin name!  
+ex. 
+browsertype other ./libdisplugin.file.so /home/http/html/email gray
+
+[5.2] Modifing skins.
+  The easiest way to custimise web email is to modify a skin.  A skin is a
+bunch of html files, with special tags.  The special tags look like ssi tags.
+For example <!-#replace url>  is a special tag which inserts the url of web 
+email.  I would recommend editing the existing html files.  Do not use
+a web composer when modifing the html pages.  The pages are fragments or
+a full page and contain unknown tags.  It is very likely that a web composer
+will add close tags for tags that are left open in a fragment.  This is very
+bad, as it will cause many problems.  So I recommend editing the skins using
+a text editor.  Don't forget to change from the default classic plugin to 
+the file plugin.  Double check that your path argument is correct and if you
+rename the skin, that the skin name is correct.

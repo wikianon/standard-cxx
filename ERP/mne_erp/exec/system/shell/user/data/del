@@ -1,0 +1,16 @@
+#!/bin/bash
+
+exit_status=0
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+olduser=$valoginnameInput_old
+
+if [ "$user" = "" ]; then
+    echo "need username" 1>&2;
+    exit 1
+fi
+
+. exec/system/shell/domain/user/del
+exit $exitstatus

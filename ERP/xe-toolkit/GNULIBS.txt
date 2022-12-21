@@ -1,0 +1,25 @@
+In the libs/darwin/ppc and lib/darwin/x86 directories, there are libraries
+that are covered under the GPL. These libraries are
+
+  libintl
+  libstdc++
+  libgcc_s.
+
+In strict terms, we are in violation of the GPL by not shipping the source
+code along with the libraries. We capitulate. These libraries are available
+to MacOS users, but instead of causing users to traverse untold machinations,
+we decided to just ship the binaries for the libraries.
+
+If you would like the source code for these libraries (we will leave versions
+up to you), you can find them at
+
+  libintl -> http://www.gnu.org/software/gettext/
+  libstdc++ -> http://gcc.gnu.org/libstdc++/
+  libgcc_s -> http://gcc.gnu.org/
+
+We'll be honest with you. We'll get away with this as long as possible. But
+if the all-powerful FSF sword is waved under our noses, we will ship the
+source code. It just seems like a huge waste of bandwidth to deliver the
+entire source code for GCC just to comply with the GPL.
+
+-- CM

@@ -1,0 +1,50 @@
+#!/bin/bash
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+
+find_script network read.sh
+
+. exec/system/shell/network/rdconfig
+
+find_template conffile        network interfaces
+find_template conffile_single network interfaces_single
+
+conf=
+single=
+
+prog='/####DEVICE####/     { gsub(/####DEVICE####/,device); }
+      /####TYP####/        { gsub(/####TYP####/,typ);   }
+      /####ADDR####/       { if ( addr == "" ) next; gsub(/####ADDR####/, addr); }
+      /####BCAST####/      { if ( bcast == "" ) next; gsub(/####BCAST####/, bcast); }
+      /####MASK####/       { if ( mask == "" ) next; gsub(/####MASK####/, mask); }
+      /####GW####/         { if ( gw == "" ) next; gsub(/####GW####/, gw); }
+      /####NAMESERVER####/ { if ( nameserver == "" ) next; gsub(/####NAMESERVER####/, nameserver); }
+      /####DOMAIN####/     { if ( domain == "" ) next; gsub(/####DOMAIN####/, domain); }
+      /####SEARCH####/     { if ( search == "" ) next; gsub(/####SEARCH####/, search); }
+                           { print $0 }'
+
+single=`( get_data "$getinterfaces" | \
+  while read line; 
+  do
+     get_interfaces "$line"
+     if [ ! "$typ" = "" ]; then
+       single=\`awk "$prog" "device=$device" "typ=$typ" "addr=$addr" "bcast=$bcast" "mask=$mask" "gw=$gw" "nameserver=$nameserver" "domain=$domain" "search=$search" $conffile_single\`
+       echo "$single"
+     fi
+  done )`
+                            
+prog='/####DEVICECONFIG####/ { gsub(/####DEVICECONFIG####/,deviceconfig); }
+                           { print $0 }'
+                           
+conf="`awk "$prog" "deviceconfig=$single" $conffile`"
+mv $netinterfaces $netinterfaces""_`date +"%d.%m.%Y_%H:%M:%S"`
+echo "$conf" >  $netinterfaces
+
+for device in `ls /sys/class/net`
+do
+  ifconfig $device down
+  ifconfig $device up
+done
+
+resolvconf -u

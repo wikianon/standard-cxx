@@ -1,0 +1,5 @@
+DEP = ../sql/besql ../relatorio/berelatorio ../Mensagens/beMensagens ../Lista/beLista ../Salvar/beSalvar ../ListaG/beListaG ../Propriedades/bePropriedades ../Filtro/beFiltro ../Ordem/beOrdem
+
+DEPS := $(DEPS) $(DEP)
+DEPS_I = $(foreach list,$(DEP),$(dir $(list))Makefile.dep)
+include $(DEPS_I)

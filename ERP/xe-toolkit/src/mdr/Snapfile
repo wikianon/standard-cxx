@@ -1,0 +1,154 @@
+#############################################################################
+##
+## Copyright (c) 2008 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+#
+# Snapfile for the mdr library
+#
+
+type=shared_obj
+language=c++
+target=libmdr.so
+optimize=-g
+
+#
+# pre_snap: Makefile does not yet exist
+#
+pre_snap() {
+  extra_files=platform/$os.cpp
+
+  case $os in
+  solaris)
+    case $mach in
+    sparc | x86)
+      xflg=
+      ;;
+    sparcv9)
+      xflg=-xarch=v9
+      ;;
+    x86_64)
+      xflg=-xarch=generic64
+      ;;
+    esac
+    ccflags="$xflg -mt -D_SOLARIS -DOS_VERSION=`os_version` -I. -D`uname -p`"
+    ldflags="-lkstat -lkvm -lm -ldl -lelf -lpthread"
+    ;;
+  linux)
+    case $mach in
+    x86)
+      xflg=-m32
+      ;;
+    x86_64)
+      xflg=-m64
+      ;;
+    ppc)
+      xflg=-m32
+      ;;
+    ppc64)
+      xflg=-m64
+      ;;
+    s390)
+      xflg=-m31
+      ;;
+    s390x)
+      xflg=-m64
+      ;;
+    esac
+    ccflags="$xflg -pthread -D_LINUX -DOS_VERSION=`os_version` -DENABLE_NLS=1 -I. -D`uname -p`"
+    ldflags=''
+    ;;
+  darwin)
+    target=libmdr.dylib
+    ccflags="-D_DARWIN -DOS_VERSION=`os_version` -I. -D`uname -p` -D__DARWIN__ -DNO_ALLOCA -DCSRG_BASED"
+    ldflags="-flat_namespace -undefined suppress -single_module -framework CoreFoundation -framework IOKit -lintl -lpthread"
+    ;;
+  freebsd)
+    ccflags="-pthread -D_FREEBSD -DOS_VERSION=`os_version` -I. -I/usr/local/include -D`uname -p`"
+    ldflags="-L/usr/local/lib -lintl -lpthread"
+    ;;
+  aix)
+    case $mach in
+    ppc)
+      xflg=-q32
+      Lflg=-L/usr/local/lib
+      Iflg=-I/usr/local/include
+      ;;
+    ppc64)
+      xflg=-q64
+      Lflg=-L/usr/local64/lib
+      Iflg=-I/usr/local64/include
+      ;;
+    esac
+    optimize="-g -qrtti=all -qdbxextra -qlinedebug"
+    ccflags="$xflg -D_AIX -DOS_VERSION=`os_version` -I. -I../../.. $Iflg"
+    CFLAGS="$xflg -D_AIX -DOS_VERSION=`os_version` -I. -I../../.. $Iflg"
+    export CFLAGS
+    ldflags="-lperfstat $Lflg -lnetsnmp -L../../../../lib/$os/$mach -lsnmpmib -lpthread -lintl -lodm"
+    ;;
+  esac
+}
+
+#
+# post_snap: Makefile exists; doctor it or append it
+#
+post_snap() {
+  makefile=$1
+  makedir=`dirname $makefile`
+  if [ "$os" = "linux" ]; then
+    sed -e 's/mdr_kvm.cpp//' -e 's/mdr_kvm.o//' $makefile > $makedir/.$$
+    mv $makedir/.$$ $makefile
+  fi
+
+  if [ "$os" = "darwin" ]; then
+    # compiler generates bad code with -O2
+    (
+      $ECHO '\nplatform/darwin.o:\tplatform/darwin.cpp'
+      $ECHO '\t$(CXX) -c `echo $(CCFLAGS) | sed -e s/-O/-g/ -e s/-O1/-g/ -e s/-O2/-g/ -e s/-O3/-g/` platform/darwin.cpp -o platform/darwin.o'
+    ) >> $makefile
+  fi
+
+  if [ "$os" = "aix" ]; then
+    sed 's/OBJ = /OBJ = odm_types.o /' $makefile > $makedir/.$$
+    mv $makedir/.$$ $makefile
+    (
+      $ECHO '\nodm_types.c:\todm_types.h\n'
+      $ECHO '\nplatform/aix.o:\todm_types.h\n'
+      $ECHO 'odm_types.h:'
+      $ECHO '\todmshow PdDv > odm_types.cre'
+      $ECHO '\todmshow CuAt >> odm_types.cre'
+      $ECHO '\todmshow CuDv >> odm_types.cre'
+      $ECHO '\todmcreate -h odm_types.cre'
+      $ECHO "\tsed 's/char class/char class_name/' odm_types.h > xxx"
+      $ECHO '\tmv xxx odm_types.h'
+      $ECHO '\t/bin/rm -f odm_types.cre'
+    ) >> $makefile
+  fi
+
+  (
+    top=../../../..
+    $ECHO \\ninstall:\\t$target
+    $ECHO \\t-mv $top/lib/$os/$mach/$target $top/lib/$os/$mach/$target.old
+    $ECHO \\tcp $target $top/lib/$os/$mach/$target
+  ) >> $makefile
+}
+

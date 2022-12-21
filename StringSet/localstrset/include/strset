@@ -1,0 +1,7 @@
+/* STRSET_INC */
+#ifndef __STRSET_INC
+#define __STRSET_INC
+
+#include "StrSet/include/strset.h"
+
+#endif

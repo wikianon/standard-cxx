@@ -1,0 +1,35 @@
+#!/bin/bash
+
+exit_status=0
+
+vaadminpasswordInputignore=1
+
+. exec/system/config/allg.sh
+. exec/system/shell/allg/file.sh
+. $scriptdir/functions
+
+find_script domain/dns read.sh
+
+read_domain
+if [ "$typ" = "primary" ] || [ "$typ" = "second" ]; then
+
+  acttime=$(date +%s)
+  check_passwd
+
+  prog='/^    A:/  { print $2;}'
+  if [ "$vapar0" != "################" ] && [ "$vapar0" != "" ]; then
+    oldaddr=$(samba-tool dns query $(hostname) $domain $vapar1 $vapar3 -k yes 2>&$logfile | awk "$prog")
+  else
+    oldaddr=
+  fi
+  
+  if [ "$oldaddr" != "" ];then
+      samba-tool dns delete $(hostname) $domain $vapar1 A $oldaddr -k yes >&$logfile 2>&1
+  fi
+
+  samba-tool dns add $(hostname) $domain $vapar1 $vapar3 "$vapar2" -k yes >&$logfile 2>&1
+
+  . $scriptdir/../dhcp/mkfix
+
+fi
+

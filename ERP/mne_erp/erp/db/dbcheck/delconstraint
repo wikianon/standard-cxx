@@ -1,0 +1,54 @@
+
+#!/bin/bash
+
+rdfkey="SELECT DISTINCT con.conname AS name, ns.nspname AS "schema", cl.relname AS "table"\
+   FROM pg_constraint con\
+   INNER JOIN pg_namespace ns ON ( con.contype = 'f'::"char" AND con.connamespace = ns.oid )\
+   INNER JOIN pg_class cl ON ( con.conrelid = cl.oid) \
+   WHERE ns.nspname = 'par1'"
+
+get_fkey()
+{
+    par=$1
+    fkey=${par/|*};par=${par#*|}
+    fschema=${par/|*};par=${par#*|}
+    ftable=${par/|*};par=${par#*|}
+}
+
+rdpkey="SELECT DISTINCT con.conname AS name, ns.nspname AS "schema", cl.relname AS "table"\
+   FROM pg_constraint con\
+   INNER JOIN pg_namespace ns ON ( con.contype = 'p'::"char" AND con.connamespace = ns.oid )\
+   INNER JOIN pg_class cl ON ( con.conrelid = cl.oid) \
+   WHERE ns.nspname = 'par1'"
+
+get_pkey()
+{
+    par=$1
+    pkey=${par/|*};par=${par#*|}
+    pschema=${par/|*};par=${par#*|}
+    ptable=${par/|*};par=${par#*|}
+}
+
+for s in $schemas
+do
+    echo "-- Schema $s"
+    get_checkdata "$rdfkey" "$s" | \
+    while read line; 
+    do
+        get_fkey $line
+        echo "ALTER TABLE ONLY \"$fschema\".\"$ftable\" DROP CONSTRAINT $fkey;" 
+    done
+done
+
+for s in $schemas
+do
+    echo "-- Schema $s"
+    get_checkdata "$rdpkey" "$s" | \
+    while read line; 
+    do
+        get_pkey $line
+        echo "ALTER TABLE ONLY \"$pschema\".\"$ptable\" DROP CONSTRAINT $pkey;" 
+    done
+done
+
+  

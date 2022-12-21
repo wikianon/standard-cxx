@@ -1,0 +1,32 @@
+############################################
+# Criando bibliotecas estaticas
+
+bash-4.4$ g++ -c teste.cxx
+
+bash-4.4$ ar -crs libteste.a *.o
+
+############################################
+# Criando bibliotecas dinâmicas
+
+bash-4.4$ g++ -fPIC -c teste.cxx
+
+bash-4.4$ g++ -shared -Wl,-soname,libteste.so.1 -o libteste.so.1.0 *.o
+
+bash-4.4$ ln -s libteste.so.1.0 libteste.so
+
+############################################
+# Instalando as bibliotecas no linux
+
+bash-4.4$ sudo cp -p libteste.{a,so*} /usr/local/lib/
+
+# Regenera o cache de bibliotecas, de modo a incluir a nova lib nesse cache
+bash-4.4$ su -c 'ldconfig'
+
+############################################
+# Instalando num diretório padrão, fica fácil usar as bibliotecas.
+
+# Static Executable
+bash-4.4$ g++ -static prog.cxx -lteste -o prog-static
+
+# Dinamic executable
+bash-4.4$ g++ prog.cxx -lteste -o prog-dynamic

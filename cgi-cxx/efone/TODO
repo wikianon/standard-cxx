@@ -1,0 +1,17 @@
+BUGS:
+
+- strange noise from time to time on the receiving side. investigate
+- add mutex on "starting transmission" to prevent staring it twice
+(via console and via net) simultanously.
+
+FEATURES:
+
+- "state" command = show transmission statistics and state.
+- add half duplex mode
+- add answering & rejecting of connection to the client.
+- add algorithm & duplex negotiation to the protocol
+
+FUTURE:
+
+- gtk gui
+

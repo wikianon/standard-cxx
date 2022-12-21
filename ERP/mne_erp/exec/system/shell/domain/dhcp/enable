@@ -1,0 +1,87 @@
+#!/bin/bash
+
+i=`dpkg --get-selections isc-dhcp-server | expand | fgrep ' install' | wc -l`
+if [ ! "$i" = "1" ]; then
+    apt-get update >&$logfile 2>&1
+    apt-get -y install isc-dhcp-server >&$logfile 2>&1
+fi
+
+#find_script domain/dhcp read.sh
+find_template conf        domain/dhcp dhcpd.conf
+find_template updateconf  domain/dhcp update.conf
+
+mkdir -p /etc/mne/dhcpd 1>&$logfile 2>&1
+touch /etc/dhcp/fix.conf 1>&$logfile 2>&1
+
+$sambabin/samba-tool user list | egrep "^dnsadmin\$" >/dev/null
+if [ ! "$?" = "0" ]; then
+  samba-tool user create dnsadmin                    --random-password --description="Unprivileged user for DNS Admin"
+fi
+samba-tool user setexpiry --noexpiry  dnsadmin 1>&$logfile 2>&1
+samba-tool group addmembers DnsAdmins dnsadmin 1>&$logfile 2>&1
+
+mkdir -p /etc/mne/dns >&$logfile 2>&1
+samba-tool domain exportkeytab --principal=dnsadmin@$udomain /etc/mne/dns/dns.keytab 1>&$logfile 2>&1
+chown root:dhcpd /etc/mne/dns/dns.keytab
+chmod 440 /etc/mne/dns/dns.keytab
+
+mod_appamor_dhcp
+echo "       /etc/mne/dhcpd/update-samba-dns.sh Ux," > /etc/apparmor.d/dhcpd.d/mne_dhcpd
+
+  addr=`ifconfig $netdevice | awk '/inet[^6]/ {gsub("^.*:", "", $2); print $2}'`
+ bcast=`ifconfig $netdevice | awk '/inet[^6]/ {gsub("^.*:", "", $3); print $3}'`
+  mask=`ifconfig $netdevice | awk '/inet[^6]/ {gsub("^.*:", "", $4); print $4}'`
+router=`route -n             | awk '/^0\.0\.0\.0/ { print $2 }'`
+
+IFS=. read -r i1 i2 i3 i4 <<< "$addr";
+IFS=. read -r m1 m2 m3 m4 <<< "$mask";
+net=$(printf "%d.%d.%d.%d\n" "$((i1 & m1))" "$((i2 & m2))" "$((i3 & m3))" "$((i4 & m4))")
+
+if [ "$dhcpstart" != "" ]; then
+  IFS=. read -r i1 i2 i3 i4 <<< "$dhcpstart";
+  dhcpnet=$(printf "%d.%d.%d.%d\n" "$((i1 & m1))" "$((i2 & m2))" "$((i3 & m3))" "$((i4 & m4))")
+
+  if [ "$dhcpnet" != "$net" ]; then
+   echo "wrong network for dhcp start address"
+   exit 1
+  fi
+fi
+
+if [ "$dhcpend" != "" ]; then
+  IFS=. read -r i1 i2 i3 i4 <<< "$dhcpend";
+  dhcpnet=$(printf "%d.%d.%d.%d\n" "$((i1 & m1))" "$((i2 & m2))" "$((i3 & m3))" "$((i4 & m4))")
+
+  if [ "$dhcpnet" != "$net" ]; then
+    echo "wrong network for dhcp end address"
+    exit 1
+  fi
+fi
+
+prog='/####UDOMAIN####/ { gsub(/####UDOMAIN####/,"'$udomain'"); }
+      /####DOMAIN####/  { gsub(/####DOMAIN####/,"'$domain'"); }
+      /####HOST####/    { gsub(/####HOST####/,"'$(hostname)'"); }
+      /####ADDR####/    { gsub(/####ADDR####/,"'$addr'"); }
+      /####MASK####/    { gsub(/####MASK####/,"'$mask'"); }
+      /####NET####/     { gsub(/####NET####/,"'$net'"); }
+      /####START####/   { gsub(/####START####/,"'$dhcpstart'"); }
+      /####END####/     { gsub(/####END####/,"'$dhcpend'"); }
+      /####ROUTER####/  { gsub(/####ROUTER####/,"'$router'"); }
+      /####BCAST####/   { gsub(/####BCAST####/,"'$bcast'"); }
+                        { print $0 }'
+
+save_file $dhcpconf/dhcpd.conf
+save_file /etc/mne/dhcpd/update-samba-dns.sh
+
+if [ "$dhcpstart" = "" ] || [ "$dhcpend" = "" ]; then
+  mne_error_ignore=1
+  rm $dhcpconf/dhcpd.conf 2>&$logfile 1>&2
+  mne_error_ignore=
+else
+  awk "$prog" < $conf > $dhcpconf/dhcpd.conf
+  awk "$prog" < $updateconf > /etc/mne/dhcpd/update-samba-dns.sh
+
+  chown root:dhcpd /etc/mne/dhcpd/update-samba-dns.sh
+  chmod 750        /etc/mne/dhcpd/update-samba-dns.sh
+fi
+
+systemctl restart isc-dhcp-server

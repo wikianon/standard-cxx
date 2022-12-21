@@ -1,0 +1,184 @@
+#############################################################################
+##
+## Copyright (c) 2008 Captive Metrics Software Corporation.
+##                    All rights reserved.
+##
+## This file may be used under the terms of the GNU General Public
+## License version 2.0 as published by the Free Software Foundation
+## and appearing in the file LICENSE-GPL.txt contained within the
+## same package as this file. This software is subject to a
+## dual-licensing mechanism, the details of which are outlined in
+## file LICENSE-DUAL.txt, also contained within this package. Be sure
+## to use the correct license for your needs. To view the commercial
+## license, read LICENSE-COMMERCIAL.txt also contained within this
+## package.
+##
+## If you do not have access to these files or are unsure which license
+## is appropriate for your use, please contact the sales department at
+## sales@captivemetrics.com.
+##
+## This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+## WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+#############################################################################
+
+###
+### These are the variables that snap expects to exist.
+###
+
+# the type of target that is to be generated
+#
+# possible values:
+#   application: A runnable program in C, C++ or Java.
+#   library:     An archive (.a file).
+#   shared_obj:  A shared object of C or C++ object files.
+#   jar_file:    A jar file with Java .class files.
+#   default:     Just build the objects.
+#                Do not try to aggregate them into something.
+#   subdirs:     Run snap in the subdirs defined by variable "subdirs".
+#
+type=library
+
+#
+# possible values: c,c++,java
+#
+language=c++
+
+#
+# name of the target, except for java applications
+#
+target=libhello.a
+
+###
+### these are the other variables that could be used by snap
+###
+
+#
+# name of the C compiler
+#
+cc=
+
+#
+# name of the C++ compiler
+#
+cxx=
+
+#
+# name of the Java compiler
+#
+javac=
+
+#
+# name of the ranlib program (use true if there is none)
+#
+ranlib=
+
+#
+# flag used to generate position independent code
+#
+picflag=
+
+#
+# flag used to tell the linker to build a shared object
+#
+shlibflag=
+
+#
+# optimization flag only, do not include defs or includes
+#
+optimize=-g
+
+#
+# other flags to the C compiler
+#
+cflags=
+
+#
+# other flags to the C++ compiler
+#
+ccflags=
+
+#
+# other flags to the Java compiler
+#
+jflags=
+
+#
+# extra flags to the linker
+#
+ldflags=
+
+#
+# flags to ar to create an archive
+#
+arflags=rv
+
+#
+# the directories to traverse when type=subdirs
+#
+subdirs=
+
+#
+# a classpath specification to be sent to "javac -classpath"
+#
+classpath=
+
+#
+# the top level of the java package heirarchy
+#
+top=
+
+#
+# the name of the java package as a path, i.e. com/capmet/metrics
+#
+java_package=
+
+#
+# the name of the directories to search for files (space separated list)
+#  [this has been tested with one directory down; anything else is unknown]
+#
+target_dirs="."
+
+#
+# extra source code files (space separated list)
+#
+extra_files=
+
+#
+# extra object files (or message catalogs or whatever) (space separated list)
+#
+extra_obj=
+
+#
+# To perform checks and set variables to platform specific values before
+# the Makefile is generated, define the "pre_snap" function and set up
+# what information you need. For example:
+#
+# pre_snap() {
+#   case $os in
+#   solaris)
+#     ccflags="-xarch=v9"
+#     ;;
+#   linux)
+#     ccflags="-m64"
+#     ;;
+#   esac
+# }
+#
+
+#
+# If additional commands are to be placed at the end of the Makefile,
+# write a function here called "post_snap". It takes one argument,
+# the path of the Makefile. For example:
+#
+# post_snap() {
+#   makefile=$1
+#   $ECHO \\ninstall:\\n\\tcp $target ../bin >> $makefile
+# }
+#
+
+#
+# From this point on, put in any shell script programming needed to
+# correctly generate a Makefile for your project on the target platform.
+# Keep in mind that this script is run BEFORE the Makefile is generated.
+#
